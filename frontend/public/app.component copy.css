@@ -1,0 +1,122 @@
+/* 整体布局 */
+.sidenav-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #121212; /* 黑色背景 */
+}
+
+/* 侧边栏 */
+.sidenav {
+  width: 15rem;  /* 使用 rem 替代 px */
+  background: linear-gradient(180deg, #1e1e1e 0%, #333333 100%); /* 渐变色背景 */
+  border-radius: 0 10px 10px 0; /* 圆角设计 */
+  box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.3); /* 阴影效果 */
+  padding-top: 2rem; /* 增加顶部内边距 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* 侧边栏链接 */
+.sidenav a {
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 1rem; /* 增加内边距 */
+  transition: background-color 0.3s ease, padding-left 0.3s ease; /* 添加平滑过渡 */
+  border-left: 4px solid transparent; /* 默认左侧无边框 */
+}
+
+.sidenav a:hover {
+  background-color: #444444; /* 深灰色 hover 背景 */
+  border-left: 4px solid #ffffff; /* hover 时添加左侧边框 */
+  padding-left: 1.5rem; /* hover 时增加左侧内边距 */
+}
+
+/* 主内容区域 */
+.main-content {
+  padding: 1rem;
+  background-color: #121212; /* 黑色背景 */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  color: #fff; /* 白色字体 */
+}
+
+/* 工具栏 */
+.toolbar {
+  display: flex;
+  justify-content: space-between; /* 将子元素分布到两边 */
+  align-items: center;  /* 垂直居中对齐 */
+  width: 100%;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.spacer {
+  flex-grow: 1;  /* 这个 div 将会填充剩余的空间，使右侧按钮靠右 */
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+}
+
+
+/* 工具栏中的 span 居中对齐 */
+.toolbar span {
+  flex-grow: 1; /* 让 span 占据剩余空间 */
+  text-align: center; /* 使 span 内容居中 */
+  font-size: 20px; /* 调整字体大小 */
+  font-weight: bold; /* 字体加粗 */
+}
+
+/* 媒体查询: 适应不同屏幕尺寸 */
+@media (max-width: 768px) {
+  .sidenav {
+    width: 12rem;  /* 在小屏幕设备上侧边栏宽度变小 */
+  }
+
+  .toolbar {
+    padding: 0 0.8rem; /* 减少工具栏的左右内边距 */
+  }
+
+  .search-box {
+    width: 100%;  /* 在小屏幕设备上搜索框宽度适应容器 */
+  }
+}
+
+@media (max-width: 480px) {
+  .sidenav {
+    width: 10rem;  /* 在小设备上更小的侧边栏 */
+  }
+
+  .search-container {
+    margin-top: 0.5rem;  /* 调整顶部边距 */
+  }
+
+  .search-box {
+    width: 80%;  /* 更窄的设备，搜索框占满整个宽度 */
+  }
+}
+
+.login-page {
+  background-image: url('https://www.loliapi.com/acg/');
+  background-size: cover; /* 背景图片覆盖整个容器 */
+  background-position: center; /* 背景居中 */
+  background-repeat: no-repeat; /* 防止背景图片重复 */
+  height: 100vh; /* 确保背景图覆盖整个页面高度 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* 确保登录框的样式不受背景影响 */
+.background-container {
+  width: 50%;
+  height: 77%;
+}

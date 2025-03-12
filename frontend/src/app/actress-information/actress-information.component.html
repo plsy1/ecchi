@@ -1,0 +1,54 @@
+<div class="actress-left">
+  <!-- Actress Name -->
+  <div class="actress-title">
+    {{ name || "N/A" }}
+  </div>
+
+  <!-- Actress Avatar -->
+  <div class="actress-avatar">
+    <img
+      [src]="actressData.avatar_url"
+      alt="Actress Avatar"
+      class="actress-avatar-img"
+    />
+  </div>
+
+  <!-- Hobbies -->
+
+  <div class="actress-info">
+    
+    <p>
+      <strong>Alias:</strong> {{ actressData.aliases?.join(", ") || "N/A" }}
+    </p>
+    <p><strong>Hobbies:</strong> {{ actressData.hobbies || "N/A" }}</p>
+    <p><strong>Birth Date:</strong> {{ actressData.birth_date || "N/A" }}</p>
+    <p><strong>Height:</strong> {{ actressData.height || "N/A" }}</p>
+    <p><strong>Size:</strong> {{ actressData.size || "N/A" }}</p>
+  </div>
+
+  <!-- Social Media Buttons -->
+  <div class="actress-social-media">
+    <div *ngFor="let platform of actressData.social_media" class="social-item">
+      <a
+        *ngIf="platform.platform !== 'RSS'"
+        [href]="platform.link"
+        target="_blank"
+        class="social-link"
+      >
+        <button class="social-btn">
+          {{ platform.platform }}
+        </button>
+      </a>
+      <button
+        *ngIf="platform.platform === 'RSS'"
+        class="social-btn"
+        (click)="subscribeActress(actressData.avatar_url)"
+      >
+        订阅
+      </button>
+    </div>
+  </div>
+
+  <!-- Related Information (Optional) -->
+  <div class="actress-other-info"></div>
+</div>

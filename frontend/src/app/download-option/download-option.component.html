@@ -1,0 +1,26 @@
+<div class="dialog-container">
+  <!-- Dialog Header -->
+  <div class="dialog-header">
+    <h2>Download Option</h2>
+  </div>
+
+  <!-- Dialog Body -->
+  <div class="dialog-body">
+    <!-- Save Path Input Field (使用 mat-form-field 和 matInput) -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Save Path</mat-label>
+      <input matInput 
+             [(ngModel)]="savePath" 
+             (keydown.enter)="download()" 
+             placeholder="Enter Save Path" />
+    </mat-form-field>
+
+    <!-- Download Button (使用 mat-button) -->
+    <div class="search-type-buttons">
+      <button mat-raised-button 
+              (click)="download()">
+        Download
+      </button>
+    </div>
+  </div>
+</div>

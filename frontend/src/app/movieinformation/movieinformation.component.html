@@ -1,0 +1,55 @@
+<div class="movie-container">
+  <!-- Left Side: Movie Cover, Title, Tags, Actors -->
+  <div class="movie-left">
+    <!-- Movie Title -->
+    <div class="movie-title">
+      {{ movieId }} - {{ movieData.title }}
+    </div>
+
+    <!-- Movie Cover -->
+    <div class="movie-cover">
+      <img [src]="movieData.cover_image" alt="Movie Cover" class="movie-cover-img">
+    </div>
+
+    <!-- Tags, Download & Subscribe buttons -->
+    <div class="tag-and-actions">
+      <div class="tag-list">
+        <span *ngFor="let tag of movieData.tags" class="tag">{{ tag }}</span>
+      </div>
+      <div class="movie-actions">
+        <!-- 下载按钮，绑定点击事件 -->
+        <button class="download-btn" (click)="downloadMovie()">下载</button>
+                <!-- 订阅按钮，绑定点击事件 -->
+        <button class="subscribe-btn" (click)="subscribeToMovie()">订阅</button>
+
+        <!-- <button mat-icon-button matSuffix (click)="downloadMovie()">
+          <mat-icon>download</mat-icon>
+        </button>
+        <button mat-icon-button matSuffix (click)="subscribeToMovie()">
+          <mat-icon>subscriptions</mat-icon>
+        </button> -->
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side: Other Information -->
+  <div class="movie-right">
+    <div class="other-info">
+      <p><strong>番号：</strong>{{ movieId }}</p>
+      <p><strong>发行日期：</strong>{{ movieData.release_date }}</p>
+      <p><strong>制造商：</strong>{{ movieData.manufacturer }}</p>
+      <p><strong>标签：</strong>{{ movieData.label }}</p>
+      <p><strong>价格：</strong>{{ movieData.price }}</p>
+      <p><strong>时长：</strong>{{ movieData.duration }} 分钟</p>
+    </div>
+
+    <!-- Actor List -->
+    <div class="actors">
+      <div *ngFor="let actor of movieData.actors" class="actor-item">
+        <img [src]="actor.avatar" alt="{{ actor.name }}" class="actor-avatar" (click)="searchByActressName(actor.name)">
+        <div class="actor-name" (click)="searchByActressName(actor.name)" >{{ actor.name }}</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,141 @@
+/* Actress container */
+.actress-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  background-color: transparent;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;  /* To allow for the fixed position of left side */
+}
+
+/* Left side container for avatar, name, hobbies, and social media */
+.actress-left {
+  position: fixed;  /* Fixed position */
+  height: 100%;  /* Full height */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: transparent;
+  box-sizing: border-box;
+  padding-right: 20px;
+  overflow-y: auto; /* Scrollable if content overflows */
+
+}
+
+/* Actress avatar */
+.actress-avatar {
+  position: relative;
+  width: 125px;
+  height: 125px;
+  border-radius: 10px;
+  background-color: transparent;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+/* Image styles for avatar */
+.actress-avatar-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Actress name styling */
+.actress-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: left;
+  color: #333;
+  margin-top: 5px;
+  background-color: transparent;
+  overflow: hidden;
+}
+
+/* Hobbies and social media buttons */
+.actress-hobbies,
+.actress-social-media {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: transparent;
+}
+
+/* Social media button styles */
+.social-btn {
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border: none;
+}
+
+.social-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Social media list */
+.social-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Actress Info Section */
+.actress-info p {
+  font-size: 1rem;
+  color: #333;
+  margin: 3px 0;
+  background-color: transparent;
+}
+
+/* Optional More Info section */
+.actress-other-info p {
+  font-size: 1rem;
+  color: #333;
+  margin: 5px 0;
+}
+
+/* Right side container for additional actress details */
+.actress-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: transparent;
+  box-sizing: border-box;
+  padding: 20px;
+  overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+/* Ensuring responsiveness */
+@media (max-width: 1200px) {
+  .actress-container {
+    flex-direction: column;
+  }
+
+  .actress-left {
+    position: relative;  /* Revert to normal flow on smaller screens */
+    width: 100%; /* Full width for smaller screens */
+    padding: 0;
+    height: auto;
+
+  }
+
+  .actress-right {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .actress-right {
+    margin: 0;
+  }
+}

@@ -1,0 +1,15 @@
+<div class="movie-container">
+  <div
+    *ngFor="let movie of keywordFeeds"
+    class="movie-card"
+    (click)="onMovieCardClick(movie)"
+  >
+    <img [src]="movie.img" alt="{{ movie.keyword }}" class="movie-img" />
+    <div class="movie-info">
+      <h3 class="movie-title">{{ movie.keyword }}</h3>
+      <button class="unsubscribe-btn" (click)="onUnsubscribeClick(movie)">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

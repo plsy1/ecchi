@@ -1,0 +1,46 @@
+<div class="table-container">
+  <mat-form-field appearance="outline" class="search-box">
+    <input matInput [(ngModel)]="query" (input)="applyFilter($event)" placeholder="Filter">
+  </mat-form-field>
+  <mat-table  [dataSource]="dataSource" matSort>
+    <!-- Indexer 列 -->
+    <ng-container matColumnDef="indexer">
+      <mat-header-cell *matHeaderCellDef mat-sort-header class="indexer-column"> Source </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="indexer-column"> {{element.indexer}} </mat-cell>
+    </ng-container>
+
+    <!-- Title 列 -->
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef mat-sort-header class="title-column"> Title </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="title-column"> {{element.title}} </mat-cell>
+    </ng-container>
+
+    <!-- Size 列 -->
+    <ng-container matColumnDef="size">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Size </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ formatSize(element.size) }} </mat-cell>
+    </ng-container>
+
+    <!-- Seeders 列 -->
+    <ng-container matColumnDef="seeders">
+      <mat-header-cell *matHeaderCellDef mat-sort-header class="seeders-column"> UP </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="seeders-column"> {{element.seeders}} </mat-cell>
+    </ng-container>
+
+    <!-- Publish Date 列 -->
+    <ng-container matColumnDef="publishDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header class="publishDate-column"> Date </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="publishDate-column"> {{formatDate(element.publishDate)}} </mat-cell>
+    </ng-container>
+
+    <!-- 表格头部和行 -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)" 
+             [ngClass]="{
+               'loading': row.loading,
+               'success': row.success,
+               'error': row.error
+             }">
+    </mat-row>
+  </mat-table>
+</div>

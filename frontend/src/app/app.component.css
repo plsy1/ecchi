@@ -1,0 +1,99 @@
+/* General Layout */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  flex: 1;
+}
+
+.sidenav {
+  flex: 1;
+  display: flex;
+  width: auto;
+  max-width: 150px;
+}
+
+.mat-nav-list {
+  padding: 0;
+}
+
+.mat-nav-list .mat-list-item {
+  padding: 10px;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.mat-nav-list .mat-list-item:hover {
+  cursor: pointer;
+}
+
+.active {
+  font-weight: bold;
+}
+
+/* 右侧区域 */
+.right-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  height:min-content
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-left button {
+  margin-right: 15px;
+}
+
+.toolbar-left span {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-right button {
+  margin-left: 10px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .sidenav {
+    width: auto;
+  }
+
+  .toolbar-left span {
+    font-size: 18px;
+  }
+
+  .right-side {
+    width: 0;
+    height: 100%;
+  }
+}
+
+.login-page {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+

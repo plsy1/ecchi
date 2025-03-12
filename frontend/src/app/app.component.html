@@ -1,0 +1,58 @@
+
+<div class="app-layout" *ngIf="!isLoginPage">
+  <!--侧边栏-->
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side" [(opened)]="isSidebarOpen" class="sidenav">
+      <mat-nav-list>
+        <a mat-list-item routerLink="/" routerLinkActive="active" color="accent">
+          <mat-icon>home</mat-icon>
+        </a>
+        <a mat-list-item routerLink="/result" routerLinkActive="active" color="accent">
+          <mat-icon>explore</mat-icon>
+        </a>
+        <a mat-list-item routerLink="/feed/actress" routerLinkActive="active" color="accent">
+          <mat-icon>subscriptions</mat-icon>
+        </a>
+        <a mat-list-item routerLink="/feed/movies" routerLinkActive="active" color="accent">
+          <mat-icon>favorite</mat-icon>
+        </a>
+        <a mat-list-item (click)="logout()" color="accent">
+          <mat-icon>logout</mat-icon>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+  </mat-sidenav-container>
+
+  <!--显示区域-->
+  <div class="right-side" [ngClass]="isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'">
+    <!--顶部导航栏-->
+    <mat-toolbar color="primary" class="toolbar">
+      <!--靠左侧显示-->
+      <div class="toolbar-left">
+        <button mat-icon-button (click)="toggleSidebar()" aria-label="Toggle navigation">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span>{{ title }}</span>
+      </div>
+      <!--靠右侧显示-->
+      <div class="toolbar-right">
+        <button mat-icon-button matSuffix (click)="OpenSearch()" aria-label="Search"> 
+          <mat-icon>search</mat-icon>
+        </button>
+        <!-- <button mat-icon-button matSuffix (click)="logout()" aria-label="Logout">
+          <mat-icon>logout</mat-icon>
+        </button> -->
+      </div>
+    </mat-toolbar>
+
+    <!--主要内容区域，路由展示组件-->
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="isLoginPage" class="login-page">
+    <app-login class="background-container"></app-login>
+</div>
