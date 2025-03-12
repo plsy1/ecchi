@@ -103,7 +103,7 @@ def refresh_movies_feeds():
             if not download_link:
                 continue
 
-            success = qb_client.add_torrent_url(download_link, DOWNLOAD_PATH)
+            success = qb_client.add_torrent_url(download_link, DOWNLOAD_PATH,None)
 
             if success:
                 keyword_feed = (

@@ -6,16 +6,21 @@
 
   <!-- Dialog Body -->
   <div class="dialog-body">
-    <!-- Save Path Input Field (使用 mat-form-field 和 matInput) -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Save Path</mat-label>
       <input matInput 
              [(ngModel)]="savePath" 
+             [matAutocomplete]="auto" 
              (keydown.enter)="download()" 
-             placeholder="Enter Save Path" />
+             placeholder="Enter or Select Save Path" />
+      
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptions" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
 
-    <!-- Download Button (使用 mat-button) -->
     <div class="search-type-buttons">
       <button mat-raised-button 
               (click)="download()">
