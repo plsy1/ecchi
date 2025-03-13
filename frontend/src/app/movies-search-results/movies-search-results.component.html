@@ -1,10 +1,6 @@
 <div class="movie-container">
   <ng-container *ngFor="let movie of discoverResults">
-    <div
-      class="movie-card"
-      (click)="onMovieClick(movie)"
-    >
-    <!-- *ngIf="movie.actors.length === 1" -->
+    <div class="movie-card" (click)="onMovieClick(movie)">
       <img
         [src]="movie.img_url"
         alt="{{ movie.title }}"
@@ -21,7 +17,6 @@
             <span *ngFor="let tag of movie.actors" class="movie-tag">
               {{ tag }}
             </span>
-            <!-- <mat-icon class="favorite-icon">favorite</mat-icon> -->
           </div>
         </div>
       </div>
@@ -29,7 +24,6 @@
   </ng-container>
 </div>
 
-<!-- 翻页按钮 -->
 <div class="pagination-controls" *ngIf="searchKeyWords.length != 0">
   <button
     mat-button
@@ -41,7 +35,6 @@
   <button mat-button (click)="loadNextPage()" [disabled]="isLoading">
     下一页
   </button>
-  <!-- 显示加载动画 -->
   <div *ngIf="isLoading" class="loading-spinner">
     <mat-spinner diameter="24"></mat-spinner>
   </div>

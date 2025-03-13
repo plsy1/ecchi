@@ -9,7 +9,8 @@
   display: table;
 }
 
-.mat-header-cell, .mat-cell {
+.mat-header-cell,
+.mat-cell {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,21 +36,19 @@
   flex: 1;
 }
 
-.mat-header-row, .mat-row {
+.mat-header-row,
+.mat-row {
   display: flex;
 }
 
-/* 加载时显示黄色 */
 .loading {
-  background-color: #ffeb3b; /* 黄色 */
+  background-color: #ffeb3b;
 }
 
-/* 成功时显示绿色 */
 .success {
-  background-color: #4caf50; /* 绿色 */
+  background-color: #4caf50;
 }
 
-/* 失败时显示红色 */
 .error {
-  background-color: #f44336; /* 红色 */
+  background-color: #f44336;
 }

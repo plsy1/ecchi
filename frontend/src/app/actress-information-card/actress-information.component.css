@@ -1,0 +1,59 @@
+.actress-left {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.actress-card {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #fff;
+  width: 100%;
+}
+
+.actress-avatar {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.actress-avatar img {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.actress-info,
+.actress-social-media {
+  padding: 15px;
+}
+
+.actress-info p {
+  margin: 8px 0;
+  word-wrap: break-word;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+
+.actress-social-media .social-item {
+  margin: 5px 0;
+}
+
+.social-btn {
+  width: 100%;
+  font-size: 14px;
+  text-align: center;
+  padding: 8px 0;
+}
+
+@media (max-width: 480px) {
+  .actress-card {
+    width: 100%;
+  }
+}

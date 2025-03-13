@@ -15,11 +15,11 @@ import { ActressPageComponent } from './actress-page/actress-page.component';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent }, 
-    { path: '', component: HomeComponent, canActivate: [authGuard] },
-    { path: 'result',component: SubComponent, canActivate: [authGuard]},
-    { path: 'feed/actress',component: FindComponent, canActivate: [authGuard]},
-    { path: 'movies/:link/:id', component: MovieinformationComponent },  // 动态路由
-    { path: 'feed/movies', component: FeedMoviesComponent },  // 动态路由
-    { path: 'actress/:name', component: ActressPageComponent },  // 动态路由
+  { path: 'login', component: LoginComponent },
+  { path: '', component: HomeComponent, canActivate: [authGuard] },
+  { path: 'result', component: SubComponent, canActivate: [authGuard] },
+  { path: 'feed/actress', component: FindComponent, canActivate: [authGuard] },
+  { path: 'movies/:link/:id', component: MovieinformationComponent },
+  { path: 'feed/movies', component: FeedMoviesComponent },
+  { path: 'actress/:name', component: ActressPageComponent },
 ];

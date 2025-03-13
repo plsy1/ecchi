@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms'; 
 import { CommonModule } from '@angular/common'; 
 import { Router } from '@angular/router'; 
-import { HomeService } from '../api.service';
+import { ApiService } from '../api.service';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,7 +31,7 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private router: Router, private homeService: HomeService) {}
+  constructor(private router: Router, private homeService: ApiService) {}
 
   OnInit(): void {
     if (localStorage.getItem('loggedIn') === 'true') {

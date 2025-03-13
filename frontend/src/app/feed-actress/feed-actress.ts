@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { HomeService } from '../api.service';
+import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
 interface ActressList {
@@ -9,24 +9,19 @@ interface ActressList {
   created_at: string;
   url: string;
   id: number;
-  description: string
-
+  description: string;
 }
 
 @Component({
   selector: 'app-find',
   standalone: true,
-  imports: [CommonModule,MatIconModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './feed-actress.html',
   styleUrl: './feed-actress.css',
 })
 export class FindComponent {
-
   ActressList: ActressList[] = [];
-  constructor(
-    private homeService: HomeService,
-    private router: Router,
-  ) {}
+  constructor(private homeService: ApiService, private router: Router) {}
 
   ngOnInit(): void {
     this.getActressFeeds();
@@ -38,7 +33,7 @@ export class FindComponent {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json', 
+          'Content-Type': 'application/json',
         },
       });
 
@@ -55,15 +50,15 @@ export class FindComponent {
 
   async onClick(name: string) {
     try {
-      const results = await this.homeService.discoverByActress(name,1);
+      const results = await this.homeService.discoverByActress(name, 1);
       this.homeService.currentPage = 1;
-      this.router.navigate(['/actress',name]);
-    } catch(error) {
+      this.router.navigate(['/actress', name]);
+    } catch (error) {
       console.error('Search failed:', error);
     }
   }
 
-  async onUnsubscribeClick(event: MouseEvent,movie: any) {
+  async onUnsubscribeClick(event: MouseEvent, movie: any) {
     event.stopPropagation();
     try {
       this.homeService.removeFeedsRSS(movie.url);
@@ -72,9 +67,4 @@ export class FindComponent {
       console.error('Search failed:', error);
     }
   }
-
-
 }
-
-
-

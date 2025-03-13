@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
-export class HomeService {
+export class ApiService {
   private apiUrl = '/api/v1';
 
   private _currentPage: number = 1;
@@ -23,7 +23,7 @@ export class HomeService {
 
   public queryKeywords: string = '';
   public movieLink: string = '';
-  
+
   constructor(private router: Router) {}
 
   async login(username: string, password: string): Promise<boolean> {
@@ -103,7 +103,6 @@ export class HomeService {
       });
 
       if (!response.ok) {
-
         if (response.status === 401) {
           this.logout();
         }
@@ -150,7 +149,6 @@ export class HomeService {
     }
   }
 
-
   async getActressInformation(name: string): Promise<any> {
     const url = `${this.apiUrl}/avbase/actress/information?name=${name}`;
 
@@ -178,9 +176,6 @@ export class HomeService {
       throw new Error('请求失败，请稍后再试');
     }
   }
-
-
-
 
   async discoverByKeywords(filter_value: string, page: number): Promise<any> {
     this.discoverType = 1;
@@ -212,8 +207,6 @@ export class HomeService {
       throw new Error('请求失败，请稍后再试');
     }
   }
-
-
 
   async singleMovieInformation(movie_url: string): Promise<any> {
     this.discoverType = 1;
@@ -290,8 +283,11 @@ export class HomeService {
     }
   }
 
-
-  async addKeywordsRSS(keyword: string, img: string,link: string): Promise<any> {
+  async addKeywordsRSS(
+    keyword: string,
+    img: string,
+    link: string
+  ): Promise<any> {
     const url = `${this.apiUrl}/feed/addKeywords`;
     try {
       const response = await fetch(url, {
@@ -302,30 +298,29 @@ export class HomeService {
         body: new URLSearchParams({
           keyword: keyword,
           img: img,
-          link: link
-
+          link: link,
         }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Error adding RSS feed');
       }
-  
+
       const responseData = await response.json();
       return responseData;
     } catch (error) {
       console.error('Error occurred while adding RSS feed:', error);
-      throw error; 
+      throw error;
     }
   }
 
   async removeKeywordsRSS(keyword: string): Promise<any> {
     const url = `${this.apiUrl}/feed/delKeywords`;
-  
+
     try {
       const response = await fetch(url, {
-        method: 'DELETE', 
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
@@ -333,12 +328,12 @@ export class HomeService {
           keyword: keyword,
         }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Error removing RSS feed');
       }
-  
+
       const responseData = await response.json();
       return responseData;
     } catch (error) {
@@ -356,57 +351,61 @@ export class HomeService {
           'Content-Type': 'application/json',
         },
       });
-  
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-  
-      const data = await response.json(); 
-      return data;  
-    } catch (error) {
-      console.error('Error fetching keywords:', error);
-      throw error;  
-    }
-  }
 
-  async getActressFeed(): Promise<any> {
-    const url = `${this.apiUrl}/feed/getFeedsList`;  
-    try {
-      const response = await fetch(url, {
-        method: 'GET',  
-        headers: {
-          'Content-Type': 'application/json',  
-        },
-      });
-  
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-  
-      const data = await response.json(); 
-      return data; 
+
+      const data = await response.json();
+      return data;
     } catch (error) {
       console.error('Error fetching keywords:', error);
       throw error;
     }
   }
 
-  async addFeedsRSS(url: string, title: string, description: string = ''): Promise<any> {
-    const addFeedsUrl = `${this.apiUrl}/feed/addFeeds`; 
-  
+  async getActressFeed(): Promise<any> {
+    const url = `${this.apiUrl}/feed/getFeedsList`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching keywords:', error);
+      throw error;
+    }
+  }
+
+  async addFeedsRSS(
+    url: string,
+    title: string,
+    description: string = ''
+  ): Promise<any> {
+    const addFeedsUrl = `${this.apiUrl}/feed/addFeeds`;
+
     try {
       const response = await fetch(addFeedsUrl, {
-        method: 'POST', 
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',  
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-          url: url, 
-          title: title,  
-          description: description, 
+          url: url,
+          title: title,
+          description: description,
         }),
       });
-  
+
       return response;
     } catch (error) {
       console.error('Error occurred while adding RSS feed:', error);
@@ -414,13 +413,12 @@ export class HomeService {
     }
   }
 
-
   async removeFeedsRSS(url: string): Promise<any> {
     const urlToDelete = `${this.apiUrl}/feed/delFeeds`;
-  
+
     try {
       const response = await fetch(urlToDelete, {
-        method: 'DELETE', 
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
@@ -428,12 +426,12 @@ export class HomeService {
           url: url,
         }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Error removing RSS feed');
       }
-  
+
       const responseData = await response.json();
       return responseData;
     } catch (error) {
@@ -441,7 +439,4 @@ export class HomeService {
       throw error;
     }
   }
-
 }
-
-

@@ -82,7 +82,7 @@ def refresh_movies_feeds():
         prowlarr = Prowlarr(PROWLARR_URL, PROWLARR_KEY)
 
         db = next(get_db())
-        feeds = db.query(KeywordFeeds).all()
+        feeds = db.query(KeywordFeeds).filter(KeywordFeeds.downloaded == False).all()
 
         if not feeds:
             return
@@ -112,7 +112,7 @@ def refresh_movies_feeds():
                     .first()
                 )
                 if keyword_feed:
-                    db.delete(keyword_feed)
+                    keyword_feed.downloaded = True
                     db.commit()
                     
                 movie_info = get_movie_info_by_url(movie_link)
@@ -154,13 +154,19 @@ def refresh_actress_feeds():
                 except ValueError as e:
                     continue
                 if release_date > datetime.today() and actors <= 2:
-                    last_feed = KeywordFeeds(keyword=id, img=img, link=link)
+                    last_feed = KeywordFeeds(keyword=id, img=img, link=link,downloaded=False)
                     last_keyword = id
                     last_link = link
                     last_img = img
             if last_feed:
                 try:
-                    db.add(last_feed)
+                    existing_feed = db.query(KeywordFeeds).filter_by(keyword=last_keyword).first()
+                    if existing_feed:
+                        existing_feed.img = last_feed.img
+                        existing_feed.link = last_feed.link
+                    else:
+                        db.add(last_feed)
+
                     db.commit()
                     db.refresh(last_feed)
 

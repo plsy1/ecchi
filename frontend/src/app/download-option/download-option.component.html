@@ -1,19 +1,19 @@
 <div class="dialog-container">
-  <!-- Dialog Header -->
   <div class="dialog-header">
     <h2>Download Option</h2>
   </div>
 
-  <!-- Dialog Body -->
   <div class="dialog-body">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Save Path</mat-label>
-      <input matInput 
-             [(ngModel)]="savePath" 
-             [matAutocomplete]="auto" 
-             (keydown.enter)="download()" 
-             placeholder="Enter or Select Save Path" />
-      
+      <input
+        matInput
+        [(ngModel)]="savePath"
+        [matAutocomplete]="auto"
+        (keydown.enter)="download()"
+        placeholder="Enter or Select Save Path"
+      />
+
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option *ngFor="let option of filteredOptions" [value]="option">
           {{ option }}
@@ -22,10 +22,7 @@
     </mat-form-field>
 
     <div class="search-type-buttons">
-      <button mat-raised-button 
-              (click)="download()">
-        Download
-      </button>
+      <button mat-raised-button (click)="download()">Download</button>
     </div>
   </div>
 </div>

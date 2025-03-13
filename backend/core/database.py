@@ -53,6 +53,7 @@ class KeywordFeeds(Base):
     created_at = Column(DateTime, default=datetime.now)
     img = Column(String)
     link = Column(String)
+    downloaded = Column(Boolean)
     
 
 def initDatabase():

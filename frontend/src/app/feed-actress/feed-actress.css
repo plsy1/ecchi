@@ -1,4 +1,3 @@
-/* 整体容器 */
 .actress-list {
   font-family: Arial, sans-serif;
   padding: 20px;
@@ -9,7 +8,6 @@
   margin: 20px auto;
 }
 
-/* 标题 */
 .actress-list h2 {
   text-align: center;
   color: #333;
@@ -17,7 +15,6 @@
   margin-bottom: 20px;
 }
 
-/* 列表 */
 ul {
   list-style-type: none;
   padding: 0;
@@ -30,16 +27,15 @@ li {
   border-radius: 6px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
   display: flex;
-  justify-content: space-between;  /* Make sure content is spaced out */
-  align-items: center;  /* Align content vertically in the center */
-  cursor: pointer;  /* Make list item clickable */
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
 }
 
 li:hover {
   background-color: #f1f1f1;
 }
 
-/* 内容部分（演员名称） */
 .actress-info {
   display: flex;
   align-items: center;
@@ -51,19 +47,17 @@ h3 {
   font-size: 20px;
   color: #2c3e50;
   margin: 0;
-  padding-left: 15px;  /* Added padding for spacing between image and text */
+  padding-left: 15px;
 }
 
-/* 优化头像显示 */
 .actress-info img {
-  width: 50px;  /* 固定宽度 */
-  height: 50px; /* 固定高度 */
-  border-radius: 50%;  /* 圆形裁剪 */
-  object-fit: cover;  /* 确保图片按比例裁剪 */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 增加图片阴影效果 */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 取消订阅按钮样式 */
 .unsubscribe-btn {
   background: none;
   border: none;
@@ -77,7 +71,6 @@ h3 {
   color: #c0392b;
 }
 
-/* 链接样式 */
 a {
   color: #3498db;
   text-decoration: none;
@@ -88,7 +81,6 @@ a:hover {
   text-decoration: underline;
 }
 
-/* 没有数据时的样式 */
 ng-template {
   display: block;
   text-align: center;

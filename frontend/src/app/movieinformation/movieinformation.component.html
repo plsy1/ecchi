@@ -1,39 +1,26 @@
 <div class="movie-container">
-  <!-- Left Side: Movie Cover, Title, Tags, Actors -->
   <div class="movie-left">
-    <!-- Movie Title -->
-    <div class="movie-title">
-      {{ movieId }} - {{ movieData.title }}
-    </div>
+    <div class="movie-title">{{ movieId }} - {{ movieData.title }}</div>
 
-    <!-- Movie Cover -->
     <div class="movie-cover">
-      <img [src]="movieData.cover_image" alt="Movie Cover" class="movie-cover-img">
+      <img
+        [src]="movieData.cover_image"
+        alt="Movie Cover"
+        class="movie-cover-img"
+      />
     </div>
 
-    <!-- Tags, Download & Subscribe buttons -->
     <div class="tag-and-actions">
       <div class="tag-list">
-        <span *ngFor="let tag of movieData.tags" class="tag">{{ tag }}</span>
-      </div>
-      <div class="movie-actions">
-        <!-- 下载按钮，绑定点击事件 -->
-        <button class="download-btn" (click)="downloadMovie()">下载</button>
-                <!-- 订阅按钮，绑定点击事件 -->
-        <button class="subscribe-btn" (click)="subscribeToMovie()">订阅</button>
-
-        <!-- <button mat-icon-button matSuffix (click)="downloadMovie()">
-          <mat-icon>download</mat-icon>
-        </button>
-        <button mat-icon-button matSuffix (click)="subscribeToMovie()">
-          <mat-icon>subscriptions</mat-icon>
-        </button> -->
-
+        <mat-chip-set>
+          <mat-chip *ngFor="let tag of movieData.tags" class="tag">{{
+            tag
+          }}</mat-chip>
+        </mat-chip-set>
       </div>
     </div>
   </div>
 
-  <!-- Right Side: Other Information -->
   <div class="movie-right">
     <div class="other-info">
       <p><strong>番号：</strong>{{ movieId }}</p>
@@ -44,12 +31,37 @@
       <p><strong>时长：</strong>{{ movieData.duration }} 分钟</p>
     </div>
 
-    <!-- Actor List -->
     <div class="actors">
       <div *ngFor="let actor of movieData.actors" class="actor-item">
-        <img [src]="actor.avatar" alt="{{ actor.name }}" class="actor-avatar" (click)="searchByActressName(actor.name)">
-        <div class="actor-name" (click)="searchByActressName(actor.name)" >{{ actor.name }}</div>
+        <img
+          [src]="actor.avatar"
+          alt="{{ actor.name }}"
+          class="actor-avatar"
+          (click)="searchByActressName(actor.name)"
+        />
+        <div class="actor-name" (click)="searchByActressName(actor.name)">
+          {{ actor.name }}
+        </div>
       </div>
+    </div>
+
+    <div class="movie-actions">
+      <button
+        class="download-btn"
+        mat-raised-button
+        color="primary"
+        (click)="downloadMovie()"
+      >
+        搜索
+      </button>
+      <button
+        class="subscribe-btn"
+        mat-raised-button
+        color="accent"
+        (click)="subscribeToMovie()"
+      >
+        订阅
+      </button>
     </div>
   </div>
 </div>

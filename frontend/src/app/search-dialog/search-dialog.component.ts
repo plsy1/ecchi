@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,9 +6,9 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router'; // 导入 Router 和 RouterModule
-
-import { HomeService } from '../api.service'; // Import the HomeService
+import { Router } from '@angular/router';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-search-dialog',
@@ -20,77 +20,122 @@ import { HomeService } from '../api.service'; // Import the HomeService
     MatInputModule,
     FormsModule,
     MatSelectModule,
-    CommonModule
-    
-  ]
+    CommonModule,
+    MatAutocompleteModule,
+  ],
 })
 export class SearchDialogComponent {
   searchType: string = '';
   searchKeywords: string = '';
+  searchKeywordsOptions: string[] = [];
+  filteredOptions: string[] = [];
 
   constructor(
-    private dialogRef: MatDialogRef<SearchDialogComponent>, 
+    private dialogRef: MatDialogRef<SearchDialogComponent>,
     private snackBar: MatSnackBar,
-    private homeService: HomeService,  // Inject HomeService
+    private homeService: ApiService,
     private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: { title: string; type: string }
-  ) 
-    {
-      
-    }
-  
-    async search(): Promise<void> {
-      if (this.searchType === '1') {
-        try {
-          // 调用 HomeService 进行搜索
-          this.snackBar.open('Searching......', 'Close', { duration: 2000 });
-          const results = await this.homeService.search(this.searchKeywords);
-          // 搜索成功后关闭对话框
-          this.router.navigate(['/']);
-          this.dialogRef.close();  
-        } catch (error) {
-          // 搜索失败时输出错误并显示 Snackbar 提示
-          console.error('Search failed:', error);
-          this.snackBar.open('Search failed. Please try again.', 'Close', { duration: 2000 });
-          this.dialogRef.close();
-        }
-      }
-      else if (this.searchType === '2') {
-        try {
-          // 调用 HomeService 进行按编号的搜索
-          this.snackBar.open('Searching......', 'Close', { duration: 2000 });
-          const results = await this.homeService.discoverByActress(this.searchKeywords,1);
-          console.log('Search results (Type 2):', results);
-          this.homeService.currentPage = 1;
-          this.router.navigate([`/actress/${this.searchKeywords}`]);
-          this.dialogRef.close();  
-        } catch (error) {
-          // 搜索失败时输出错误并显示 Snackbar 提示
-          console.error('Search failed:', error);
-          this.snackBar.open('Search failed. Please try again.', 'Close', { duration: 2000 });
-          this.dialogRef.close();
-        }
-      }
+  ) {
+    this.filteredOptions = this.searchKeywordsOptions;
+  }
 
-      else if (this.searchType === '3') {
-        try {
-          // 调用 HomeService 进行按编号的搜索
-          this.snackBar.open('Searching......', 'Close', { duration: 2000 });
-          const results = await this.homeService.discoverByKeywords(this.searchKeywords,1);
-          console.log('Search results (Type 3):', results);
-          this.homeService.currentPage = 1;
-          // 搜索成功后关闭对话框并跳转到根路由
-          this.router.navigate(['/result']); // 执行路由跳转到根路由（/）
-          this.dialogRef.close();  
-        } catch (error) {
-          // 搜索失败时输出错误并显示 Snackbar 提示
-          console.error('Search failed:', error);
-          this.snackBar.open('Search failed. Please try again.', 'Close', { duration: 2000 });
-          this.dialogRef.close();
+  ngOnInit(): void {
+    const savedPaths = localStorage.getItem('searchKeywordsOptions');
+    if (savedPaths) {
+      this.searchKeywordsOptions = JSON.parse(savedPaths);
+      this.filteredOptions = [...this.searchKeywordsOptions];
+    }
+  }
+
+  async search(): Promise<void> {
+    if (this.searchType === '1') {
+      try {
+        this.snackBar.open('Searching......', 'Close', { duration: 2000 });
+        const results = await this.homeService.search(this.searchKeywords);
+        if (
+          this.searchKeywords &&
+          !this.searchKeywordsOptions.includes(this.searchKeywords)
+        ) {
+          this.searchKeywordsOptions.push(this.searchKeywords);
+
+          localStorage.setItem(
+            'searchKeywordsOptions',
+            JSON.stringify(this.searchKeywordsOptions)
+          );
+
+          this.filteredOptions = [...this.searchKeywordsOptions];
         }
+
+        this.router.navigate(['/']);
+        this.dialogRef.close();
+      } catch (error) {
+        this.snackBar.open('Search failed. Please try again.', 'Close', {
+          duration: 2000,
+        });
+        this.dialogRef.close();
+      }
+    } else if (this.searchType === '2') {
+      try {
+        this.snackBar.open('Searching......', 'Close', { duration: 2000 });
+        const results = await this.homeService.discoverByActress(
+          this.searchKeywords,
+          1
+        );
+        if (
+          this.searchKeywords &&
+          !this.searchKeywordsOptions.includes(this.searchKeywords)
+        ) {
+          this.searchKeywordsOptions.push(this.searchKeywords);
+
+          localStorage.setItem(
+            'searchKeywordsOptions',
+            JSON.stringify(this.searchKeywordsOptions)
+          );
+
+          this.filteredOptions = [...this.searchKeywordsOptions];
+        }
+
+        this.homeService.currentPage = 1;
+        this.router.navigate([`/actress/${this.searchKeywords}`]);
+        this.dialogRef.close();
+      } catch (error) {
+        this.snackBar.open('Search failed. Please try again.', 'Close', {
+          duration: 2000,
+        });
+        this.dialogRef.close();
+      }
+    } else if (this.searchType === '3') {
+      try {
+        this.snackBar.open('Searching......', 'Close', { duration: 2000 });
+        const results = await this.homeService.discoverByKeywords(
+          this.searchKeywords,
+          1
+        );
+        if (
+          this.searchKeywords &&
+          !this.searchKeywordsOptions.includes(this.searchKeywords)
+        ) {
+          this.searchKeywordsOptions.push(this.searchKeywords);
+
+          localStorage.setItem(
+            'searchKeywordsOptions',
+            JSON.stringify(this.searchKeywordsOptions)
+          );
+
+          this.filteredOptions = [...this.searchKeywordsOptions];
+        }
+        this.homeService.currentPage = 1;
+        this.router.navigate(['/result']);
+        this.dialogRef.close();
+      } catch (error) {
+        this.snackBar.open('Search failed. Please try again.', 'Close', {
+          duration: 2000,
+        });
+        this.dialogRef.close();
       }
     }
-
+  }
 
   close() {
     this.dialogRef.close();
@@ -99,9 +144,7 @@ export class SearchDialogComponent {
   showErrorNotification(message: string) {
     this.snackBar.open(message, '关闭', {
       duration: 3000,
-      panelClass: ['error-snackbar'] // Add custom styling if needed
+      panelClass: ['error-snackbar'],
     });
   }
-
 }
-

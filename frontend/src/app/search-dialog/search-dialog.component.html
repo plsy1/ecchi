@@ -4,33 +4,44 @@
   </div>
 
   <div class="dialog-body">
-    <!-- 关键词输入框 -->
     <mat-form-field appearance="outline">
-      <mat-label>Keywords</mat-label> <!-- 左上角标签显示 "Keywords" -->
-      <input matInput 
-             [(ngModel)]="searchKeywords" 
-             (keydown.enter)="search()" />
+      <mat-label>Keywords</mat-label>
+      <input
+        matInput
+        [(ngModel)]="searchKeywords"
+        [matAutocomplete]="auto"
+        (keydown.enter)="search()"
+        placeholder="Enter Keywords"
+      />
+
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptions" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
 
-    <!-- 搜索类型按钮组（垂直排列） -->
     <div class="search-type-buttons">
-      <button 
+      <button
         mat-button
-        [class.selected]="searchType === '1'" 
-        (click)="searchType = '1'; search()">
+        [class.selected]="searchType === '1'"
+        (click)="searchType = '1'; search()"
+      >
         Torrents
       </button>
-      <button 
+      <button
         mat-button
-        [class.selected]="searchType === '2'" 
-        (click)="searchType = '2'; search()">
+        [class.selected]="searchType === '2'"
+        (click)="searchType = '2'; search()"
+      >
         Actress
       </button>
-      <button 
+      <button
         mat-button
         color="primary"
-        [class.selected]="searchType === '3'" 
-        (click)="searchType = '3'; search()">
+        [class.selected]="searchType === '3'"
+        (click)="searchType = '3'; search()"
+      >
         Keywords
       </button>
     </div>

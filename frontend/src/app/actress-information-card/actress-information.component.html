@@ -1,0 +1,57 @@
+<div class="actress-left">
+  <!-- Title -->
+  <mat-card class="actress-card">
+    <mat-card-header>
+      <mat-card-title>{{ name || "N/A" }}</mat-card-title>
+    </mat-card-header>
+
+    <!-- Avatar -->
+    <mat-card-content class="actress-avatar">
+      <img
+        mat-card-image
+        [src]="actressData.avatar_url"
+        alt="Actress Avatar"
+        class="actress-avatar-img"
+      />
+    </mat-card-content>
+
+    <!-- Actress Info -->
+    <mat-card-content class="actress-info">
+      <p>
+        <strong>Alias:</strong> {{ actressData.aliases?.join(", ") || "N/A" }}
+      </p>
+      <p><strong>Hobbies:</strong> {{ actressData.hobbies || "N/A" }}</p>
+      <p><strong>Birth Date:</strong> {{ actressData.birth_date || "N/A" }}</p>
+      <p><strong>Height:</strong> {{ actressData.height || "N/A" }}</p>
+      <p><strong>Size:</strong> {{ actressData.size || "N/A" }}</p>
+    </mat-card-content>
+
+    <!-- Social Media -->
+    <mat-card-content class="actress-social-media">
+      <div
+        *ngFor="let platform of actressData.social_media"
+        class="social-item"
+      >
+        <a
+          *ngIf="platform.platform !== 'RSS'"
+          [href]="platform.link"
+          target="_blank"
+          class="social-link"
+        >
+          <button mat-raised-button color="primary" class="social-btn">
+            {{ platform.platform }}
+          </button>
+        </a>
+        <button
+          *ngIf="platform.platform === 'RSS'"
+          mat-raised-button
+          color="accent"
+          class="social-btn"
+          (click)="subscribeActress(actressData.avatar_url)"
+        >
+          订阅
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

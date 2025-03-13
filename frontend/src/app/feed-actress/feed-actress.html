@@ -1,15 +1,16 @@
 <div class="actress-list">
   <h2>演员订阅</h2>
 
-  <!-- 如果 ActressList 有数据 -->
   <div *ngIf="ActressList.length > 0; else noData">
     <ul>
-      <!-- 遍历 ActressList 数组并显示每一项 -->
       <li *ngFor="let actress of ActressList">
         <div class="actress-info" (click)="onClick(actress.title)">
-          <img [src]="actress.url" alt="Actress Avatar"/>
+          <img [src]="actress.url" alt="Actress Avatar" />
           <h3>{{ actress.title }}</h3>
-          <button class="unsubscribe-btn" (click)="onUnsubscribeClick($event, actress)">
+          <button
+            class="unsubscribe-btn"
+            (click)="onUnsubscribeClick($event, actress)"
+          >
             <mat-icon>cancel</mat-icon>
           </button>
         </div>
@@ -17,7 +18,6 @@
     </ul>
   </div>
 
-  <!-- 如果没有数据，显示提示信息 -->
   <ng-template #noData>
     <p>当前无订阅。</p>
   </ng-template>

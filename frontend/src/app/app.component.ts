@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HomeService } from './api.service';
+import { ApiService } from './api.service';
 import { SearchDialogComponent } from './search-dialog/search-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginComponent } from './login/login.component';
@@ -33,7 +33,7 @@ import { LoginComponent } from './login/login.component';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'TorrentSearcher';
+  title = 'Ecchi';
   isSidebarOpen = true;
   searchTerm = '';
   searchResults: any[] = [];
@@ -41,7 +41,7 @@ export class AppComponent {
 
   dialog: MatDialog = inject(MatDialog);
 
-  constructor(private homeService: HomeService, private router: Router) {
+  constructor(private homeService: ApiService, private router: Router) {
     this.router.events.subscribe(() => {
       this.isLoginPage = this.router.url === '/login';
     });

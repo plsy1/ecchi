@@ -1,7 +1,7 @@
-import { HomeService } from '../api.service';
+import { ApiService } from '../api.service';
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';  // 导入 CommonModule
-import { Router } from '@angular/router'; // 导入 Router 和 RouterModule
+import { CommonModule } from '@angular/common'; 
+import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 interface KeywordFeed {
   id: number;
@@ -17,17 +17,15 @@ interface KeywordFeed {
   styleUrls: ['./feed-movies.component.css']
 })
 export class FeedMoviesComponent implements OnInit {
-  // 用来保存获取的订阅数据
   keywordFeeds: KeywordFeed[] = [];
 
   constructor(
         private router: Router,
-        private HomeService: HomeService
+        private HomeService: ApiService
 
   ) {}
 
   ngOnInit() {
-    // 在组件初始化时获取已订阅的数据
     this.getKeywordFeeds();
   }
 
@@ -35,9 +33,9 @@ export class FeedMoviesComponent implements OnInit {
     const url = '/api/v1/feed/getKeywordsFeedList';
     try {
       const response = await fetch(url, {
-        method: 'GET',  // 使用GET请求
+        method: 'GET', 
         headers: {
-          'Content-Type': 'application/json',  // 设置请求头
+          'Content-Type': 'application/json', 
         },
       });
 
@@ -45,7 +43,7 @@ export class FeedMoviesComponent implements OnInit {
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
 
-      const data: KeywordFeed[] = await response.json();  // 解析返回的数据并确保其类型
+      const data: KeywordFeed[] = await response.json(); 
       this.keywordFeeds = data;
     } catch (error) {
       console.error('Error fetching keyword feeds:', error);
@@ -64,7 +62,7 @@ export class FeedMoviesComponent implements OnInit {
   async onMovieCardClick(movie: any) {
     console.log('Movie clicked:', movie);
     try {
-      this.router.navigate(['movies',movie.link,movie.keyword]); // 执行路由跳转到根路由（/）
+      this.router.navigate(['movies',movie.link,movie.keyword]);
     } catch (error) {
       console.error('Search failed:', error);
     }

@@ -1,4 +1,3 @@
-/* Movie container */
 .movie-container {
   display: flex;
   justify-content: space-between;
@@ -8,7 +7,6 @@
   overflow: hidden;
 }
 
-/* Left side container for cover image, title, tags, and actors */
 .movie-left {
   flex: 1 1 50%;
   display: flex;
@@ -20,17 +18,15 @@
   overflow: hidden;
 }
 
-/* Movie cover */
 .movie-cover {
   position: relative;
   width: 100%;
-  padding-top: 75%; /* 4:3 aspect ratio */
+  padding-top: 75%;
   overflow: hidden;
   border-radius: 10px;
   background-color: transparent;
 }
 
-/* Image styles */
 .movie-cover-img {
   position: absolute;
   top: 0;
@@ -42,18 +38,16 @@
   max-height: 100%;
 }
 
-/* Movie title styling */
 .movie-title {
   font-size: 1.5rem;
   font-weight: bold;
   text-align: left;
   color: #333;
-  margin-top: 10px;
+
   background-color: transparent;
   overflow: hidden;
 }
 
-/* Tags and movie actions (Download & Subscribe buttons) */
 .tag-and-actions {
   display: flex;
   flex-direction: column;
@@ -61,7 +55,6 @@
   background-color: transparent;
 }
 
-/* Tags list */
 .tag-list {
   display: flex;
   flex-wrap: wrap;
@@ -70,16 +63,12 @@
   background-color: transparent;
 }
 
-/* Individual tag */
 .tag {
-  background-color: #ffcc00;
-  color: white;
   padding: 5px 10px;
   border-radius: 20px;
   font-size: 0.9rem;
 }
 
-/* Movie action buttons (Download & Subscribe) */
 .movie-actions {
   display: flex;
   gap: 10px;
@@ -87,39 +76,25 @@
   background-color: transparent;
 }
 
-/* Download button styles */
 .download-btn,
 .subscribe-btn {
-  padding: 12px 20px;
+  padding: 12px 30px;
   font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
+  width: 100%;
   transition: background-color 0.3s ease, transform 0.2s ease;
   border: none;
 }
 
-.download-btn {
-  background-color: #007bff;
-  color: white;
-}
-
-.subscribe-btn {
-  background-color: #28a745;
-  color: white;
-}
-
-/* Hover effects for buttons */
 .download-btn:hover {
-  background-color: #0056b3;
   transform: scale(1.05);
 }
 
 .subscribe-btn:hover {
-  background-color: #218838;
   transform: scale(1.05);
 }
 
-/* Actor section */
 .actors {
   display: flex;
   flex-wrap: wrap;
@@ -145,17 +120,16 @@
 }
 
 .actor-avatar:hover {
-  transform: translateY(-2px); /* 头像悬停时轻微浮动效果 */
+  transform: translateY(-2px);
 }
 
 .actor-name {
   font-size: 0.8rem;
-  margin-top: 5px;
+
   background-color: transparent;
   text-align: left;
 }
 
-/* Right side container for additional movie info */
 .movie-right {
   flex: 1 1 45%;
   display: flex;
@@ -167,7 +141,6 @@
   overflow: hidden;
 }
 
-/* Movie Info Section */
 .other-info p {
   font-size: 1rem;
   color: #333;
@@ -175,7 +148,6 @@
   background-color: transparent;
 }
 
-/* Ensuring responsiveness */
 @media (max-width: 1200px) {
   .movie-container {
     flex-direction: column;

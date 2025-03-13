@@ -1,10 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends, Form
-from fastapi.security import OAuth2PasswordRequestForm
 from core.auth import *
 from sqlalchemy.orm import Session
 from core.database import KeywordFeeds, RSSFeed, get_db
 from core.prowlarr import Prowlarr
-from api.router.qbittorrent import add_torrent_url
 from core.config import *
 from core.telegram import *
 from core.avbase import *
@@ -23,29 +21,38 @@ async def add_feed(
     link: str = Form(None),
     db: Session = Depends(get_db),
 ):
-
     existing_keyword = (
         db.query(KeywordFeeds).filter(KeywordFeeds.keyword == keyword).first()
     )
     if existing_keyword:
-        raise HTTPException(status_code=400, detail="Keyword already subscribed.")
-
-    new_feed = KeywordFeeds(keyword=keyword, img=img, link=link)
-
-    try:
-        db.add(new_feed)
-        db.commit()
-        db.refresh(new_feed)
-
-        movie_info = get_movie_info_by_url(link)
-        movie_details = movieInformation(keyword, movie_info)
-
-        TelegramBot.Send_Message_With_Image(img, movie_details)
-
-        return {"message": f"Successfully added keyword: {keyword}"}
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error adding feed: {str(e)}")
+        try:
+            existing_keyword.downloaded = False
+            db.commit()
+            db.refresh(existing_keyword)
+            movie_info = get_movie_info_by_url(link)
+            movie_details = movieInformation(keyword, movie_info)
+            TelegramBot.Send_Message_With_Image(img, movie_details)
+            return {
+                "message": f"Keyword {keyword} already exists, updated 'downloaded' to False."
+            }
+        except Exception as e:
+            db.rollback()
+            raise HTTPException(
+                status_code=500, detail=f"Error updating feed: {str(e)}"
+            )
+    else:
+        new_feed = KeywordFeeds(keyword=keyword, img=img, link=link, downloaded=False)
+        try:
+            db.add(new_feed)
+            db.commit()
+            db.refresh(new_feed)
+            movie_info = get_movie_info_by_url(link)
+            movie_details = movieInformation(keyword, movie_info)
+            TelegramBot.Send_Message_With_Image(img, movie_details)
+            return {"message": f"Successfully added keyword: {keyword}"}
+        except Exception as e:
+            db.rollback()
+            raise HTTPException(status_code=500, detail=f"Error adding feed: {str(e)}")
 
 
 @router.delete("/delKeywords")
