@@ -127,7 +127,7 @@ async def remove_rss_feed(url: str = Form(...), db: Session = Depends(get_db)):
 @router.get("/getKeywordsFeedList")
 async def get_keywords_feed_list(db: Session = Depends(get_db)):
     try:
-        feeds = db.query(KeywordFeeds).all()
+        feeds = db.query(KeywordFeeds).filter(KeywordFeeds.downloaded == False).all()
         return feeds
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
