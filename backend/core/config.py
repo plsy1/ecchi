@@ -6,7 +6,7 @@ DOWNLOAD_PATH = os.environ.get("DOWNLOAD_PATH", "")
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "fuckyou")
 ALGORITHM = os.environ.get("ALGORITHM", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES", 60)
+ACCESS_TOKEN_EXPIRE_MINUTES = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES", 10080)
 
 
 QB_HOST = os.environ.get("QB_HOST", "")

@@ -7,7 +7,7 @@
     <img [src]="movie.img" alt="{{ movie.keyword }}" class="movie-img" />
     <div class="movie-info">
       <h3 class="movie-title">{{ movie.keyword }}</h3>
-      <button class="unsubscribe-btn" (click)="onUnsubscribeClick(movie)">
+      <button class="unsubscribe-btn" (click)="onUnsubscribeClick($event,movie)">
         <mat-icon>cancel</mat-icon>
       </button>
     </div>

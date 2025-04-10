@@ -50,7 +50,8 @@ export class FeedMoviesComponent implements OnInit {
     }
   }
 
-  async onUnsubscribeClick(movie: any) {
+  async onUnsubscribeClick(event: MouseEvent,movie: any) {
+    event.stopPropagation();
     try {
       this.HomeService.removeKeywordsRSS(movie.keyword);
       this.getKeywordFeeds();
