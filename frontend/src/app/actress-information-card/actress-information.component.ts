@@ -4,11 +4,12 @@ import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-actress-information',
   standalone: true,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule,MatIconModule],
   templateUrl: './actress-information.component.html',
   styleUrls: ['./actress-information.component.css'],
 })
@@ -56,4 +57,19 @@ export class ActressInformationComponent {
         this.snackBar.open('添加订阅失败', 'Close', { duration: 2000 });
       });
   }
+
+  getIcon(platform: string): string {
+    switch (platform) {
+      case 'Instagram':
+        return 'instagram';
+      case 'Twitter':
+        return 'twitter';
+      case 'Facebook':
+        return 'facebook';
+      default:
+        return 'account_circle';
+    }
+  }
+
+
 }

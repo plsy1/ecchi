@@ -3,6 +3,21 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Router } from '@angular/router';
 
+interface ActressList {
+  title: string;
+  created_at: string;
+  url: string;
+  id: number;
+  description: string;
+}
+
+interface KeywordFeed {
+  id: number;
+  keyword: string;
+  img: string;
+}
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -439,4 +454,49 @@ export class ApiService {
       throw error;
     }
   }
+
+  async getActressFeeds() {
+    const url = `${this.apiUrl}/feed/getFeedsList`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data: ActressList[] = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching keyword feeds:', error);
+      throw error;
+    }
+  }
+
+  async getKeywordFeeds() {
+    const url = `${this.apiUrl}/feed/getKeywordsFeedList`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET', 
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data: KeywordFeed[] = await response.json(); 
+      return data
+    } catch (error) {
+      console.error('Error fetching keyword feeds:', error);
+      throw error;
+    }
+  }
+  
 }

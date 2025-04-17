@@ -163,14 +163,16 @@ def get_social_media_links(soup):
 
 def get_platform_from_link(link: str):
     """根据链接来推测平台名称"""
-    if "twitter.com" in link:
+    if "twitter.com" in link or "x.com" in link:
         return "Twitter"
     elif "instagram.com" in link:
         return "Instagram"
     elif "tiktok.com" in link:
         return "TikTok"
-    else:
+    elif "avbase.net" in link:
         return "RSS"
+    else:
+        return "Null"
 
 
 @router.get("/movie/Information")
@@ -267,7 +269,7 @@ async def search(keywords: str, page: int, isValid: str = Depends(tokenIntercept
 
     movie_elements = soup.find_all(
         "div",
-        class_="bg-base-100 border border-solid border-gray-300 shadow sm:rounded-lg overflow-hidden",
+        class_="bg-base border border-light rounded-lg overflow-hidden",
     )
 
     for movie in movie_elements:

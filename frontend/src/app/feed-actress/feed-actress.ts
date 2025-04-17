@@ -19,33 +19,17 @@ interface ActressList {
   templateUrl: './feed-actress.html',
   styleUrl: './feed-actress.css',
 })
+
 export class FindComponent {
   ActressList: ActressList[] = [];
   constructor(private homeService: ApiService, private router: Router) {}
 
   ngOnInit(): void {
-    this.getActressFeeds();
-  }
-
-  async getActressFeeds() {
-    const url = '/api/v1/feed/getFeedsList';
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error fetching data: ${response.statusText}`);
-      }
-
-      const data: ActressList[] = await response.json();
+    this.homeService.getActressFeeds().then((data: ActressList[]) => {
       this.ActressList = data;
-    } catch (error) {
-      console.error('Error fetching keyword feeds:', error);
-    }
+    }).catch(error => {
+      console.error('Error fetching actress feeds:', error);
+    });
   }
 
   async onClick(name: string) {
@@ -62,7 +46,11 @@ export class FindComponent {
     event.stopPropagation();
     try {
       this.homeService.removeFeedsRSS(movie.url);
-      this.getActressFeeds();
+      this.homeService.getActressFeeds().then((data: ActressList[]) => {
+        this.ActressList = data;
+      }).catch(error => {
+        console.error('Error fetching actress feeds:', error);
+      });
     } catch (error) {
       console.error('Search failed:', error);
     }

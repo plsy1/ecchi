@@ -26,35 +26,24 @@ export class FeedMoviesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getKeywordFeeds();
-  }
-
-  async getKeywordFeeds() {
-    const url = '/api/v1/feed/getKeywordsFeedList';
-    try {
-      const response = await fetch(url, {
-        method: 'GET', 
-        headers: {
-          'Content-Type': 'application/json', 
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error fetching data: ${response.statusText}`);
-      }
-
-      const data: KeywordFeed[] = await response.json(); 
+    this.HomeService.getKeywordFeeds().then((data: KeywordFeed[]) => {
       this.keywordFeeds = data;
-    } catch (error) {
-      console.error('Error fetching keyword feeds:', error);
-    }
+    }).catch(error=> {
+      console.error("Error fetching keywords feed list",error);
+    })
   }
+
+
 
   async onUnsubscribeClick(event: MouseEvent,movie: any) {
     event.stopPropagation();
     try {
       this.HomeService.removeKeywordsRSS(movie.keyword);
-      this.getKeywordFeeds();
+      this.HomeService.getKeywordFeeds().then((data: KeywordFeed[]) => {
+        this.keywordFeeds = data;
+      }).catch(error=> {
+        console.error("Error fetching keywords feed list",error);
+      })
     } catch (error) {
       console.error('Search failed:', error);
     }
