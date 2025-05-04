@@ -24,7 +24,7 @@ def getLatestMovies(name: str):
 
     movie_elements = soup.find_all(
         "div",
-        class_="bg-base-100 border border-solid border-gray-300 shadow sm:rounded-lg overflow-hidden",
+        class_="bg-base border border-light rounded-lg overflow-hidden",
     )
 
     for movie in movie_elements:
