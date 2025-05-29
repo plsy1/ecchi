@@ -12,7 +12,7 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header class="indexer-column">
         Source
       </mat-header-cell>
-      <mat-cell *matCellDef="let element" class="indexer-column">
+      <mat-cell *matCellDef="let element" class="indexer-column" (click)="onTitleClick(element)" [matTooltip]="'Open Source Page'" matTooltipPosition="right" >
         {{ element.indexer }}
       </mat-cell>
     </ng-container>
@@ -21,7 +21,7 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header class="title-column">
         Title
       </mat-header-cell>
-      <mat-cell *matCellDef="let element" class="title-column">
+      <mat-cell *matCellDef="let element" class="title-column" (click)="onRowClick(element)">
         {{ element.title }}
       </mat-cell>
     </ng-container>
@@ -37,7 +37,7 @@
 
     <ng-container matColumnDef="seeders">
       <mat-header-cell *matHeaderCellDef mat-sort-header class="seeders-column">
-        UP
+        Seeding
       </mat-header-cell>
       <mat-cell *matCellDef="let element" class="seeders-column">
         {{ element.seeders }}
@@ -60,7 +60,6 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row
       *matRowDef="let row; columns: displayedColumns"
-      (click)="onRowClick(row)"
       [ngClass]="{
         loading: row.loading,
         success: row.success,

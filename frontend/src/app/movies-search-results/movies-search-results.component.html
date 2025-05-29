@@ -1,26 +1,46 @@
+<mat-form-field class="search-box" appearance="outline" style="min-width: 60px">
+  <mat-label>Type</mat-label>
+  <mat-select [(ngModel)]="actressNumberFilter">
+    <mat-select-trigger>
+      {{
+        actressNumberFilter === "0"
+          ? "All"
+          : actressNumberFilter === "1"
+          ? "Single"
+          : actressNumberFilter === "2"
+          ? "Sale"
+          : "Type"
+      }}
+    </mat-select-trigger>
+    <mat-option [value]="'0'">All</mat-option>
+    <mat-option [value]="'1'">Single</mat-option>
+    <mat-option [value]="'2'">Sale</mat-option>
+  </mat-select>
+</mat-form-field>
+
 <div class="movie-container">
   <ng-container *ngFor="let movie of discoverResults">
-    <div class="movie-card" (click)="onMovieClick(movie)">
-      <img
-        [src]="movie.img_url"
-        alt="{{ movie.title }}"
-        class="movie-img"
-        (error)="onImageError($event)"
-      />
-      <div class="movie-info">
-        <h3 class="movie-title">{{ movie.id }} - {{ movie.title }}</h3>
-
-        <div class="movie-meta">
-          <p class="movie-date">{{ movie.release_date }}</p>
-
-          <div class="movie-tags">
-            <span *ngFor="let tag of movie.actors" class="movie-tag">
-              {{ tag }}
-            </span>
+    <ng-container *ngIf="shouldShowMovie(movie)">
+      <div class="movie-card" (click)="onMovieClick(movie)">
+        <img
+          [src]="movie.img_url"
+          alt="{{ movie.title }}"
+          class="movie-img"
+          (error)="onImageError($event)"
+        />
+        <div class="movie-info">
+          <h3 class="movie-title">{{ movie.id }} - {{ movie.title }}</h3>
+          <div class="movie-meta">
+            <p class="movie-date">{{ movie.release_date }}</p>
+            <div class="movie-tags">
+              <span *ngFor="let tag of movie.actors" class="movie-tag">
+                {{ tag }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </ng-container>
 </div>
 

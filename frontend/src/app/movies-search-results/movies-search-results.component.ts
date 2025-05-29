@@ -5,17 +5,32 @@ import { Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+
 @Component({
   selector: 'app-sub',
   standalone: true,
   templateUrl: './movies-search-results.component.html',
   styleUrls: ['./movies-search-results.component.css'],
-  imports: [CommonModule, MatProgressSpinnerModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatOptionModule,
+    MatSelectModule,
+  ],
 })
 export class SubComponent implements OnInit {
   discoverResults: any[] = [];
   isLoading: boolean = false;
   searchKeyWords: string = '';
+
+  actressNumberFilter: string = '0';
 
   constructor(public homeService: ApiService, private router: Router) {}
 
@@ -80,5 +95,15 @@ export class SubComponent implements OnInit {
       'normal',
       this.homeService.currentPage
     );
+  }
+  shouldShowMovie(movie: any): boolean {
+    if (!this.actressNumberFilter) return true;
+
+    const actorCount = movie.actors?.length || 0;
+
+    if (this.actressNumberFilter === '1') return actorCount === 1;
+    if (this.actressNumberFilter === '2') return actorCount >= 2;
+
+    return true;
   }
 }

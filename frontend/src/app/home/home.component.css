@@ -52,3 +52,13 @@
 .error {
   background-color: #f44336;
 }
+
+mat-cell.indexer-column:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+mat-cell.title-column:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}

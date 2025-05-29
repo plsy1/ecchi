@@ -199,18 +199,23 @@ async def search(url: str, isValid: str = Depends(tokenInterceptor)):
         movie_info["cover_image"] = "未找到封面图片"
 
     actors = []
+    seen_names = set()
     actor_tags = soup.find_all("a", class_="chip")
 
     for actor_tag in actor_tags:
-        actor_name = actor_tag.find("span")
+        actor_name_tag = actor_tag.find("span")
         actor_img_tag = actor_tag.find("img")
 
-        if actor_name and actor_img_tag:
-            actor = {
-                "name": actor_name.get_text(strip=True),
-                "avatar": actor_img_tag.get("src"),
-            }
-            actors.append(actor)
+        if actor_name_tag and actor_img_tag:
+            name = actor_name_tag.get_text(strip=True)
+            avatar = actor_img_tag.get("src")
+
+            if name not in seen_names:
+                seen_names.add(name)
+                actors.append({
+                    "name": name,
+                    "avatar": avatar
+                })
 
     movie_info["actors"] = actors
 

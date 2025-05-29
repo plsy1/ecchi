@@ -18,6 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 import { DownloadOptionComponent } from '../download-option/download-option.component';
 import { MatDialog } from '@angular/material/dialog';
 
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -28,6 +30,7 @@ import { MatDialog } from '@angular/material/dialog';
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTooltipModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -121,6 +124,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
       }
     });
+  }
+
+    onTitleClick(row: any): void {
+      const url = row.infoUrl;
+        if (url) {
+    window.open(url, '_blank'); // 在新标签页打开
+  }
   }
 
   formatSize(value: number): string {
