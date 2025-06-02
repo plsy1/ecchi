@@ -1,0 +1,24 @@
+<div class="actress-list">
+  <h2>Actress Collection</h2>
+
+  <div *ngIf="ActressList.length > 0; else noData">
+    <ul>
+      <li *ngFor="let actress of ActressList">
+        <div class="actress-info" (click)="onClick(actress.name)">
+          <img [src]="actress.avatar_url" alt="Actress Avatar" />
+          <h3>{{ actress.name }}</h3>
+          <button
+            class="unsubscribe-btn"
+            (click)="onUnsubscribeClick($event, actress)"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #noData>
+    <p>Empty.</p>
+  </ng-template>
+</div>

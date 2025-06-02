@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { SubComponent } from './movies-search-results/movies-search-results.component';
-import { FindComponent } from './feed-actress/feed-actress';
+import { FeedActress } from './feed-actress/feed-actress';
 
 import { LoginComponent } from './login/login.component';
 
@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', component: HomeComponent, canActivate: [authGuard] },
   { path: 'result', component: SubComponent, canActivate: [authGuard] },
-  { path: 'feed/actress', component: FindComponent, canActivate: [authGuard] },
+  { path: 'feed/actress', component: FeedActress, canActivate: [authGuard] },
   { path: 'movies/:link/:id', component: MovieinformationComponent },
   { path: 'feed/movies', component: FeedMoviesComponent },
   { path: 'actress/:name', component: ActressPageComponent },

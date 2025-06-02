@@ -31,6 +31,15 @@ class RSSFeed(Base):
     
     items = relationship("RSSItem", back_populates="feed")
 
+class ActressCollect(Base):
+    __tablename__ = 'actress_collect'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    avatar_url = Column(String, unique=True, index=True)
+    name = Column(String, index=True)
+    created_at = Column(DateTime, default=datetime.now)
+    
+
 
 class RSSItem(Base):
     __tablename__ = 'rss_items'

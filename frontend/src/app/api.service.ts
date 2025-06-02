@@ -3,6 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Router } from '@angular/router';
 
+import { environment } from '../environments/environment';
+
 interface ActressList {
   title: string;
   created_at: string;
@@ -22,7 +24,8 @@ interface KeywordFeed {
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = '/api/v1';
+  private isDev = !environment.production;
+  private apiUrl = this.isDev ? 'http://localhost:8964/api/v1' : '/api/v1';
 
   private _currentPage: number = 1;
   private _discoverType: number = 1;
@@ -401,6 +404,28 @@ export class ApiService {
     }
   }
 
+    async getActressCollect(): Promise<any> {
+    const url = `${this.apiUrl}/feed/getCollectList`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching keywords:', error);
+      throw error;
+    }
+  }
+
   async addFeedsRSS(
     url: string,
     title: string,
@@ -418,6 +443,31 @@ export class ApiService {
           url: url,
           title: title,
           description: description,
+        }),
+      });
+
+      return response;
+    } catch (error) {
+      console.error('Error occurred while adding RSS feed:', error);
+      throw error;
+    }
+  }
+
+    async addActressCollect(
+    url: string,
+    title: string,
+  ): Promise<any> {
+    const addFeedsUrl = `${this.apiUrl}/feed/addActressCollect`;
+
+    try {
+      const response = await fetch(addFeedsUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          avatar_url: url,
+          name: title
         }),
       });
 
@@ -455,24 +505,29 @@ export class ApiService {
     }
   }
 
-  async getActressFeeds() {
-    const url = `${this.apiUrl}/feed/getFeedsList`;
+    async removeActressCollect(url: string): Promise<any> {
+    const urlToDelete = `${this.apiUrl}/feed/delActressCollect`;
+
     try {
-      const response = await fetch(url, {
-        method: 'GET',
+      const response = await fetch(urlToDelete, {
+        method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
+        body: new URLSearchParams({
+          url: url,
+        }),
       });
 
       if (!response.ok) {
-        throw new Error(`Error fetching data: ${response.statusText}`);
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Error removing RSS feed');
       }
 
-      const data: ActressList[] = await response.json();
-      return data;
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
-      console.error('Error fetching keyword feeds:', error);
+      console.error('Error occurred while removing RSS feed:', error);
       throw error;
     }
   }

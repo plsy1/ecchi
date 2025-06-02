@@ -48,9 +48,9 @@ export class ActressInformationComponent {
         if (response.status === 200) {
           console.log('订阅成功！');
 
-          this.snackBar.open('添加订阅成功', 'Close', { duration: 2000 });
+          this.snackBar.open('添加成功', 'Close', { duration: 2000 });
         } else {
-          this.snackBar.open('添加订阅失败', 'Close', { duration: 2000 });
+          this.snackBar.open('添加失败', 'Close', { duration: 2000 });
         }
       })
       .catch((error) => {
@@ -58,18 +58,33 @@ export class ActressInformationComponent {
       });
   }
 
-  getIcon(platform: string): string {
-    switch (platform) {
-      case 'Instagram':
-        return 'instagram';
-      case 'Twitter':
-        return 'twitter';
-      case 'Facebook':
-        return 'facebook';
-      default:
-        return 'account_circle';
-    }
+  collectActress(rssLink: string): void {
+    this.homeService
+      .addActressCollect(rssLink, this.name)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('订阅成功！');
+
+          this.snackBar.open('添加成功', 'Close', { duration: 2000 });
+        } else {
+          this.snackBar.open('添加失败', 'Close', { duration: 2000 });
+        }
+      })
+      .catch((error) => {
+        this.snackBar.open('添加订阅失败', 'Close', { duration: 2000 });
+      });
   }
+
+getFaIcon(platform: string): string {
+  switch (platform.toLowerCase()) {
+    case 'twitter': return 'fab fa-twitter';
+    case 'instagram': return 'fab fa-instagram';
+    case 'facebook': return 'fab fa-facebook';
+    case 'youtube': return 'fab fa-youtube';
+    case 'tiktok': return 'fab fa-tiktok';
+    default: return 'fas fa-globe';
+  }
+}
 
 
 }
