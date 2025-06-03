@@ -1,60 +1,94 @@
-.actress-left {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-}
-
 .actress-card {
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background-color: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
   width: 100%;
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
 }
 
-.actress-avatar {
+.actress-card {
+  padding: 16px;
+}
+
+.actress-content-wrapper {
   display: flex;
-  justify-content: center;
-  padding: 10px;
+  gap: 24px;
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
-.actress-avatar img {
-  border-radius: 50%;
-  width: 100px;
-  height: 100px;
+.avatar-section {
+  flex: 0 0 160px;
+}
+
+.actress-avatar-img {
+  width: 160px;
+  height: 160px;
   object-fit: cover;
+  border-radius: 12px;
 }
 
-.actress-info,
-.actress-social-media {
-  padding: 15px;
+.info-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.actress-name {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.social-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.social-icons,
+.action-icons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
 .actress-info p {
-  margin: 8px 0;
-  word-wrap: break-word;
-  white-space: normal;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin: 4px 0;
   font-size: 14px;
 }
 
-.actress-social-media .social-item {
-  margin: 5px 0;
+button[mat-icon-button] {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
 }
 
-.social-icons {
-  display: flex;
-  gap: 3px;
-  flex-wrap: wrap;
-  align-items: center;
-}
+@media (max-width: 600px) {
+  .actress-content-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
 
+  .avatar-section {
+    text-align: center;
+  }
 
-@media (max-width: 480px) {
-  .actress-card {
+  .actress-avatar-img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .info-section {
     width: 100%;
+    text-align: center;
+  }
+
+  .social-icons,
+  .action-icons {
+    justify-content: center;
   }
 }

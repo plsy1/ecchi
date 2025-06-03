@@ -11,7 +11,6 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
-  color: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
@@ -44,7 +43,6 @@
   right: 0;
   padding: 8px;
   background: rgba(0, 0, 0, 0.7);
-  color: #fff;
   z-index: 2;
 }
 
@@ -64,77 +62,117 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 8px;
+  color: #fff;
 }
 
 .movie-date {
   font-size: 14px;
-  color: #ccc;
   margin-bottom: 8px;
+  color: #fff;
 }
 
 .movie-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  color: #fff;
 }
 
 .movie-tag {
-  background-color: #555;
   padding: 2px 4px;
   border-radius: 4px;
   font-size: 10px;
   color: #fff;
 }
 
-.pagination-controls {
+.loading-spinner {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
+  align-items: center;
 }
 
-.pagination-controls button {
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+.foot-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 10px;
 }
 
-.pagination-controls button:hover {
-  background-color: #444;
+/* 分页按钮区域 */
+.pagination-controls-foot {
+  display: flex;
+  align-items: center;
+  gap:10px
 }
 
-.pagination-controls button:disabled {
-  background-color: #555;
-  color: #999;
+.pagination-controls-foot button {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.pagination-controls-foot button.mat-mini-fab {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pagination-controls-foot button.mat-mini-fab:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.pagination-controls-foot button.mat-mini-fab:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
-  .movie-card {
-    width: 100%;
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  
+}
+
+.pagination-controls {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagination-controls button.mat-mini-fab {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pagination-controls button.mat-mini-fab:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.pagination-controls button.mat-mini-fab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button[mat-mini-fab] {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+/* 加载动画 */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .pagination-controls {
-    flex-direction: column;
-  }
-
-  .pagination-controls button {
-    width: 100%;
-    margin: 8px 0;
-  }
-}
-
-@media (min-width: 480px) {
-  .pagination-controls button {
-    width: auto;
-  }
-}
-@media (max-width: 768px) {
-  .movie-container {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    justify-content: center;
   }
 }

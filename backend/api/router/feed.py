@@ -126,10 +126,11 @@ async def add_actress_collect(
         db.commit()
         db.refresh(new_collect)
 
-        actress_info = get_actress_info_by_name(name)
-        actress_details = actressInformation(name, actress_info)
+        # actress_info = get_actress_info_by_name(name)
+        # actress_details = actressInformation(name, actress_info)
 
-        TelegramBot.Send_Message_With_Image(actress_info["avatar_url"], actress_details)
+        # TelegramBot.Send_Message_With_Image(actress_info["avatar_url"], actress_details)
+        
         return {
             "message": f"Successfully added Actress to Collect: {name}",
             "feed_id": new_collect.id,

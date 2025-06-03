@@ -45,23 +45,24 @@
       </div>
     </div>
 
-    <div class="movie-actions">
-      <button
-        class="download-btn"
-        mat-raised-button
-        color="primary"
-        (click)="downloadMovie()"
-      >
-        搜索
-      </button>
-      <button
-        class="subscribe-btn"
-        mat-raised-button
-        color="accent"
-        (click)="subscribeToMovie()"
-      >
-        订阅
-      </button>
-    </div>
+<div class="movie-actions">
+  <button
+    mat-icon-button
+    (click)="downloadMovie()"
+    matTooltip="搜索"
+    aria-label="搜索"
+  >
+    <mat-icon>search</mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    (click)="subscribeToMovie()"
+    matTooltip="订阅"
+    aria-label="订阅"
+  >
+    <mat-icon>rss_feed</mat-icon>
+  </button>
+</div>
   </div>
 </div>

@@ -5,7 +5,7 @@
   width: 100%;
 }
 
-.actress-left {
+/* .actress-left {
   padding: 0;
   position: fixed;  
   top: 5%; 
@@ -13,22 +13,22 @@
   display: flex;
   padding-top: 20px;
   flex-direction: column;
-}
+} */
 
 .actress-right {
-  padding-left: 40px;
-  margin-left: 20%;
+  /* padding-left: 40px; */
+  /* margin-left: 20%; */
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
 @media (max-width: 768px) {
-  .actress-left {
+  /* .actress-left {
     position: static;  
     width: 100%;
     padding-bottom: 10px;
-  }
+  } */
   .actress-right {
     padding-left: 0;
     margin-left: 0;

@@ -9,8 +9,23 @@
 .sidenav {
   flex: 1;
   display: flex;
-  width: auto;
-  max-width: 150px;
+  padding-right: 10%;
+  max-width: 300px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.nav-label {
+  margin-left: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mat-icon {
+  margin-right: 12px;
 }
 
 .mat-nav-list {

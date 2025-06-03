@@ -71,9 +71,32 @@
 
 .movie-actions {
   display: flex;
-  gap: 10px;
-  justify-content: flex-start;
-  background-color: transparent;
+  align-items: center;
+  gap: 16px;
+  justify-content: flex-left;
+}
+
+.movie-actions button[mat-icon-button] {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.movie-actions button[mat-icon-button]:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.movie-actions mat-icon {
+  font-size: 24px;
+  color: #444;
+}
+
+@media (max-width: 600px) {
+  .movie-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }
 
 .download-btn,
@@ -146,6 +169,11 @@
   color: #333;
   margin: 5px 0;
   background-color: transparent;
+}
+
+button[mat-icon-button] {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
 }
 
 @media (max-width: 1200px) {

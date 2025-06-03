@@ -1,22 +1,52 @@
-<mat-form-field class="search-box" appearance="outline" style="min-width: 60px">
-  <mat-label>Type</mat-label>
-  <mat-select [(ngModel)]="actressNumberFilter">
-    <mat-select-trigger>
-      {{
-        actressNumberFilter === "0"
-          ? "All"
-          : actressNumberFilter === "1"
-          ? "Single"
-          : actressNumberFilter === "2"
-          ? "Sale"
-          : "Type"
-      }}
-    </mat-select-trigger>
-    <mat-option [value]="'0'">All</mat-option>
-    <mat-option [value]="'1'">Single</mat-option>
-    <mat-option [value]="'2'">Sale</mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="top-bar">
+  <!-- 筛选框 -->
+  <mat-form-field class="search-box" appearance="outline">
+    <mat-label>Type</mat-label>
+    <mat-select [(ngModel)]="actressNumberFilter">
+      <mat-select-trigger>
+        {{
+          actressNumberFilter === "0"
+            ? "All"
+            : actressNumberFilter === "1"
+            ? "Single"
+            : actressNumberFilter === "2"
+            ? "Sale"
+            : "Type"
+        }}
+      </mat-select-trigger>
+      <mat-option [value]="'0'">All</mat-option>
+      <mat-option [value]="'1'">Single</mat-option>
+      <mat-option [value]="'2'">Sale</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- 分页按钮 -->
+  <div class="pagination-controls" *ngIf="searchKeyWords.length != 0">
+    <button
+      mat-mini-fab
+      color="primary"
+      (click)="loadPreviousPage()"
+      [disabled]="isLoading || homeService.currentPage <= 1"
+      aria-label="Previous Page"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <button
+      mat-mini-fab
+      color="primary"
+      (click)="loadNextPage()"
+      [disabled]="isLoading"
+      aria-label="Next Page"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+
+    <div *ngIf="isLoading" class="loading-spinner">
+      <mat-spinner diameter="24"></mat-spinner>
+    </div>
+  </div>
+</div>
 
 <div class="movie-container">
   <ng-container *ngFor="let movie of discoverResults">
@@ -44,18 +74,31 @@
   </ng-container>
 </div>
 
-<div class="pagination-controls" *ngIf="searchKeyWords.length != 0">
-  <button
-    mat-button
-    (click)="loadPreviousPage()"
-    [disabled]="isLoading || homeService.currentPage <= 1"
-  >
-    上一页
-  </button>
-  <button mat-button (click)="loadNextPage()" [disabled]="isLoading">
-    下一页
-  </button>
-  <div *ngIf="isLoading" class="loading-spinner">
-    <mat-spinner diameter="24"></mat-spinner>
+<div class="foot-bar">
+  <!-- 分页按钮 -->
+  <div class="pagination-controls-foot" *ngIf="searchKeyWords.length != 0">
+    <button
+      mat-mini-fab
+      color="primary"
+      (click)="loadPreviousPage()"
+      [disabled]="isLoading || homeService.currentPage <= 1"
+      aria-label="Previous Page"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <button
+      mat-mini-fab
+      color="primary"
+      (click)="loadNextPage()"
+      [disabled]="isLoading"
+      aria-label="Next Page"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+
+    <div *ngIf="isLoading" class="loading-spinner">
+      <mat-spinner diameter="24"></mat-spinner>
+    </div>
   </div>
 </div>

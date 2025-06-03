@@ -1,64 +1,61 @@
-<!-- Title -->
 <mat-card class="actress-card">
-  <mat-card-header>
-    <mat-card-title>{{ name || "N/A" }}</mat-card-title>
-  </mat-card-header>
+  <div class="actress-content-wrapper">
+    <!-- 左侧头像 -->
+    <div class="avatar-section">
+      <img
+        [src]="actressData.avatar_url"
+        alt="Actress Avatar"
+        class="actress-avatar-img"
+      />
+    </div>
 
-  <!-- Avatar -->
-  <mat-card-content class="actress-avatar">
-    <img
-      mat-card-image
-      [src]="actressData.avatar_url"
-      alt="Actress Avatar"
-      class="actress-avatar-img"
-    />
-  </mat-card-content>
+    <!-- 右侧信息 -->
+    <div class="info-section">
+      <!-- 名字 -->
+      <h3 class="actress-name">{{ name || "N/A" }}</h3>
 
-    <!-- Social Media -->
-  <mat-card-content class="actress-social-media">
-    <div class="social-icons">
-      <div *ngFor="let platform of actressData.social_media">
-        <a
-          *ngIf="platform.platform !== 'RSS'"
-          [href]="platform.link"
-          target="_blank"
+      <!-- 社交媒体标题 + 图标 -->
+      <div class="social-title">Social Media</div>
+      <div class="social-icons">
+        <div *ngFor="let platform of actressData.social_media">
+          <a
+            *ngIf="platform.platform !== 'RSS'"
+            [href]="platform.link"
+            target="_blank"
+          >
+            <button mat-icon-button color="primary">
+              <i [ngClass]="getFaIcon(platform.platform)"></i>
+            </button>
+          </a>
+        </div>
+      </div>
+
+      <!-- 个人信息 -->
+      <div class="actress-info">
+        <p><strong>Alias:</strong> {{ actressData.aliases?.join(", ") || "N/A" }}</p>
+        <p><strong>Hobbies:</strong> {{ actressData.hobbies || "N/A" }}</p>
+        <p><strong>Birth Date:</strong> {{ actressData.birth_date || "N/A" }}</p>
+        <p><strong>Height:</strong> {{ actressData.height || "N/A" }}</p>
+        <p><strong>Size:</strong> {{ actressData.size || "N/A" }}</p>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div class="action-icons">
+        <button
+          mat-icon-button
+          (click)="subscribeActress(actressData.avatar_url)"
+          matTooltip="Add to Feed"
         >
-          <button mat-icon-button color="primary">
-            <i [ngClass]="getFaIcon(platform.platform)"></i>
-          </button>
-        </a>
+          <i class="fas fa-rss"></i>
+        </button>
+        <button
+          mat-icon-button
+          (click)="collectActress(actressData.avatar_url)"
+          matTooltip="Add to Collection"
+        >
+          <i class="fas fa-heart"></i>
+        </button>
       </div>
     </div>
-  </mat-card-content>
-
-  <!-- Actress Info -->
-  <mat-card-content class="actress-info">
-    <p>
-      <strong>Alias:</strong> {{ actressData.aliases?.join(", ") || "N/A" }}
-    </p>
-    <p><strong>Hobbies:</strong> {{ actressData.hobbies || "N/A" }}</p>
-    <p><strong>Birth Date:</strong> {{ actressData.birth_date || "N/A" }}</p>
-    <p><strong>Height:</strong> {{ actressData.height || "N/A" }}</p>
-    <p><strong>Size:</strong> {{ actressData.size || "N/A" }}</p>
-  </mat-card-content>
-
-  <mat-card-content class="actress-social-media">
-    <div class="social-icons">
-      <button
-        mat-icon-button
-        (click)="subscribeActress(actressData.avatar_url)"
-        matTooltip="Add to Feed"
-      >
-        <i class="fas fa-rss"></i>
-      </button>
-
-      <button
-        mat-icon-button
-        (click)="collectActress(actressData.avatar_url)"
-        matTooltip="Add to Collection"
-      >
-        <i class="fas fa-heart"></i>
-      </button>
-    </div>
-  </mat-card-content>
+  </div>
 </mat-card>
