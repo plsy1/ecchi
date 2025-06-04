@@ -28,7 +28,7 @@
   width: 160px;
   height: 160px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 50%;
 }
 
 .info-section {
@@ -64,7 +64,9 @@
 
 button[mat-icon-button] {
   background-color: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
 }
 
 @media (max-width: 600px) {
