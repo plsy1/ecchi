@@ -11,10 +11,10 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-sub',
+  selector: 'app-movie-cards',
   standalone: true,
-  templateUrl: './movies-search-results.component.html',
-  styleUrls: ['./movies-search-results.component.css'],
+  templateUrl: './movie-cards.component.html',
+  styleUrls: ['./movie-cards.component.css'],
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
@@ -25,20 +25,20 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
   ],
 })
-export class SubComponent implements OnInit {
+export class MovieCards implements OnInit {
   discoverResults: any[] = [];
   isLoading: boolean = false;
   searchKeyWords: string = '';
 
   actressNumberFilter: string = '0';
 
-  constructor(public homeService: ApiService, private router: Router) {}
+  constructor(public ApiService: ApiService, private router: Router) {}
 
   ngOnInit(): void {
-    this.homeService.discoverResults$.subscribe((results) => {
+    this.ApiService.discoverResults$.subscribe((results) => {
       this.discoverResults = results;
     });
-    this.homeService.discoverByKeywordsResults$.subscribe((keyword) => {
+    this.ApiService.discoverByKeywordsResults$.subscribe((keyword) => {
       this.searchKeyWords = keyword;
     });
   }
@@ -50,16 +50,16 @@ export class SubComponent implements OnInit {
   ): void {
     if (this.isLoading == true) return;
     this.isLoading = true;
-    if (this.homeService.discoverType === 1) {
-      this.homeService
+    if (this.ApiService.discoverType === 1) {
+      this.ApiService
         .discoverByKeywords(filter_value, page)
         .then((data) => {
           this.discoverResults = data.movies;
           this.isLoading = false;
         })
         .catch((error) => {});
-    } else if (this.homeService.discoverType === 2) {
-      this.homeService
+    } else if (this.ApiService.discoverType === 2) {
+      this.ApiService
         .discoverByActress(filter_value, page)
         .then((data) => {
           this.discoverResults = data.movies;
@@ -78,22 +78,22 @@ export class SubComponent implements OnInit {
   }
 
   loadPreviousPage(): void {
-    if (this.homeService.currentPage > 1) {
-      this.homeService.currentPage -= 1;
+    if (this.ApiService.currentPage > 1) {
+      this.ApiService.currentPage -= 1;
       this.loadDiscoverData(
         this.searchKeyWords,
         'normal',
-        this.homeService.currentPage
+        this.ApiService.currentPage
       );
     }
   }
 
   loadNextPage(): void {
-    this.homeService.currentPage += 1;
+    this.ApiService.currentPage += 1;
     this.loadDiscoverData(
       this.searchKeyWords,
       'normal',
-      this.homeService.currentPage
+      this.ApiService.currentPage
     );
   }
   shouldShowMovie(movie: any): boolean {

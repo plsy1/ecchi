@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
-import { SubComponent } from '../movies-search-results/movies-search-results.component';
-import { ActressInformationComponent } from '../actress-information-card/actress-information.component';
+import { MovieCards } from '../card-movies/movie-cards.component';
+import { ActressInformationComponent } from '../card-actress-information/actress-information.component';
 
 @Component({
   selector: 'app-actress-page',
   standalone: true,
-  imports: [CommonModule, SubComponent, ActressInformationComponent],
+  imports: [CommonModule, MovieCards, ActressInformationComponent],
   templateUrl: './actress-page.component.html',
   styleUrl: './actress-page.component.css',
 })

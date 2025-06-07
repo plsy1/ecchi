@@ -9,9 +9,9 @@ import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from './api.service';
-import { SearchDialogComponent } from './search-dialog/search-dialog.component';
+import { SearchDialogComponent } from './dialog-search/search-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './page-login/login.component';
 
 
 @Component({

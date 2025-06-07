@@ -15,13 +15,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { DownloadOptionComponent } from '../download-option/download-option.component';
+import { DownloadOptionComponent } from '../dialog-download-option/download-option.component';
 import { MatDialog } from '@angular/material/dialog';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-torrents-list',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,10 +32,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatTooltipModule
   ],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  templateUrl: './torrents-list.component.html',
+  styleUrls: ['./torrents-list.component.css'],
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class TorrentsList implements OnInit, AfterViewInit {
   searchResults: any[] = [];
   loading: boolean = false;
   error: string | null = null;

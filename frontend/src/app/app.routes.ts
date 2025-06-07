@@ -1,23 +1,17 @@
 import { Routes } from '@angular/router';
-
-import { HomeComponent } from './home/home.component';
-import { SubComponent } from './movies-search-results/movies-search-results.component';
-import { FeedActress } from './feed-actress/feed-actress';
-
-import { LoginComponent } from './login/login.component';
-
-import { MovieinformationComponent } from './movieinformation/movieinformation.component';
-
-import { FeedMoviesComponent } from './feed-movies/feed-movies.component';
-
-import { ActressPageComponent } from './actress-page/actress-page.component';
-
+import { TorrentsList } from './list-torrents-search-result/torrents-list.component';
+import { MovieCards } from './card-movies/movie-cards.component';
+import { FeedActress } from './page-feed-actress/feed-actress';
+import { LoginComponent } from './page-login/login.component';
+import { MovieinformationComponent } from './page-movie/movie-information.component';
+import { FeedMoviesComponent } from './page-feed-movies/feed-movies.component';
+import { ActressPageComponent } from './page-actress/actress-page.component';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: '', component: HomeComponent, canActivate: [authGuard] },
-  { path: 'result', component: SubComponent, canActivate: [authGuard] },
+  { path: '', component: TorrentsList, canActivate: [authGuard] },
+  { path: 'result', component: MovieCards, canActivate: [authGuard] },
   { path: 'feed/actress', component: FeedActress, canActivate: [authGuard] },
   { path: 'movies/:link/:id', component: MovieinformationComponent },
   { path: 'feed/movies', component: FeedMoviesComponent },

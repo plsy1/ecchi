@@ -20,8 +20,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatProgressSpinnerModule,
     MatIconModule,
   ],
-  templateUrl: './movieinformation.component.html',
-  styleUrls: ['./movieinformation.component.css'],
+  templateUrl: './movie-information.component.html',
+  styleUrls: ['./movie-information.component.css'],
 })
 export class MovieinformationComponent implements OnInit {
   movieData: any;

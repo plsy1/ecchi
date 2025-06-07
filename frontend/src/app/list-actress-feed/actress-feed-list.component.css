@@ -1,0 +1,75 @@
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 16px 8px 8px;
+  color: var(--mat-card-text-color, rgba(0, 0, 0, 0.87));
+  border-left: 4px solid var(--mat-primary, #3f51b5);
+  padding-left: 8px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  padding: 8px;
+}
+
+/* 卡片整体样式 */
+.actress-card {
+  position: relative;
+  padding: 12px 4px 16px;
+  text-align: center;
+  border-radius: 10px;
+  background-color: transparent;
+  color: var(--mat-card-text-color);
+  box-shadow: var(--mat-elevation-1);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.actress-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--mat-elevation-6);
+}
+
+/* 头像 */
+.avatar-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.12);
+  margin: 0 auto;
+}
+
+/* 标题 */
+.title {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: inherit;
+}
+
+.menu-button {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  min-width: unset;
+  padding: 0;
+  line-height: 1;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--mat-icon-color, rgba(0, 0, 0, 0.54));
+}
+
+.menu-button:hover {
+  background-color: var(--mat-hover-state-layer-color, rgba(0, 0, 0, 0.05));
+}
+
+.menu-button:hover {
+  background-color: var(--mat-hover-state-layer-color, rgba(0, 0, 0, 0.04));
+  border-radius: 50%;
+}

@@ -4,6 +4,10 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+
 interface ActressList {
   name: string;
   created_at: string;
@@ -14,7 +18,7 @@ interface ActressList {
 @Component({
   selector: 'app-actress-collect-list',
   standalone: true,
-  imports: [CommonModule,MatIconModule ],
+  imports: [CommonModule, MatIconModule,MatCardModule,MatButtonModule,MatMenuModule],
   templateUrl: './actress-collect-list.component.html',
   styleUrl: './actress-collect-list.component.css'
 })
@@ -53,4 +57,11 @@ export class ActressCollectListComponent {
         console.error('Search failed:', error);
       }
     }
+
+        contextActress: any;
+
+  openMenu(event: Event, actress: any) {
+    event.stopPropagation();
+    this.contextActress = actress;
+  }
 }
