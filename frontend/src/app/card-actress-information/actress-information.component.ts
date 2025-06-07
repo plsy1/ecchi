@@ -1,3 +1,4 @@
+import { ActressInformationService } from './../actress-information-service.service';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -9,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-actress-information',
   standalone: true,
-  imports: [CommonModule, MatCardModule,MatIconModule],
+  imports: [CommonModule, MatCardModule, MatIconModule],
   templateUrl: './actress-information.component.html',
   styleUrls: ['./actress-information.component.css'],
 })
@@ -19,22 +20,30 @@ export class ActressInformationComponent {
 
   constructor(
     private getRoute: ActivatedRoute,
-    private homeService: ApiService,
+    private ApiService: ApiService,
+    private ActressInformation: ActressInformationService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.getRoute.paramMap.subscribe((params) => {
       this.name = params.get('name') || '';
-      this.loadActressInformation(this.name);
+      if (
+        this.ActressInformation.actressData &&
+        this.name == this.ActressInformation.actressData.name
+      ) {
+        this.actressData = this.ActressInformation.actressData;
+      } else {
+        this.loadActressInformation(this.name);
+      }
     });
   }
 
   loadActressInformation(name: string): void {
-    this.homeService
-      .getActressInformation(encodeURIComponent(name))
+    this.ApiService.getActressInformation(encodeURIComponent(name))
       .then((data) => {
         this.actressData = data;
+        this.ActressInformation.saveState(this.actressData);
       })
       .catch((error) => {
         console.error('加载电影信息失败', error);
@@ -42,8 +51,7 @@ export class ActressInformationComponent {
   }
 
   subscribeActress(rssLink: string): void {
-    this.homeService
-      .addFeedsRSS(rssLink, this.name, '')
+    this.ApiService.addFeedsRSS(rssLink, this.name, '')
       .then((response) => {
         if (response.status === 200) {
           console.log('订阅成功！');
@@ -59,8 +67,7 @@ export class ActressInformationComponent {
   }
 
   collectActress(rssLink: string): void {
-    this.homeService
-      .addActressCollect(rssLink, this.name)
+    this.ApiService.addActressCollect(rssLink, this.name)
       .then((response) => {
         if (response.status === 200) {
           console.log('订阅成功！');
@@ -75,16 +82,20 @@ export class ActressInformationComponent {
       });
   }
 
-getFaIcon(platform: string): string {
-  switch (platform.toLowerCase()) {
-    case 'twitter': return 'fab fa-twitter';
-    case 'instagram': return 'fab fa-instagram';
-    case 'facebook': return 'fab fa-facebook';
-    case 'youtube': return 'fab fa-youtube';
-    case 'tiktok': return 'fab fa-tiktok';
-    default: return 'fas fa-globe';
+  getFaIcon(platform: string): string {
+    switch (platform.toLowerCase()) {
+      case 'twitter':
+        return 'fab fa-twitter';
+      case 'instagram':
+        return 'fab fa-instagram';
+      case 'facebook':
+        return 'fab fa-facebook';
+      case 'youtube':
+        return 'fab fa-youtube';
+      case 'tiktok':
+        return 'fab fa-tiktok';
+      default:
+        return 'fas fa-globe';
+    }
   }
-}
-
-
 }

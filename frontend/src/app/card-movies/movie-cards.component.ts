@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { MovieStateService } from '../movie-state-service.service';
 
 @Component({
   selector: 'app-movie-cards',
@@ -32,15 +33,25 @@ export class MovieCards implements OnInit {
 
   actressNumberFilter: string = '0';
 
-  constructor(public ApiService: ApiService, private router: Router) {}
+  constructor(
+    public ApiService: ApiService,
+    private movieState: MovieStateService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.ApiService.discoverResults$.subscribe((results) => {
-      this.discoverResults = results;
-    });
-    this.ApiService.discoverByKeywordsResults$.subscribe((keyword) => {
-      this.searchKeyWords = keyword;
-    });
+    this.searchKeyWords = this.ApiService.queryKeywords;
+
+    const cacheMatches =
+      this.movieState.searchKeyWords === this.searchKeyWords &&
+      this.movieState.discoverResults.length > 0;
+
+    if (cacheMatches) {
+      this.discoverResults = this.movieState.discoverResults;
+      this.actressNumberFilter = this.movieState.actressNumberFilter;
+    } else {
+      this.loadDiscoverData(this.searchKeyWords, 'normal', 1);
+    }
   }
 
   loadDiscoverData(
@@ -51,19 +62,31 @@ export class MovieCards implements OnInit {
     if (this.isLoading == true) return;
     this.isLoading = true;
     if (this.ApiService.discoverType === 1) {
-      this.ApiService
-        .discoverByKeywords(filter_value, page)
+      this.ApiService.discoverByKeywords(filter_value, page)
         .then((data) => {
           this.discoverResults = data.movies;
           this.isLoading = false;
+          this.movieState.saveState(
+            this.discoverResults,
+            this.searchKeyWords,
+            this.ApiService.currentPage,
+            this.ApiService.discoverType,
+            this.actressNumberFilter
+          );
         })
         .catch((error) => {});
     } else if (this.ApiService.discoverType === 2) {
-      this.ApiService
-        .discoverByActress(filter_value, page)
+      this.ApiService.discoverByActress(filter_value, page)
         .then((data) => {
           this.discoverResults = data.movies;
           this.isLoading = false;
+          this.movieState.saveState(
+            this.discoverResults,
+            this.searchKeyWords,
+            this.ApiService.currentPage,
+            this.ApiService.discoverType,
+            this.actressNumberFilter
+          );
         })
         .catch((error) => {});
     }
@@ -105,5 +128,9 @@ export class MovieCards implements OnInit {
     if (this.actressNumberFilter === '2') return actorCount >= 2;
 
     return true;
+  }
+
+  onFilterChange(value: string) {
+    this.movieState.actressNumberFilter = value;
   }
 }

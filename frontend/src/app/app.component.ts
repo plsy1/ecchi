@@ -12,7 +12,7 @@ import { ApiService } from './api.service';
 import { SearchDialogComponent } from './dialog-search/search-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginComponent } from './page-login/login.component';
-
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +41,7 @@ export class AppComponent {
 
   dialog: MatDialog = inject(MatDialog);
 
-  constructor(private homeService: ApiService, private router: Router) {
+  constructor(private homeService: ApiService, private router: Router,private location: Location) {
     this.router.events.subscribe(() => {
       this.isLoginPage = this.router.url === '/login';
     });
@@ -89,4 +89,9 @@ export class AppComponent {
   logout(): void {
     this.homeService.logout();
   }
+
+  goBack() {
+  this.location.back();
+}
+
 }

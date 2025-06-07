@@ -13,12 +13,12 @@
             <span class="nav-label">Home</span>
           </div>
         </a>
-        <a mat-list-item routerLink="/result" routerLinkActive="active">
+        <!-- <a mat-list-item routerLink="/result" routerLinkActive="active">
           <div class="nav-item">
             <mat-icon>explore</mat-icon>
             <span class="nav-label">Explore</span>
           </div>
-        </a>
+        </a> -->
         <a mat-list-item routerLink="/feed/actress" routerLinkActive="active">
           <div class="nav-item">
             <mat-icon>favorite</mat-icon>
@@ -47,6 +47,13 @@
   >
     <mat-toolbar color="primary" class="toolbar">
       <div class="toolbar-left">
+            <button
+      mat-icon-button
+      aria-label="Back"
+      (click)="goBack()"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
         <button
           mat-icon-button
           (click)="toggleSidebar()"

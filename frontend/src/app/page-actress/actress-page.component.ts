@@ -17,13 +17,14 @@ export class ActressPageComponent {
 
   constructor(
     private getRoute: ActivatedRoute,
-    private homeService: ApiService
+    private ApiService: ApiService
   ) {}
 
   ngOnInit(): void {
     this.getRoute.paramMap.subscribe((params) => {
       this.name = params.get('name') || '';
-      this.homeService.discoverByActress(this.name, 1);
+      this.ApiService.queryKeywords = this.name;
+      //this.homeService.discoverByActress(this.name, 1);
     });
   }
 }

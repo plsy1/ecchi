@@ -41,6 +41,7 @@ export class ApiService {
 
   public queryKeywords: string = '';
   public movieLink: string = '';
+  
 
   constructor(private router: Router) {}
 

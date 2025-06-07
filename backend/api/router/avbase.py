@@ -81,6 +81,8 @@ async def search(name: str, isValid: str = Depends(tokenInterceptor)):
     url = f"https://www.avbase.net/talents/{name}"
 
     info = {}
+    
+    info["name"] = name
 
     response = requests.get(url)
 
@@ -132,7 +134,7 @@ async def search(name: str, isValid: str = Depends(tokenInterceptor)):
     social_media_links = get_social_media_links(soup)
 
     info["social_media"] = social_media_links
-
+    
     return JSONResponse(content=info)
 
 
