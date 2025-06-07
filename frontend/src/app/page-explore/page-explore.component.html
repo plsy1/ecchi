@@ -21,9 +21,13 @@
 </button>
 </div>
 
+<h2 class="section-title">Monthly Ranking of Works</h2>
 
 <div class="poster-container">
-  <h2 class="section-title">Monthly Ranking of Works</h2>
+
+  <button mat-icon-button class="floating-button left" (click)="prevWorkPage()" [disabled]="currentWorkPage === 1" >
+    <mat-icon>chevron_left</mat-icon>
+  </button>
 
   <div class="poster-grid">
     <div class="poster-card" *ngFor="let work of workList" (click)="posterClick(work.number)">
@@ -37,10 +41,8 @@
     </div>
   </div>
 
-  <button class="floating-button left" (click)="prevWorkPage()" [disabled]="currentWorkPage === 1">
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-  <button class="floating-button right" (click)="nextWorkPage()" [disabled]="workList.length < 10">
+
+  <button mat-icon-button class="floating-button right" (click)="nextWorkPage()" [disabled]="workList.length < 10">
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
