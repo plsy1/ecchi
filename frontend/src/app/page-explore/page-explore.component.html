@@ -1,0 +1,22 @@
+<div class="section-title">人気女優ランキング</div>
+
+<div class="hover-container">
+  <!-- 左侧分页按钮 -->
+  <button class="floating-button left" (click)="prevPage()" [disabled]="currentPage === 1">
+    ⬅
+  </button>
+
+  <!-- 演员卡片列表 -->
+  <div class="card-grid">
+    <div *ngFor="let actress of actressList" class="actress-card">
+      <div class="rank-badge">{{ actress.rank }}</div>
+      <img [src]="actress.image" [alt]="actress.name" class="avatar-img" />
+      <div class="title">{{ actress.name }}</div>
+    </div>
+  </div>
+
+  <!-- 右侧分页按钮 -->
+  <button class="floating-button right" (click)="nextPage()">
+    ➡
+  </button>
+</div>
