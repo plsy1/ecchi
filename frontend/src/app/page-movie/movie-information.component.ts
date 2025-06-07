@@ -1,10 +1,10 @@
+import { ApiService } from './../api.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -87,8 +87,6 @@ export class MovieinformationComponent implements OnInit {
 
   async searchByActressName(name: string) {
     try {
-      const results = await this.homeService.discoverByActress(name, 1);
-      this.homeService.currentPage = 1;
       this.router.navigate(['/actress', name]);
     } catch (error) {
       console.error('Search failed:', error);

@@ -8,6 +8,16 @@ export interface ActressRanking {
   work_count: number;
 }
 
+export interface RankingItem {
+  rank: string;
+  title: string;
+  number: string;
+  image: string;
+  detail_url: string;
+  maker: string | null;
+  actresses: string[];
+}
+
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
 
@@ -20,6 +30,9 @@ export class PageExploreServiceService {
 
   private actressRankingCache: ActressRanking[] = [];
   private lastFetchedPage: number = 1;
+
+  private workRankingCache: RankingItem[] = [];
+  private lastFetchedWorkPage: number = 1;
 
   constructor() {}
 
@@ -46,6 +59,33 @@ export class PageExploreServiceService {
         return response.json();
       })
       .then((data: ActressRanking[]) => {
+        return data;
+      });
+  }
+
+  setWorkRankingData(data: RankingItem[], page: number): void {
+    this.workRankingCache = data;
+    this.lastFetchedWorkPage = page;
+  }
+
+  getWorkRankingData(): RankingItem[] {
+    return this.workRankingCache;
+  }
+
+  getLastWorkPage(): number {
+    return this.lastFetchedWorkPage;
+  }
+
+  fetchWorkRanking(page: number): Promise<RankingItem[]> {
+    const url = `${this.apiUrl}/fanza/monthlyworks?page=${page}`;
+    return fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data: RankingItem[]) => {
         return data;
       });
   }

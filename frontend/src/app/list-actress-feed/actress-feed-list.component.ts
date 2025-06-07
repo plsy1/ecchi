@@ -39,8 +39,6 @@ export class ActressFeedListComponent {
   
     async onClick(name: string) {
       try {
-        const results = await this.homeService.discoverByActress(name, 1);
-        this.homeService.currentPage = 1;
         this.router.navigate(['/actress', name]);
       } catch (error) {
         console.error('Search failed:', error);

@@ -26,7 +26,7 @@
       mat-mini-fab
       color="primary"
       (click)="loadPreviousPage()"
-      [disabled]="isLoading || ApiService.currentPage <= 1"
+      [disabled]="isLoading || this.page <= 1"
       aria-label="Previous Page"
     >
       <mat-icon>chevron_left</mat-icon>
@@ -81,7 +81,7 @@
       mat-mini-fab
       color="primary"
       (click)="loadPreviousPage()"
-      [disabled]="isLoading || ApiService.currentPage <= 1"
+      [disabled]="isLoading || this.page <= 1"
       aria-label="Previous Page"
     >
       <mat-icon>chevron_left</mat-icon>

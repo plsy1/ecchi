@@ -30,6 +30,7 @@ export class MovieCards implements OnInit {
   discoverResults: any[] = [];
   isLoading: boolean = false;
   searchKeyWords: string = '';
+  page: number = 1;
 
   actressNumberFilter: string = '0';
 
@@ -49,8 +50,9 @@ export class MovieCards implements OnInit {
     if (cacheMatches) {
       this.discoverResults = this.movieState.discoverResults;
       this.actressNumberFilter = this.movieState.actressNumberFilter;
+      this.page = this.movieState.currentPage;
     } else {
-      this.loadDiscoverData(this.searchKeyWords, 'normal', 1);
+      this.loadDiscoverData(this.searchKeyWords, 'normal', this.page);
     }
   }
 
@@ -62,6 +64,7 @@ export class MovieCards implements OnInit {
     if (this.isLoading == true) return;
     this.isLoading = true;
     if (this.ApiService.discoverType === 1) {
+      console.log('keywords');
       this.ApiService.discoverByKeywords(filter_value, page)
         .then((data) => {
           this.discoverResults = data.movies;
@@ -69,13 +72,14 @@ export class MovieCards implements OnInit {
           this.movieState.saveState(
             this.discoverResults,
             this.searchKeyWords,
-            this.ApiService.currentPage,
+            page,
             this.ApiService.discoverType,
             this.actressNumberFilter
           );
         })
         .catch((error) => {});
     } else if (this.ApiService.discoverType === 2) {
+      console.log('actress');
       this.ApiService.discoverByActress(filter_value, page)
         .then((data) => {
           this.discoverResults = data.movies;
@@ -83,7 +87,7 @@ export class MovieCards implements OnInit {
           this.movieState.saveState(
             this.discoverResults,
             this.searchKeyWords,
-            this.ApiService.currentPage,
+            page,
             this.ApiService.discoverType,
             this.actressNumberFilter
           );
@@ -101,23 +105,15 @@ export class MovieCards implements OnInit {
   }
 
   loadPreviousPage(): void {
-    if (this.ApiService.currentPage > 1) {
-      this.ApiService.currentPage -= 1;
-      this.loadDiscoverData(
-        this.searchKeyWords,
-        'normal',
-        this.ApiService.currentPage
-      );
+    if (this.page > 1) {
+      this.page -= 1;
+      this.loadDiscoverData(this.searchKeyWords, 'normal', this.page);
     }
   }
 
   loadNextPage(): void {
-    this.ApiService.currentPage += 1;
-    this.loadDiscoverData(
-      this.searchKeyWords,
-      'normal',
-      this.ApiService.currentPage
-    );
+    this.page += 1;
+    this.loadDiscoverData(this.searchKeyWords, 'normal', this.page);
   }
   shouldShowMovie(movie: any): boolean {
     if (!this.actressNumberFilter) return true;

@@ -33,7 +33,7 @@ export class SearchDialogComponent {
   constructor(
     private dialogRef: MatDialogRef<SearchDialogComponent>,
     private snackBar: MatSnackBar,
-    private homeService: ApiService,
+    private apiService: ApiService,
     private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: { title: string; type: string }
   ) {
@@ -52,7 +52,7 @@ export class SearchDialogComponent {
     if (this.searchType === '1') {
       try {
         this.snackBar.open('Searching......', 'Close', { duration: 2000 });
-        const results = await this.homeService.search(this.searchKeywords);
+        const results = await this.apiService.search(this.searchKeywords);
         if (
           this.searchKeywords &&
           !this.searchKeywordsOptions.includes(this.searchKeywords)
@@ -78,10 +78,8 @@ export class SearchDialogComponent {
     } else if (this.searchType === '2') {
       try {
         this.snackBar.open('Searching......', 'Close', { duration: 2000 });
-        const results = await this.homeService.discoverByActress(
-          this.searchKeywords,
-          1
-        );
+        this.apiService.queryKeywords = this.searchKeywords
+        this.apiService.discoverType = 2;
         if (
           this.searchKeywords &&
           !this.searchKeywordsOptions.includes(this.searchKeywords)
@@ -96,7 +94,6 @@ export class SearchDialogComponent {
           this.filteredOptions = [...this.searchKeywordsOptions];
         }
 
-        this.homeService.currentPage = 1;
         this.router.navigate([`/actress/${this.searchKeywords}`]);
         this.dialogRef.close();
       } catch (error) {
@@ -105,13 +102,14 @@ export class SearchDialogComponent {
         });
         this.dialogRef.close();
       }
-    } else if (this.searchType === '3') {
+    } 
+    
+    else if (this.searchType === '3') {
       try {
         this.snackBar.open('Searching......', 'Close', { duration: 2000 });
-        const results = await this.homeService.discoverByKeywords(
-          this.searchKeywords,
-          1
-        );
+        this.apiService.queryKeywords = this.searchKeywords;
+        this.apiService.discoverType = 1;
+
         if (
           this.searchKeywords &&
           !this.searchKeywordsOptions.includes(this.searchKeywords)
@@ -125,7 +123,7 @@ export class SearchDialogComponent {
 
           this.filteredOptions = [...this.searchKeywordsOptions];
         }
-        this.homeService.currentPage = 1;
+
         this.router.navigate(['/result']);
         this.dialogRef.close();
       } catch (error) {

@@ -19,7 +19,6 @@ interface KeywordFeed {
   img: string;
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -27,7 +26,6 @@ export class ApiService {
   private isDev = !environment.production;
   private apiUrl = this.isDev ? 'http://localhost:8964/api/v1' : '/api/v1';
 
-  private _currentPage: number = 1;
   private _discoverType: number = 1;
 
   private searchResultsSubject = new BehaviorSubject<any[]>([]);
@@ -41,7 +39,6 @@ export class ApiService {
 
   public queryKeywords: string = '';
   public movieLink: string = '';
-  
 
   constructor(private router: Router) {}
 
@@ -86,14 +83,6 @@ export class ApiService {
     localStorage.removeItem('loggedIn');
     localStorage.removeItem('access_token');
     this.router.navigate(['/login']);
-  }
-
-  get currentPage(): number {
-    return this._currentPage;
-  }
-
-  set currentPage(page: number) {
-    this._currentPage = page;
   }
 
   get discoverType(): number {
@@ -405,7 +394,7 @@ export class ApiService {
     }
   }
 
-    async getActressCollect(): Promise<any> {
+  async getActressCollect(): Promise<any> {
     const url = `${this.apiUrl}/feed/getCollectList`;
     try {
       const response = await fetch(url, {
@@ -454,10 +443,7 @@ export class ApiService {
     }
   }
 
-    async addActressCollect(
-    url: string,
-    title: string,
-  ): Promise<any> {
+  async addActressCollect(url: string, title: string): Promise<any> {
     const addFeedsUrl = `${this.apiUrl}/feed/addActressCollect`;
 
     try {
@@ -468,7 +454,7 @@ export class ApiService {
         },
         body: new URLSearchParams({
           avatar_url: url,
-          name: title
+          name: title,
         }),
       });
 
@@ -506,7 +492,7 @@ export class ApiService {
     }
   }
 
-    async removeActressCollect(url: string): Promise<any> {
+  async removeActressCollect(url: string): Promise<any> {
     const urlToDelete = `${this.apiUrl}/feed/delActressCollect`;
 
     try {
@@ -537,9 +523,9 @@ export class ApiService {
     const url = `${this.apiUrl}/feed/getKeywordsFeedList`;
     try {
       const response = await fetch(url, {
-        method: 'GET', 
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json', 
+          'Content-Type': 'application/json',
         },
       });
 
@@ -547,12 +533,11 @@ export class ApiService {
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
 
-      const data: KeywordFeed[] = await response.json(); 
-      return data
+      const data: KeywordFeed[] = await response.json();
+      return data;
     } catch (error) {
       console.error('Error fetching keyword feeds:', error);
       throw error;
     }
   }
-  
 }

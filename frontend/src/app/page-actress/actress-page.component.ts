@@ -23,8 +23,8 @@ export class ActressPageComponent {
   ngOnInit(): void {
     this.getRoute.paramMap.subscribe((params) => {
       this.name = params.get('name') || '';
+      this.ApiService.discoverType = 2; //actress
       this.ApiService.queryKeywords = this.name;
-      //this.homeService.discoverByActress(this.name, 1);
     });
   }
 }

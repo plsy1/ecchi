@@ -35,7 +35,10 @@ async def fetch_actress_ranking(page: int = 1):
             img_tag = td.select_one("a > img")
             img_url = img_tag["src"] if img_tag else None
             actress_name = img_tag["alt"] if img_tag else None
-
+            
+            match = re.match(r"^(.*?)（", actress_name)
+            actress_name = match.group(1) if match else actress_name
+            
             profile_link_tag = td.select_one("a[href*='actress=']")
             profile_link = (
                 f"https://www.dmm.co.jp{profile_link_tag['href']}"
@@ -65,3 +68,60 @@ async def fetch_actress_ranking(page: int = 1):
             })
 
         return actresses
+    
+@router.get("/monthlyworks")
+async def fetch_dvd_ranking(page: int = 1):
+    
+    url = f"https://www.dmm.co.jp/digital/videoa/-/ranking/=/term=monthly/page={page}/"
+
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Referer": "https://www.dmm.co.jp/digital/videoa/-/ranking/=/term=monthly/",
+        "Accept-Language": "ja,en;q=0.9",
+    }
+
+    cookies = {
+        "age_check_done": "1",
+        "ckcy": "1",
+        "cklg": "ja",
+    }
+    async with httpx.AsyncClient(headers=headers, cookies=cookies, follow_redirects=True) as client:
+        res = await client.get(url)
+        soup = BeautifulSoup(res.text, "html.parser")
+
+        results = []
+
+        for td in soup.select("td.bd-b"):
+            rank_tag = td.select_one("span.rank")
+            rank = rank_tag.text.strip() if rank_tag else None
+
+            img = td.select_one("a > img")
+            image = img["src"].replace("pt.jpg", "pl.jpg") if img else None
+            
+            match = re.search(r'/([a-z]+\d+)/\1pl\.jpg$', image)
+            number = match.group(1) if match else None
+                        
+            detail_url = f"https://www.dmm.co.jp{img.parent['href']}" if img else None
+
+            # 标题去除【独占】【新作】
+            title_tag = td.select_one(".data p a")
+            raw_title = title_tag.get_text(strip=True) if title_tag else None
+            title = re.sub(r"【.*?】", "", raw_title).strip() if raw_title else None
+
+            maker_tag = td.select_one("span.arrow a[href*='maker=']")
+            maker = maker_tag.text.strip() if maker_tag else None
+
+            actress_tags = td.select("a[href*='actress=']")
+            actresses = [a.text.strip() for a in actress_tags]
+
+            results.append({
+                "rank": rank,
+                "title": title,
+                "number": number,
+                "image": image,
+                "detail_url": detail_url,
+                "maker": maker,
+                "actresses": actresses
+            })
+
+        return results

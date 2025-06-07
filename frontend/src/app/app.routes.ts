@@ -13,6 +13,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', component: TorrentsList, canActivate: [authGuard] },
   { path: 'explore', component: PageExploreComponent, canActivate: [authGuard] },
+  { path: 'result', component: MovieCards, canActivate: [authGuard] },
   { path: 'feed/actress', component: FeedActress, canActivate: [authGuard] },
   { path: 'movies/:link/:id', component: MovieinformationComponent },
   { path: 'feed/movies', component: FeedMoviesComponent },
