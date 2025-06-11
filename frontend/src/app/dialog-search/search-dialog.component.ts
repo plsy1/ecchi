@@ -10,6 +10,10 @@ import { Router } from '@angular/router';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ApiService } from '../api.service';
 
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+
 @Component({
   selector: 'app-search-dialog',
   templateUrl: './search-dialog.component.html',
@@ -22,6 +26,9 @@ import { ApiService } from '../api.service';
     MatSelectModule,
     CommonModule,
     MatAutocompleteModule,
+    MatButtonToggleModule,
+    MatDialogModule,
+    MatIconModule
   ],
 })
 export class SearchDialogComponent {
@@ -145,4 +152,6 @@ export class SearchDialogComponent {
       panelClass: ['error-snackbar'],
     });
   }
+
+  
 }

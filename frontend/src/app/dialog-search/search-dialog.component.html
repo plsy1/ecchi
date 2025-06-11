@@ -1,49 +1,66 @@
 <div class="dialog-container">
-  <div class="dialog-header">
-    <h2>Search</h2>
-  </div>
-
   <div class="dialog-body">
     <mat-form-field appearance="outline">
       <mat-label>Keywords</mat-label>
       <input
         matInput
         [(ngModel)]="searchKeywords"
-        [matAutocomplete]="auto"
         (keydown.enter)="search()"
         placeholder="Enter Keywords"
       />
-
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let option of filteredOptions" [value]="option">
-          {{ option }}
-        </mat-option>
-      </mat-autocomplete>
     </mat-form-field>
 
+    <!-- 最近搜索 -->
+    <div *ngIf="filteredOptions?.length" class="recent-searches">
+      <div class="recent-title">Recent Searches</div>
+      <div class="recent-list">
+        <span
+          class="recent-item"
+          *ngFor="let option of filteredOptions"
+          (click)="searchKeywords = option; search()"
+        >
+          {{ option }}
+        </span>
+      </div>
+    </div>
+
+    <!-- 搜索类型按钮 -->
     <div class="search-type-buttons">
-      <button
-        mat-button
-        [class.selected]="searchType === '1'"
-        (click)="searchType = '1'; search()"
-      >
-        Torrents
-      </button>
-      <button
-        mat-button
-        [class.selected]="searchType === '2'"
-        (click)="searchType = '2'; search()"
-      >
-        Actress
-      </button>
-      <button
-        mat-button
-        color="primary"
-        [class.selected]="searchType === '3'"
-        (click)="searchType = '3'; search()"
-      >
-        Keywords
-      </button>
+<button
+  mat-button
+  [class.selected]="searchType === '1'"
+  (click)="searchType = '1'; search()"
+  class="search-button"
+>
+  <div class="button-content">
+    <mat-icon class="icon-left">cloud_download</mat-icon>
+    <span class="label-text">Torrents</span>
+  </div>
+</button>
+
+<button
+  mat-button
+  [class.selected]="searchType === '2'"
+  (click)="searchType = '2'; search()"
+  class="search-button"
+>
+  <div class="button-content">
+    <mat-icon class="icon-left">person</mat-icon>
+    <span class="label-text">Actress</span>
+  </div>
+</button>
+
+<button
+  mat-button
+  [class.selected]="searchType === '3'"
+  (click)="searchType = '3'; search()"
+  class="search-button"
+>
+  <div class="button-content">
+    <mat-icon class="icon-left">search</mat-icon>
+    <span class="label-text">Keywords</span>
+  </div>
+</button>
     </div>
   </div>
 </div>

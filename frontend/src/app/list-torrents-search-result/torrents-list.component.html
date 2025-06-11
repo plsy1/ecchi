@@ -8,54 +8,53 @@
     />
   </mat-form-field>
   <mat-table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="indexer">
-      <mat-header-cell *matHeaderCellDef mat-sort-header class="indexer-column">
-        Source
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element" class="indexer-column" (click)="onTitleClick(element)" [matTooltip]="'Open Source Page'" matTooltipPosition="right" >
-        {{ element.indexer }}
-      </mat-cell>
-    </ng-container>
+<ng-container matColumnDef="indexer">
+  <mat-header-cell *matHeaderCellDef mat-sort-header class="indexer-column">
+    <i class="fas fa-database" matTooltip="Source"></i>
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element" class="indexer-column" 
+            (click)="onTitleClick(element)" 
+            [matTooltip]="'Open Source Page'" 
+            matTooltipPosition="right">
+    {{ element.indexer }}
+  </mat-cell>
+</ng-container>
 
-    <ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef mat-sort-header class="title-column">
-        Title
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element" class="title-column" (click)="onRowClick(element)">
-        {{ element.title }}
-      </mat-cell>
-    </ng-container>
+<ng-container matColumnDef="title">
+  <mat-header-cell *matHeaderCellDef mat-sort-header class="title-column">
+    <i class="fas fa-heading" matTooltip="Title"></i>
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element" class="title-column" (click)="onRowClick(element)">
+    {{ element.title }}
+  </mat-cell>
+</ng-container>
 
-    <ng-container matColumnDef="size">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>
-        Size
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        {{ formatSize(element.size) }}
-      </mat-cell>
-    </ng-container>
+<ng-container matColumnDef="size">
+  <mat-header-cell *matHeaderCellDef mat-sort-header>
+    <i class="fas fa-file-archive" matTooltip="Size"></i>
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element">
+    {{ formatSize(element.size) }}
+  </mat-cell>
+</ng-container>
 
-    <ng-container matColumnDef="seeders">
-      <mat-header-cell *matHeaderCellDef mat-sort-header class="seeders-column">
-        Seeding
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element" class="seeders-column">
-        {{ element.seeders }}
-      </mat-cell>
-    </ng-container>
+<ng-container matColumnDef="seeders">
+  <mat-header-cell *matHeaderCellDef mat-sort-header class="seeders-column">
+    <i class="fas fa-upload" matTooltip="Seeding"></i>
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element" class="seeders-column">
+    {{ element.seeders }}
+  </mat-cell>
+</ng-container>
 
-    <ng-container matColumnDef="publishDate">
-      <mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header
-        class="publishDate-column"
-      >
-        Date
-      </mat-header-cell>
-      <mat-cell *matCellDef="let element" class="publishDate-column">
-        {{ formatDate(element.publishDate) }}
-      </mat-cell>
-    </ng-container>
+<ng-container matColumnDef="publishDate">
+  <mat-header-cell *matHeaderCellDef mat-sort-header class="publishDate-column">
+    <i class="fas fa-calendar-alt" matTooltip="Date"></i>
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element" class="publishDate-column">
+    {{ formatDate(element.publishDate) }}
+  </mat-cell>
+</ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row

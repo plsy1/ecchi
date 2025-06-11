@@ -33,11 +33,13 @@ import { Location } from '@angular/common';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'Ecchi';
+  // title = 'Ecchi';
   isSidebarOpen = true;
   searchTerm = '';
   searchResults: any[] = [];
   isLoginPage: boolean = false;
+
+  searchText: string = '';
 
   dialog: MatDialog = inject(MatDialog);
 

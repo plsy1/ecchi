@@ -19,6 +19,7 @@ import { DownloadOptionComponent } from '../dialog-download-option/download-opti
 import { MatDialog } from '@angular/material/dialog';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-torrents-list',
@@ -30,7 +31,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatIconModule
   ],
   templateUrl: './torrents-list.component.html',
   styleUrls: ['./torrents-list.component.css'],
