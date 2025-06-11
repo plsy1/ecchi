@@ -1,3 +1,4 @@
+
 export interface ActressRanking {
   rank: string;
   name: string;
@@ -18,6 +19,12 @@ export interface RankingItem {
   actresses: string[];
 }
 
+export enum RankingTypeOfWorks {
+  Daily = 'daily',
+  Weekly = 'weekly',
+  Monthly = 'monthly'
+}
+
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
 
@@ -33,6 +40,7 @@ export class PageExploreServiceService {
 
   private workRankingCache: RankingItem[] = [];
   private lastFetchedWorkPage: number = 1;
+  private workRankingType: RankingTypeOfWorks = RankingTypeOfWorks.Weekly;
 
   constructor() {}
 
@@ -49,7 +57,12 @@ export class PageExploreServiceService {
     return this.lastFetchedPage;
   }
 
-  fetchActressRanking(page: number): Promise<ActressRanking[]> {
+  getWorkRankingType(): RankingTypeOfWorks
+  {
+    return this.workRankingType;
+  }
+
+  async fetchActressRanking(page: number): Promise<ActressRanking[]> {
     const url = `${this.apiUrl}/fanza/monthlyactress?page=${page}`;
     return fetch(url)
       .then((response) => {
@@ -63,9 +76,10 @@ export class PageExploreServiceService {
       });
   }
 
-  setWorkRankingData(data: RankingItem[], page: number): void {
+  setWorkRankingData(data: RankingItem[], page: number,RankingType: RankingTypeOfWorks): void {
     this.workRankingCache = data;
     this.lastFetchedWorkPage = page;
+    this.workRankingType = RankingType;
   }
 
   getWorkRankingData(): RankingItem[] {
@@ -76,8 +90,8 @@ export class PageExploreServiceService {
     return this.lastFetchedWorkPage;
   }
 
-  fetchWorkRanking(page: number): Promise<RankingItem[]> {
-    const url = `${this.apiUrl}/fanza/monthlyworks?page=${page}`;
+  async fetchWorkRanking(page: number,term: RankingTypeOfWorks): Promise<RankingItem[]> {
+    const url = `${this.apiUrl}/fanza/monthlyworks?page=${page}&term=${term}`;
     return fetch(url)
       .then((response) => {
         if (!response.ok) {

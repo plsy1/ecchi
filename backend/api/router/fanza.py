@@ -1,8 +1,13 @@
 from fastapi import APIRouter
-
+from enum import Enum
 from bs4 import BeautifulSoup
 import httpx
 import re
+
+class RankingType(Enum):
+    daily = 'daily'
+    weekly = 'weekly'
+    monthly = 'monthly'
 
 router = APIRouter()
 
@@ -70,13 +75,21 @@ async def fetch_actress_ranking(page: int = 1):
         return actresses
     
 @router.get("/monthlyworks")
-async def fetch_dvd_ranking(page: int = 1):
+async def fetch_dvd_ranking(page: int = 1, term: RankingType = RankingType.monthly):
     
-    url = f"https://www.dmm.co.jp/digital/videoa/-/ranking/=/term=monthly/page={page}/"
+    base_url = "https://www.dmm.co.jp/digital/videoa/-/ranking/=/"
 
+    if term == RankingType.daily:
+        url = f"{base_url}term=daily/"
+    elif term == RankingType.weekly:
+        url = f"{base_url}term=weekly/page={page}/"
+    elif term == RankingType.monthly:
+        url = f"{base_url}term=monthly/page={page}/"
+    else:
+        raise ValueError("Unsupported ranking term")
+    
     headers = {
         "User-Agent": "Mozilla/5.0",
-        "Referer": "https://www.dmm.co.jp/digital/videoa/-/ranking/=/term=monthly/",
         "Accept-Language": "ja,en;q=0.9",
     }
 

@@ -5,7 +5,6 @@
   overflow: hidden;
 }
 
-/* 网格布局：一行 10 个卡片 */
 .card-grid {
   width: 97%;
   margin: 0 auto;
@@ -15,7 +14,6 @@
   box-sizing: border-box;
 }
 
-/* 卡片容器 */
 .actress-card {
   position: relative;
   background: var(--mat-card-background-color);
@@ -122,7 +120,7 @@
   width: 97%;
   margin: 0 auto;
   gap: 1rem;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   box-sizing: border-box;
 }
 
@@ -182,15 +180,5 @@
   }
   .card-grid{
       grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-
-@media (max-width: 1080px) {
-  .poster-grid {
-      grid-template-columns: repeat(3, 1fr);
-  }
-  .card-grid{
-      grid-template-columns: repeat(5, 1fr);
   }
 }

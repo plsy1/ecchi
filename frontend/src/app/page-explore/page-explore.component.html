@@ -21,13 +21,34 @@
 </button>
 </div>
 
-<h2 class="section-title">Monthly Ranking of Works</h2>
+<h2 class="section-title">Ranking of Works</h2>
 
 <div class="poster-container">
 
   <button mat-icon-button class="floating-button left" (click)="prevWorkPage()" [disabled]="currentWorkPage === 1" >
     <mat-icon>chevron_left</mat-icon>
   </button>
+
+  <mat-form-field appearance="outline" class="search-box">
+  <mat-label>Ranking Type</mat-label>
+  <mat-select [(ngModel)]="workRankingType" (ngModelChange)="onWorkRankingTypeChange($event)">
+    <mat-select-trigger>
+      {{
+        workRankingType === RankingTypeOfWorks.Daily
+          ? 'Daily'
+          : workRankingType === RankingTypeOfWorks.Weekly
+          ? 'Weekly'
+          : workRankingType === RankingTypeOfWorks.Monthly
+          ? 'Monthly'
+          : 'Select Type'
+      }}
+    </mat-select-trigger>
+
+    <mat-option [value]="RankingTypeOfWorks.Daily">Daily</mat-option>
+    <mat-option [value]="RankingTypeOfWorks.Weekly">Weekly</mat-option>
+    <mat-option [value]="RankingTypeOfWorks.Monthly">Monthly</mat-option>
+  </mat-select>
+</mat-form-field>
 
   <div class="poster-grid">
     <div class="poster-card" *ngFor="let work of workList" (click)="posterClick(work.number)">
