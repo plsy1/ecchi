@@ -28,5 +28,3 @@ def initScheduler():
 
     scheduler.start()
     scheduler.add_listener(job_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
-
-

@@ -13,7 +13,8 @@ QB_HOST = os.environ.get("QB_HOST", "")
 QB_PORT = os.environ.get("QB_PORT", "")
 QB_USERNAME = os.environ.get("QB_USERNAME", "")
 QB_PASSWORD = os.environ.get("QB_PASSWORD", "")
-
+QB_KEYWORD_FILTER = [kw.strip() for kw in os.environ.get("QB_KEYWORD_FILTER", "游戏大全,七龍珠").split(",") if kw.strip()]
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+

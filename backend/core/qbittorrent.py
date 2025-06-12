@@ -79,3 +79,55 @@ class QB:
         except Exception as e:
             print(f"Error downloading torrent: {e}")
             return None
+
+    def get_torrents_list(self):
+        try:
+            return self.qb.torrents_info()
+        except Exception as e:
+            return None
+
+    def get_torrent_file_by_hash(self, hash):
+        try:
+            return self.qb.torrents.files(hash)
+        except Exception as e:
+            print(e)
+
+    def set_file_priority(self, torrent_hash, file_ids, priority):
+        try:
+            self.qb.torrents.file_priority(
+                torrent_hash=torrent_hash, file_ids=file_ids, priority=priority
+            )
+        except Exception as e:
+            print(e)
+            
+        
+    def file_filter_by_keywords(self,QB_KEYWORD_FILTER):
+        try:
+            
+            deselect_map = {}
+
+            torrent_list = self.get_torrents_list()
+            
+
+            for torrent in torrent_list:
+                torrent_hash = torrent.get("hash")
+                files = self.get_torrent_file_by_hash(hash=torrent_hash)
+
+                deselect_ids = [
+                    f.get("index")
+                    for f in files
+                    if any(kw in f.get("name", "") for kw in QB_KEYWORD_FILTER)
+                ]
+                
+                if deselect_ids:
+                    deselect_map[torrent_hash] = deselect_ids
+                    
+            for torrent_hash, file_ids in deselect_map.items():
+                self.set_file_priority(
+                    torrent_hash=torrent_hash,
+                    file_ids=file_ids,
+                    priority=0
+                )
+        
+        except Exception as e:
+            print(e)
