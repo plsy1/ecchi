@@ -19,19 +19,24 @@ router = APIRouter()
 
 
 def filter_after_add_by_tag(qb_client, tag, keyword_filter, max_wait=10):
-    for _ in range(max_wait):
-        torrent_list = qb_client.get_torrents_list()
-        for t in torrent_list:
-            if t.get("tags") == tag:
-                torrent_hash = t.get("hash")
-                files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
-                if files:
-                    qb_client.file_filter_by_keywords(QB_KEYWORD_FILTER=keyword_filter)
-                    qb_client.qb.torrents_remove_tags(
-                        tags=tag, torrent_hashes=torrent_hash
-                    )
-                    return
-        time.sleep(1)
+    torrent_hash = None
+
+    try:
+        for _ in range(max_wait):
+            torrent_list = qb_client.get_torrents_list()
+            for t in torrent_list:
+                if t.get("tags") == tag:
+                    torrent_hash = t.get("hash")
+                    files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
+                    if files:
+                        qb_client.file_filter_by_keywords(
+                            QB_KEYWORD_FILTER=keyword_filter
+                        )
+                        return
+            time.sleep(1)
+    finally:
+        if torrent_hash:
+            qb_client.qb.torrents_remove_tags(tags=tag, torrent_hashes=torrent_hash)
 
 
 @router.post("/add_torrent_url")
