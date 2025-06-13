@@ -28,7 +28,7 @@ RUN pip install --break-system-packages -r requirements.txt
 COPY start.sh /app/start.sh
 RUN chmod +x /app/start.sh
 
-EXPOSE 12450
+EXPOSE 80
 
 COPY supervisord.conf /app/supervisord.conf
 COPY nginx.conf /etc/nginx/nginx.conf
