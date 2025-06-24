@@ -5,7 +5,7 @@ from core.qbittorrent import QB
 from datetime import datetime
 from core.config import *
 import requests
-import time,uuid
+import time, uuid
 from core.telegram import *
 from core.avbase import *
 
@@ -121,15 +121,20 @@ def refresh_movies_feeds():
             download_link = best_seed.get("downloadUrl")
             if not download_link:
                 continue
-            
+
             random_tag = str(uuid.uuid4())[:8]
 
-            success = qb_client.add_torrent_url(download_link, DOWNLOAD_PATH,random_tag)
+            success = qb_client.add_torrent_url(
+                download_link, f'{DOWNLOAD_PATH}/{feed.actress_name}', random_tag
+            )
 
             if success:
                 
-                filter_after_add_by_tag(qb_client, random_tag, QB_KEYWORD_FILTER)
-                            
+                
+                filter_after_add_by_tag(
+                    
+                        qb_client, random_tag, QB_KEYWORD_FILTER
+                    )
                 keyword_feed = (
                     db.query(KeywordFeeds)
                     .filter(KeywordFeeds.keyword == keyword)
@@ -138,11 +143,14 @@ def refresh_movies_feeds():
                 if keyword_feed:
                     keyword_feed.downloaded = True
                     db.commit()
-                    
+
                 movie_info = get_movie_info_by_url(movie_link)
-                movie_details = DownloadInformation(keyword,movie_info)
-                TelegramBot.Send_Message_With_Image(movie_info["cover_image"], movie_details)
+                movie_details = DownloadInformation(keyword, movie_info)
+                TelegramBot.Send_Message_With_Image(
+                    movie_info["cover_image"], movie_details
+                )
                 
+
             time.sleep(5)
         return
 
@@ -162,7 +170,7 @@ def refresh_actress_feeds():
         last_keyword = None
         last_link = None
         last_img = None
-        
+
         for feed in feeds:
             name = feed.title
             items = getLatestMovies(name)
@@ -178,13 +186,17 @@ def refresh_actress_feeds():
                 except ValueError as e:
                     continue
                 if release_date > datetime.today() and actors <= 2:
-                    last_feed = KeywordFeeds(keyword=id, img=img, link=link,downloaded=False)
+                    last_feed = KeywordFeeds(
+                        actress_name = name,keyword=id, img=img, link=link, downloaded=False
+                    )
                     last_keyword = id
                     last_link = link
                     last_img = img
             if last_feed:
                 try:
-                    existing_feed = db.query(KeywordFeeds).filter_by(keyword=last_keyword).first()
+                    existing_feed = (
+                        db.query(KeywordFeeds).filter_by(keyword=last_keyword).first()
+                    )
                     if existing_feed:
                         existing_feed.img = last_feed.img
                         existing_feed.link = last_feed.link

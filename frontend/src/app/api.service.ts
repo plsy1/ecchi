@@ -218,7 +218,7 @@ export class ApiService {
 
   async singleMovieInformation(movie_url: string): Promise<any> {
     this.discoverType = 1;
-    const url = `${this.apiUrl}/avbase/movie/Information?url=${movie_url}`;
+    const url = `${this.apiUrl}/avbase/movie/information?url=${movie_url}`;
 
     const accessToken = localStorage.getItem('access_token');
 

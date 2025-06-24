@@ -16,6 +16,7 @@ prowlarr = Prowlarr(PROWLARR_URL, PROWLARR_KEY)
 
 @router.post("/addKeywords")
 async def add_feed(
+    actors: str = Form(...),
     keyword: str = Form(...),
     img: str = Form(None),
     link: str = Form(None),
@@ -41,7 +42,7 @@ async def add_feed(
                 status_code=500, detail=f"Error updating feed: {str(e)}"
             )
     else:
-        new_feed = KeywordFeeds(keyword=keyword, img=img, link=link, downloaded=False)
+        new_feed = KeywordFeeds(actress_name = actors,keyword=keyword, img=img, link=link, downloaded=False)
         try:
             db.add(new_feed)
             db.commit()

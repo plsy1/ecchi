@@ -58,6 +58,7 @@ class KeywordFeeds(Base):
     __tablename__ = 'keyword_feeds'
     
     id = Column(Integer, primary_key=True, index=True)
+    actress_name = Column(String) 
     keyword = Column(String, unique=True, index=True) 
     created_at = Column(DateTime, default=datetime.now)
     img = Column(String)

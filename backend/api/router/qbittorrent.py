@@ -70,8 +70,6 @@ async def add_torrent_url(
 
         success = qb_client.add_torrent_url(download_link, save_path, random_tag)
 
-        # qb_client.file_filter_by_keywords(QB_KEYWORD_FILTER=QB_KEYWORD_FILTER)
-
         if success:
             background_tasks.add_task(
                 filter_after_add_by_tag, qb_client, random_tag, QB_KEYWORD_FILTER
