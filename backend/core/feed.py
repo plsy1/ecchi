@@ -5,10 +5,29 @@ from core.qbittorrent import QB
 from datetime import datetime
 from core.config import *
 import requests
-import time
+import time,uuid
 from core.telegram import *
 from core.avbase import *
 
+def filter_after_add_by_tag(qb_client, tag, keyword_filter, max_wait=10):
+    torrent_hash = None
+
+    try:
+        for _ in range(max_wait):
+            torrent_list = qb_client.get_torrents_list()
+            for t in torrent_list:
+                if t.get("tags") == tag:
+                    torrent_hash = t.get("hash")
+                    files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
+                    if files:
+                        qb_client.file_filter_by_keywords(
+                            QB_KEYWORD_FILTER=keyword_filter
+                        )
+                        return
+            time.sleep(1)
+    finally:
+        if torrent_hash:
+            qb_client.qb.torrents_remove_tags(tags=tag, torrent_hashes=torrent_hash)
 
 def getLatestMovies(name: str):
     url = f"https://www.avbase.net/talents/{name}?q=&page=1"
@@ -102,10 +121,15 @@ def refresh_movies_feeds():
             download_link = best_seed.get("downloadUrl")
             if not download_link:
                 continue
+            
+            random_tag = str(uuid.uuid4())[:8]
 
-            success = qb_client.add_torrent_url(download_link, DOWNLOAD_PATH,None)
+            success = qb_client.add_torrent_url(download_link, DOWNLOAD_PATH,random_tag)
 
             if success:
+                
+                filter_after_add_by_tag(qb_client, random_tag, QB_KEYWORD_FILTER)
+                            
                 keyword_feed = (
                     db.query(KeywordFeeds)
                     .filter(KeywordFeeds.keyword == keyword)
