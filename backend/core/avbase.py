@@ -1,6 +1,7 @@
 
 from bs4 import BeautifulSoup
 import requests
+import json
 from fastapi import HTTPException
 
 field_mapping = {
@@ -16,7 +17,7 @@ def get_social_media_links(soup):
     """获取社交媒体链接"""
     social_media_links = []
 
-    social_media_div = soup.find("div", class_="flex gap-2")
+    social_media_div = soup.find("div", class_="group/social col-span-2 mt-4")
 
     if not social_media_div:
         return social_media_links
@@ -142,46 +143,32 @@ def get_actress_info_by_name(name: str):
 
     soup = BeautifulSoup(response.text, "html.parser")
 
-    info_div = soup.find("div", class_="basis-1/3 p-2 bg-base-200 rounded-md shrink-0")
-
-    if info_div:
-        table = info_div.find("table")
-        if table:
-            ths = table.find_all("th")
-            tds = table.find_all("td")
-
-            if len(ths) != len(tds):
-                return
-
-            for th, td in zip(ths, tds):
-                key = th.get_text(strip=True)
-                value = td.get_text(strip=True)
-
-                if key in field_mapping:
-                    key = field_mapping[key]
-
-                if value:
-                    info[key] = value
-
-    avatar_div = soup.find("div", class_="avatar")
-
-    avatar_url = "无头像图片"
-    if avatar_div:
-        img_tag = avatar_div.find("img")
-        if img_tag:
-            avatar_url = img_tag["src"]
-
+    avatar_url = "No Information"
+    
+    script_tag = soup.find("script", id="__NEXT_DATA__")
+    if script_tag:
+        data = json.loads(script_tag.string)
+        page_props = data["props"]["pageProps"]
+        talent = page_props.get("talent")
+        
+        primary = talent.get("primary", {})
+        avatar_url = primary.get("image_url")
+        
+        fanza = primary.get("meta")
+        if fanza:
+            fanza = fanza.get("fanza", {})
+            if fanza:
+                info.update(fanza)
+                
+                
+        actors = talent.get("actors")
+        
+        if actors:
+            names = [actor.get("name") for actor in actors if actor.get("name")]
+            info["aliases"] = names
+                
     info["avatar_url"] = avatar_url
-
-    name_div = soup.find("div", class_="flex flex-wrap items-baseline")
-    if name_div:
-        names = []
-        for span in name_div.find_all("span", class_="text-sm mx-1 flex items-end"):
-            name = span.get_text(strip=True)
-            names.append(name)
-
-        info["aliases"] = names
-
+        
     social_media_links = get_social_media_links(soup)
 
     info["social_media"] = social_media_links
