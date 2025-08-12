@@ -10,6 +10,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { MatIconModule } from '@angular/material/icon';
 
+import { MovieStateService } from '../movie-state-service.service';
+
 @Component({
   selector: 'app-movieinformation',
   standalone: true,
@@ -25,7 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class MovieinformationComponent implements OnInit {
   movieData: any;
-  movieLink: string = '';
+  movieLink: any;
   movieId: string = '';
   isLoading: boolean = false;
 
@@ -33,13 +35,21 @@ export class MovieinformationComponent implements OnInit {
     private getRoute: ActivatedRoute,
     private homeService: ApiService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private movieState: MovieStateService,
   ) {}
 
   ngOnInit(): void {
     this.getRoute.paramMap.subscribe((params) => {
-      this.movieLink = params.get('link') || '';
       this.movieId = params.get('id') || '';
+      this.movieData = this.movieState.getSelectedMovie();
+
+      if (this.movieData && this.movieData.avbase_link) {
+        this.movieLink = this.movieData.avbase_link;
+      } else {
+        this.movieLink = this.movieId;
+      }
+
       this.loadMovieData(this.movieLink);
     });
   }
@@ -60,7 +70,7 @@ export class MovieinformationComponent implements OnInit {
 
   async downloadMovie(): Promise<void> {
     try {
-      const results = await this.homeService.search(this.movieId);
+      const results = await this.homeService.search(this.movieData.props.pageProps.work.work_id);
       this.router.navigate(['/']);
       this.homeService.movieLink = this.movieLink;
       this.homeService.queryKeywords = this.movieId;
@@ -73,8 +83,8 @@ export class MovieinformationComponent implements OnInit {
     try {
       console.log(this.movieData.cover_image);
       const results = await this.homeService.addKeywordsRSS(
-        this.movieId,
-        this.movieData.cover_image,
+        this.movieData.props.pageProps.work.work_id,
+        this.movieData.props.pageProps.work.products[0]?.image_url,
         this.movieLink
       );
       if (results) {

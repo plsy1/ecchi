@@ -7,7 +7,7 @@ from core.config import *
 import requests
 import time, uuid
 from core.telegram import *
-from core.avbase import *
+from core.avbase.avbase import *
 
 def filter_after_add_by_tag(qb_client, tag, keyword_filter, max_wait=10):
     torrent_hash = None
@@ -144,10 +144,10 @@ def refresh_movies_feeds():
                     keyword_feed.downloaded = True
                     db.commit()
 
-                movie_info = get_movie_info_by_url(movie_link)
+                movie_info = get_actors_from_work(movie_link)
                 movie_details = DownloadInformation(keyword, movie_info)
                 TelegramBot.Send_Message_With_Image(
-                    movie_info["cover_image"], movie_details
+                    str(movie_info.props.pageProps.work.products[0].image_url), movie_details
                 )
                 
 
@@ -171,16 +171,17 @@ def refresh_actress_feeds():
         last_link = None
         last_img = None
 
+                
         for feed in feeds:
             name = feed.title
-            items = getLatestMovies(name)
+            items = get_movie_info_by_actress_name(name, 1)
             for item in items:
-                id = item["id"]
-                release_date_str = item["release_date"]
-                img = item["img_url"]
-                link = item["avbase_link"]
-                actors = len(item["actors"])
-
+                id = item.id
+                release_date_str = item.release_date
+                img = str(item.img_url)
+                link = str(item.avbase_link) 
+                actors = len(item.actors)
+                            
                 try:
                     release_date = datetime.strptime(release_date_str, "%Y/%m/%d")
                 except ValueError as e:
@@ -206,17 +207,18 @@ def refresh_actress_feeds():
                     db.commit()
                     db.refresh(last_feed)
 
-                    movie_info = get_movie_info_by_url(last_link)
+                    movie_info = get_actors_from_work(last_link)
                     movie_details = movieInformation(last_keyword, movie_info)
-
                     TelegramBot.Send_Message_With_Image(last_img, movie_details)
 
                     last_feed = None
                 except Exception as e:
                     db.rollback()
+                    print(f"DB error: {e}")
             else:
                 continue
             time.sleep(5)
 
     except Exception as e:
+        print(e)
         return

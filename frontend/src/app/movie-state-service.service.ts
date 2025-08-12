@@ -8,6 +8,8 @@ export class MovieStateService {
   public discoverType: number = 1;
   public actressNumberFilter: string = '0';
 
+  public selectedMovie: any = null;
+
   saveState(results: any[], keywords: string, page: number, type: number, actressNumberFilter: string) {
     this.discoverResults = results;
     this.searchKeyWords = keywords;
@@ -15,4 +17,13 @@ export class MovieStateService {
     this.discoverType = type;
     this.actressNumberFilter = actressNumberFilter;
   }
+
+  saveSelectedMovie(movie: any) {
+    this.selectedMovie = movie;
+  }
+
+  getSelectedMovie() {
+    return this.selectedMovie;
+  }
+
 }

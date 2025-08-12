@@ -5,7 +5,7 @@ from core.database import KeywordFeeds, RSSFeed, ActressCollect, get_db
 from core.prowlarr import Prowlarr
 from core.config import *
 from core.telegram import *
-from core.avbase import *
+from core.avbase.avbase import *
 from core.feed import *
 
 router = APIRouter()
@@ -29,7 +29,7 @@ async def add_feed(
             existing_keyword.downloaded = False
             db.commit()
             db.refresh(existing_keyword)
-            movie_info = get_movie_info_by_url(link)
+            movie_info = get_actors_from_work(link)
             movie_details = movieInformation(keyword, movie_info)
             TelegramBot.Send_Message_With_Image(img, movie_details)
             return {
@@ -46,7 +46,7 @@ async def add_feed(
             db.add(new_feed)
             db.commit()
             db.refresh(new_feed)
-            movie_info = get_movie_info_by_url(link)
+            movie_info = get_actors_from_work(link)
             movie_details = movieInformation(keyword, movie_info)
             TelegramBot.Send_Message_With_Image(img, movie_details)
             return {"message": f"Successfully added keyword: {keyword}"}
@@ -92,10 +92,10 @@ async def add_rss_feed(
         db.commit()
         db.refresh(new_feed)
 
-        actress_info = get_actress_info_by_name(title)
+        actress_info = get_actress_info_by_actress_name(title)
         actress_details = actressInformation(title, actress_info)
-
-        TelegramBot.Send_Message_With_Image(actress_info["avatar_url"], actress_details)
+        
+        TelegramBot.Send_Message_With_Image(actress_info.avatar_url, actress_details)
         return {
             "message": f"Successfully added RSS feed: {title}",
             "feed_id": new_feed.id,

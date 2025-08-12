@@ -11,7 +11,7 @@ from fastapi import (
 )
 from io import BytesIO
 from core.config import *
-from core.avbase import *
+from core.avbase.avbase import *
 from core.telegram import *
 import uuid, time
 
@@ -76,10 +76,10 @@ async def add_torrent_url(
             )
 
             if keywords != "":
-                movie_info = get_movie_info_by_url(movie_link)
+                movie_info = get_actors_from_work(movie_link)
                 movie_details = DownloadInformation(keywords, movie_info)
                 TelegramBot.Send_Message_With_Image(
-                    movie_info["cover_image"], movie_details
+                    str(movie_info.props.pageProps.work.products[0].image_url), movie_details
                 )
             return {"message": "Torrent added successfully"}
         else:

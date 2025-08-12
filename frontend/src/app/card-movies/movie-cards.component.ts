@@ -100,7 +100,8 @@ export class MovieCards implements OnInit {
 
   async onMovieClick(movie: any) {
     try {
-      this.router.navigate(['movies', movie.avbase_link, movie.id]);
+      this.movieState.saveSelectedMovie(movie);
+      this.router.navigate(['movies', movie.avbase_link]);
     } catch (error) {}
   }
 

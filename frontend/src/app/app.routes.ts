@@ -15,7 +15,7 @@ export const routes: Routes = [
   { path: 'explore', component: PageExploreComponent, canActivate: [authGuard] },
   { path: 'result', component: MovieCards, canActivate: [authGuard] },
   { path: 'feed/actress', component: FeedActress, canActivate: [authGuard] },
-  { path: 'movies/:link/:id', component: MovieinformationComponent },
+  { path: 'movies/:id', component: MovieinformationComponent },
   { path: 'feed/movies', component: FeedMoviesComponent },
   { path: 'actress/:name', component: ActressPageComponent },
 ];

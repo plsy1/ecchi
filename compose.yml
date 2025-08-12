@@ -1,0 +1,51 @@
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:libtorrentv1-version-release-5.0.3_v1.2.19
+    container_name: qbittorrent
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Asia/Shanghai
+      - TORRENTING_PORT=59252
+    volumes:
+      - ./data/qbittorrent:/config
+      - ./downloads:/downloads
+    ports:
+      - 59252:59252
+      - 59252:59252/udp
+      - 8080:8080
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+    volumes:
+      - ./data/prowlarr:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+    ports:
+      - 9696:9696
+
+
+  ecchi:
+    image: plsy1/ecchi:latest
+    container_name: ecchi
+    restart: unless-stopped
+    volumes:
+      - ./data/ecchi:/app/data
+    ports:
+      - "12450:80"
+    environment:
+      - TZ=Asia/Shanghai
+      - PROWLARR_URL=http://prowlarr:9696
+      - PROWLARR_KEY=
+      - DOWNLOAD_PATH=/downloads
+      - QB_HOST=qbittorrent
+      - QB_PORT=8080
+      - QB_USERNAME=admin
+      - QB_PASSWORD=adminadmin
+      - QB_KEYWORD_FILTER=游戏大全,996gg.cc
+      - TELEGRAM_TOKEN=
+      - TELEGRAM_CHAT_ID=

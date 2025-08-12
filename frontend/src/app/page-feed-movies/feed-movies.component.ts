@@ -52,7 +52,7 @@ export class FeedMoviesComponent implements OnInit {
   async onMovieCardClick(movie: any) {
     console.log('Movie clicked:', movie);
     try {
-      this.router.navigate(['movies',movie.link,movie.keyword]);
+      this.router.navigate(['movies',movie.link]);
     } catch (error) {
       console.error('Search failed:', error);
     }
