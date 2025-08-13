@@ -77,7 +77,7 @@ export class SearchDialogComponent {
         this.router.navigate(['/torrents']);
         this.dialogRef.close();
       } catch (error) {
-        this.snackBar.open('Search failed. Please try again.', 'Close', {
+        this.snackBar.open('Failed. Please try again.', 'Close', {
           duration: 2000,
         });
         this.dialogRef.close();
@@ -104,7 +104,7 @@ export class SearchDialogComponent {
         this.router.navigate([`/actress/${this.searchKeywords}`]);
         this.dialogRef.close();
       } catch (error) {
-        this.snackBar.open('Search failed. Please try again.', 'Close', {
+        this.snackBar.open('Failed. Please try again.', 'Close', {
           duration: 2000,
         });
         this.dialogRef.close();
@@ -134,7 +134,7 @@ export class SearchDialogComponent {
         this.router.navigate(['/search',this.searchKeywords]);
         this.dialogRef.close();
       } catch (error) {
-        this.snackBar.open('Search failed. Please try again.', 'Close', {
+        this.snackBar.open('Failed. Please try again.', 'Close', {
           duration: 2000,
         });
         this.dialogRef.close();

@@ -135,15 +135,15 @@ export class PageExploreComponent {
     try {
       this.router.navigate(['/actress', name]);
     } catch (error) {
-      console.error('Search failed:', error);
+      console.error('Failed:', error);
     }
   }
   async posterClick(name: string) {
     try {
       this.ApiService.queryKeywords = name;
-      this.router.navigate(['result']);
+      this.router.navigate(['search',name]);
     } catch (error) {
-      console.error('Search failed:', error);
+      console.error('Failed:', error);
     }
   }
 

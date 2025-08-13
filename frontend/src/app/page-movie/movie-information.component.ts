@@ -77,7 +77,7 @@ export class MovieinformationComponent implements OnInit {
       this.homeService.movieLink = this.movieLink;
       this.homeService.queryKeywords = this.movieId;
     } catch (error) {
-      console.error('Search failed:', error);
+      console.error('Failed:', error);
     }
   }
 
@@ -93,7 +93,7 @@ export class MovieinformationComponent implements OnInit {
         this.snackBar.open('Added successfully.', 'Close', { duration: 2000 });
       }
     } catch (error) {
-      console.error('Search failed:', error);
+      console.error('Failed:', error);
     }
   }
 
@@ -101,7 +101,7 @@ export class MovieinformationComponent implements OnInit {
     try {
       this.router.navigate(['/actress', name]);
     } catch (error) {
-      console.error('Search failed:', error);
+      console.error('Failed:', error);
     }
   }
 

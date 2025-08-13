@@ -33,10 +33,10 @@ export class LoginComponent {
 
   constructor(private router: Router, private homeService: ApiService) {}
 
-  OnInit(): void {
+  ngOnInit(): void {
     if (localStorage.getItem('loggedIn') === 'true') {
-      this.router.navigate(['/'])
-    }
+      this.router.navigate([''])
+    } 
   }
 
   onSubmit(): void {
@@ -45,7 +45,7 @@ export class LoginComponent {
       .then((success) => {
         if (success) {
           localStorage.setItem('username', this.username);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['']);
         } else {
           this.errorMessage = '用户名或密码错误';
         }

@@ -45,7 +45,7 @@ export class FeedMoviesComponent implements OnInit {
         console.error("Error fetching keywords feed list",error);
       })
     } catch (error) {
-      console.error('Search failed:', error);
+      console.error('Failed:', error);
     }
   }
 
@@ -54,7 +54,7 @@ export class FeedMoviesComponent implements OnInit {
     try {
       this.router.navigate(['movies',movie.link]);
     } catch (error) {
-      console.error('Search failed:', error);
+      console.error('Failed:', error);
     }
   }
   

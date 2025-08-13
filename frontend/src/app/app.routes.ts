@@ -13,7 +13,7 @@ import { PageSettingComponent } from './page-setting/page-setting.component';
 import { PageDownloadManagementComponent } from './page-download-management/page-download-management.component';
 
 export const routes: Routes = [
-  { path: 'dashboard', component: PageDashboardComponent, canActivate: [authGuard] },
+  { path: '', component: PageDashboardComponent, canActivate: [authGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'torrents', component: TorrentsList, canActivate: [authGuard] },
   { path: 'explore', component: PageExploreComponent, canActivate: [authGuard] },

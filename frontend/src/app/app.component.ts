@@ -79,7 +79,7 @@ export class AppComponent {
         console.log('Search results:', results);
         this.router.navigate(['/torrents']);
       } catch (error) {
-        console.error('Search failed:', error);
+        console.error('Failed:', error);
       }
     }
   }

@@ -83,9 +83,9 @@ export class DownloadOptionComponent {
 
       this.dialogRef.close({
         success: false,
-        message: 'Search failed. Please try again.',
+        message: 'Failed. Please try again.',
       });
-      this.snackBar.open('Search failed. Please try again.', 'Close', {
+      this.snackBar.open('Failed. Please try again.', 'Close', {
         duration: 2000,
       });
     }

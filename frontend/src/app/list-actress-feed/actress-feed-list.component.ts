@@ -41,7 +41,7 @@ export class ActressFeedListComponent {
       try {
         this.router.navigate(['/actress', name]);
       } catch (error) {
-        console.error('Search failed:', error);
+        console.error('Failed:', error);
       }
     }
   
@@ -55,7 +55,7 @@ export class ActressFeedListComponent {
           console.error('Error fetching actress feeds:', error);
         });
       } catch (error) {
-        console.error('Search failed:', error);
+        console.error('Failed:', error);
       }
     }
 
