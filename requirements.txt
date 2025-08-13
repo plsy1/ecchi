@@ -25,6 +25,7 @@ pydantic_core==2.27.2
 pyTelegramBotAPI==4.26.0
 python-jose==3.4.0
 python-multipart==0.0.20
+PyYAML==6.0.2
 qbittorrent-api==2025.2.0
 requests==2.32.3
 rsa==4.9
