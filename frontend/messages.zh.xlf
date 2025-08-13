@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+              <trans-unit id="93091798085763950" datatype="html">
+        <source>Torrents</source>
+                        <target>种子</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9212705249340904752" datatype="html">
+        <source>Explore</source>
+                        <target>发现</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1716650975831219382" datatype="html">
+        <source>Actress</source>
+                        <target>女优</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8436385934277401930" datatype="html">
+        <source>Movies</source>
+                        <target>影片</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3797778920049399855" datatype="html">
+        <source>Logout</source>
+                        <target>退出</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+          <trans-unit id="4402105639558509892" datatype="html">
+        <source>Monthly Ranking of Actress</source>
+                <target>女优排行</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-explore/page-explore.component.html</context>
+          <context context-type="linenumber">1,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6134610428130870685" datatype="html">
+        <source>Ranking of Works</source>
+                        <target>作品排行</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-explore/page-explore.component.html</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2050674093828061127" datatype="html">
+        <source>Ranking Type</source>
+                        <target>时间范围</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-explore/page-explore.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2988589012964101797" datatype="html">
+        <source>Daily</source>
+                        <target>每天</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-explore/page-explore.component.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="928838138686087140" datatype="html">
+        <source>Weekly</source>
+                        <target>每周</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-explore/page-explore.component.html</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6762743264882388498" datatype="html">
+        <source>Monthly</source>
+                        <target>每月</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-explore/page-explore.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="503445309622982213" datatype="html">
+        <source>cancel</source>
+        <target>取消</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-feed-movies/feed-movies.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1934500988788338041" datatype="html">
+        <source>Ecchi</source>
+                <target>Ecchi</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-login/login.component.html</context>
+          <context context-type="linenumber">3,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5248717555542428023" datatype="html">
+        <source>Username</source>
+                        <target>用户名</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-login/login.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1431416938026210429" datatype="html">
+        <source>Password</source>
+                        <target>密码</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-login/login.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2454050363478003966" datatype="html">
+        <source>Login</source>
+                        <target>登录</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-login/login.component.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8432562579042371182" datatype="html">
+        <source>Options</source>
+        <target>选项</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-movie/movie-information.component.html</context>
+          <context context-type="linenumber">32,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5028777105388019087" datatype="html">
+        <source>Details</source>
+        <target>详细信息</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-movie/movie-information.component.html</context>
+          <context context-type="linenumber">53,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3375615893259971034" datatype="html">
+        <source>ID: </source>
+        <target>编号：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-movie/movie-information.component.html</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="4348794267169350671" datatype="html">
+        <source>Release Date: </source>
+        <target>发布日期：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-movie/movie-information.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="2255881779138913206" datatype="html">
+        <source>Maker: </source>
+        <target>制作商：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-movie/movie-information.component.html</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="8055426476932658000" datatype="html">
+        <source>Label: </source>
+        <target>品牌：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-movie/movie-information.component.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="2502388485848434957" datatype="html">
+        <source>Price: </source>
+        <target>价格：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-movie/movie-information.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="569785428576811345" datatype="html">
+        <source>Duration: </source>
+        <target>时长：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-movie/movie-information.component.html</context>
+          <context context-type="linenumber">61,62</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="982745398054129955" datatype="html">
+        <source>minutes</source>
+        <target>分钟</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-movie/movie-information.component.html</context>
+          <context context-type="linenumber">63,64</context>
+        </context-group>
+      </trans-unit>
+
+      <trans-unit id="5599329059064696489" datatype="html">
+        <source>Performers</source>
+        <target>参演女优</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/page-movie/movie-information.component.html</context>
+          <context context-type="linenumber">67,68</context>
+        </context-group>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

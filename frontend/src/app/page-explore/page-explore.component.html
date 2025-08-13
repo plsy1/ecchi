@@ -1,4 +1,4 @@
-<div class="section-title">Monthly Ranking of Actress</div>
+<div class="section-title" i18n >Monthly Ranking of Actress</div>
 
 <div class="hover-container">
   <!-- 左侧按钮 -->
@@ -21,7 +21,7 @@
 </button>
 </div>
 
-<h2 class="section-title">Ranking of Works</h2>
+<h2 class="section-title" i18n>Ranking of Works</h2>
 
 <div class="poster-container">
 
@@ -30,7 +30,7 @@
   </button>
 
   <mat-form-field appearance="outline" class="search-box">
-  <mat-label>Ranking Type</mat-label>
+  <mat-label i18n>Ranking Type</mat-label>
   <mat-select [(ngModel)]="workRankingType" (ngModelChange)="onWorkRankingTypeChange($event)">
     <mat-select-trigger>
       {{
@@ -44,9 +44,9 @@
       }}
     </mat-select-trigger>
 
-    <mat-option [value]="RankingTypeOfWorks.Daily">Daily</mat-option>
-    <mat-option [value]="RankingTypeOfWorks.Weekly">Weekly</mat-option>
-    <mat-option [value]="RankingTypeOfWorks.Monthly">Monthly</mat-option>
+    <mat-option [value]="RankingTypeOfWorks.Daily" i18n>Daily</mat-option>
+    <mat-option [value]="RankingTypeOfWorks.Weekly" i18n>Weekly</mat-option>
+    <mat-option [value]="RankingTypeOfWorks.Monthly" i18n>Monthly</mat-option>
   </mat-select>
 </mat-form-field>
 

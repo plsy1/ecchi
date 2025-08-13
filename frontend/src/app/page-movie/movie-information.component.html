@@ -29,7 +29,7 @@
   </div>
 
   <div class="movie-right">
-    <div class="movie-title">Options</div>
+    <div class="movie-title" i18n>Options</div>
     <div class="movie-actions">
       <button
         mat-icon-button
@@ -50,33 +50,21 @@
       </button>
     </div>
 
-    <div class="movie-title">Details</div>
+    <div class="movie-title" i18n>Details</div>
     <div class="other-info">
-      <p><strong>ID: </strong>{{ movieData?.props?.pageProps?.work?.work_id }}</p>
-      <p>
-        <strong>Release Date: </strong>
-        {{ movieData?.props?.pageProps?.work?.min_date }}
-      </p>
-      <p>
-        <strong>Maker: </strong>
-        {{ movieData?.props?.pageProps?.work?.products?.[0]?.maker?.name }}
-      </p>
-      <p>
-        <strong>Label: </strong>
-        {{ movieData?.props?.pageProps?.work?.products?.[0]?.label?.name }}
-      </p>
-      <p>
-        <strong>Price: </strong>
-        {{ movieData?.props?.pageProps?.work?.products?.[0]?.iteminfo?.price }}
-      </p>
-      <p>
-        <strong>Duration: </strong>
-        {{ movieData?.props?.pageProps?.work?.products?.[0]?.iteminfo?.volume }}
-        minutes
-      </p>
+<p><strong i18n>ID: </strong>{{ movieData?.props?.pageProps?.work?.work_id }}</p>
+<p><strong i18n>Release Date: </strong>{{ movieData?.props?.pageProps?.work?.min_date }}</p>
+<p><strong i18n>Maker: </strong>{{ movieData?.props?.pageProps?.work?.products?.[0]?.maker?.name }}</p>
+<p><strong i18n>Label: </strong>{{ movieData?.props?.pageProps?.work?.products?.[0]?.label?.name }}</p>
+<p><strong i18n>Price: </strong>{{ movieData?.props?.pageProps?.work?.products?.[0]?.iteminfo?.price }}</p>
+<p>
+  <strong i18n>Duration: </strong>
+  {{ movieData?.props?.pageProps?.work?.products?.[0]?.iteminfo?.volume }}
+  <span i18n>minutes</span>
+</p>
     </div>
 
-    <div class="movie-title">Performers</div>
+    <div class="movie-title" i18n>Performers</div>
     <div class="actors">
       <div
         *ngFor="let cast of movieData?.props?.pageProps?.work?.casts"
