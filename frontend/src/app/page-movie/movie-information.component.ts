@@ -12,6 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { MovieStateService } from '../movie-state-service.service';
 
+
+
 @Component({
   selector: 'app-movieinformation',
   standalone: true,
@@ -102,4 +104,12 @@ export class MovieinformationComponent implements OnInit {
       console.error('Search failed:', error);
     }
   }
+
+  onWheelScroll(event: WheelEvent) {
+  const container = event.currentTarget as HTMLElement;
+  // 阻止默认纵向滚动
+  event.preventDefault();
+  // 将纵向滚轮 deltaY 转为横向滚动
+  container.scrollLeft += event.deltaY;
+}
 }

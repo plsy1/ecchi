@@ -67,7 +67,7 @@ button[mat-icon-button] {
   border-radius: 50%;
   width: 32px;
   height: 32px;
-}
+} 
 
 @media (max-width: 600px) {
   .actress-content-wrapper {

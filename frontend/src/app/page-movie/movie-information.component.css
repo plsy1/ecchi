@@ -1,52 +1,30 @@
 .movie-container {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 20px;
-  background-color: transparent;
   box-sizing: border-box;
   overflow: hidden;
+  background-color: transparent;
+}
+.movie-left,
+.movie-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: transparent;
 }
 
 .movie-left {
-  flex: 1 1 38%;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  background-color: transparent;
-  max-width: 38%;
-  box-sizing: border-box;
-  overflow: hidden;
+  flex: 1 1 100%;
+  max-width: 60%;
 }
 
 .movie-right {
-  flex: 1 1 60%;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  background-color: transparent;
-  max-width: 60%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.movie-cover {
-  position: relative;
-  width: 100%;
-  padding-top: 75%;
-  overflow: hidden;
-  border-radius: 10px;
-  background-color: transparent;
-}
-
-.movie-cover-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  max-width: 100%;
-  max-height: 100%;
+  flex: 1 1 100%;
+  max-width: 38%;
 }
 
 .movie-title {
@@ -56,6 +34,59 @@
   color: #333;
   background-color: transparent;
   overflow: hidden;
+}
+
+.movie-cover {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+.movie-cover-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+.movie-actions {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  justify-content: space-between;
+}
+
+.movie-actions button[mat-icon-button] {
+  flex: 1;
+  height: 40px;
+  border-radius: 8px;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  transition: transform 0.2s ease;
+}
+
+.movie-actions button[mat-icon-button]:hover {
+  transform: translateY(-2px);
+}
+
+.other-info {
+  display: grid;
+  gap: 8px 20px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.other-info p {
+  font-size: 1rem;
+  color: #333;
+  margin: 0;
+  background-color: transparent;
 }
 
 .tag-and-actions {
@@ -79,79 +110,47 @@
   font-size: 0.9rem;
 }
 
-.movie-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  justify-content: flex-left;
-}
-
-.movie-actions button[mat-icon-button] {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
-
-.movie-actions button[mat-icon-button]:hover {
-  transform: translateY(-2px);
-}
-
-.movie-actions mat-icon {
-  font-size: 24px;
-  color: #444;
-}
-
-@media (max-width: 600px) {
-  .movie-actions {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-}
-
-.download-btn,
-.subscribe-btn {
-  font-size: 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  border: none;
-}
-
-.download-btn:hover {
-  transform: scale(1.05);
-}
-
-.subscribe-btn:hover {
-  transform: scale(1.05);
-}
-
 .actors {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(80px, 1fr)
+  ); /* 每个 item 最小 80px，自适应填满 */
+  grid-auto-rows: 60px; /* 每行高度 60px */
   gap: 10px;
-  max-height: calc(2 * (80px + 10px));
-  overflow-x: hidden;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-height: calc(5 * 60px + 4 * 10px); /* 最多显示 5 行 */
   overflow-y: auto;
-  scrollbar-width: thin;
+}
+
+/* 可选滚动条样式 */
+.actors::-webkit-scrollbar {
+  width: 6px;
+}
+
+.actors::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
 }
 
 .actor-item {
-  text-align: left;
-  max-width: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
-  height: 80px;
-  flex: 0 0 auto;
+  justify-content: center;
+  text-align: center;
 }
 
 .actor-avatar {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
+  transition: transform 0.2s ease;
+  cursor: pointer;
 }
 
 .actor-avatar:hover {
@@ -160,35 +159,44 @@
 
 .actor-name {
   font-size: 0.8rem;
-
   background-color: transparent;
   text-align: left;
+  cursor: pointer;
 }
 
-.other-info {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px 20px;
-  margin: 0;
+.sample-images {
+  height: 500px;
+  overflow: hidden;
+  padding-top: 10px;
 }
 
-.movie-actions {
+.sample-image-list {
   display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: flex-start;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  gap: 10px;
+  height: 100%;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  scrollbar-width: thin;
 }
 
-.other-info p {
-  font-size: 1rem;
-  color: #333;
-  margin: 0 0;
-  background-color: transparent;
+.sample-image-list::-webkit-scrollbar {
+  height: 6px;
 }
 
-button[mat-icon-button] {
-  background-color: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
+.sample-image-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.sample-image {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 1200px) {
@@ -203,40 +211,12 @@ button[mat-icon-button] {
   }
 }
 
-.sample-images {
-  height: 500px;
-  overflow: hidden;
-}
-
-.sample-image-list {
-  display: flex;
-  overflow-x: auto;
-  overflow-y: hidden;
-  gap: 10px;
-  height: 100%;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  scrollbar-width: thin;
-}
-
-.sample-image {
-  height: 100%;
-  width: auto;
-  object-fit: contain;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-
-.sample-image-list::-webkit-scrollbar {
-  height: 6px;
-}
-.sample-image-list::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
-}
-
 @media (max-width: 600px) {
+  .movie-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
   .sample-images {
     height: auto;
     overflow: visible;
@@ -252,5 +232,19 @@ button[mat-icon-button] {
   .sample-image {
     width: 100%;
     height: auto;
+  }
+
+  .movie-container {
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+  }
+
+  .movie-left,
+  .movie-right {
+    flex: 1 1 100%;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
   }
 }
