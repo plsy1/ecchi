@@ -1,8 +1,8 @@
 <div class="movie-container">
   <div class="movie-left">
     <div class="movie-title">
-      {{ movieData?.props?.pageProps?.work?.work_id || 'Loading' }} -
-      {{ movieData?.props?.pageProps?.work?.title || 'Loading' }}
+      {{ movieData?.props?.pageProps?.work?.work_id || "Loading" }} -
+      {{ movieData?.props?.pageProps?.work?.title || "Loading" }}
     </div>
 
     <div class="movie-cover">
@@ -52,16 +52,31 @@
 
     <div class="movie-title" i18n>Details</div>
     <div class="other-info">
-<p><strong i18n>ID: </strong>{{ movieData?.props?.pageProps?.work?.work_id }}</p>
-<p><strong i18n>Release Date: </strong>{{ movieData?.props?.pageProps?.work?.min_date }}</p>
-<p><strong i18n>Maker: </strong>{{ movieData?.props?.pageProps?.work?.products?.[0]?.maker?.name }}</p>
-<p><strong i18n>Label: </strong>{{ movieData?.props?.pageProps?.work?.products?.[0]?.label?.name }}</p>
-<p><strong i18n>Price: </strong>{{ movieData?.props?.pageProps?.work?.products?.[0]?.iteminfo?.price }}</p>
-<p>
-  <strong i18n>Duration: </strong>
-  {{ movieData?.props?.pageProps?.work?.products?.[0]?.iteminfo?.volume }}
-  <span i18n>minutes</span>
-</p>
+      <p>
+        <strong i18n>ID: </strong
+        >{{ movieData?.props?.pageProps?.work?.work_id }}
+      </p>
+      <p>
+        <strong i18n>Release Date: </strong
+        >{{ movieData?.props?.pageProps?.work?.min_date }}
+      </p>
+      <p>
+        <strong i18n>Maker: </strong
+        >{{ movieData?.props?.pageProps?.work?.products?.[0]?.maker?.name }}
+      </p>
+      <p>
+        <strong i18n>Label: </strong
+        >{{ movieData?.props?.pageProps?.work?.products?.[0]?.label?.name }}
+      </p>
+      <p>
+        <strong i18n>Price: </strong
+        >{{ movieData?.props?.pageProps?.work?.products?.[0]?.iteminfo?.price }}
+      </p>
+      <p>
+        <strong i18n>Duration: </strong>
+        {{ movieData?.props?.pageProps?.work?.products?.[0]?.iteminfo?.volume }}
+        <span i18n>minutes</span>
+      </p>
     </div>
 
     <div class="movie-title" i18n>Performers</div>
@@ -77,7 +92,10 @@
           class="actor-avatar"
           (click)="searchByActressName(cast?.actor?.name)"
         />
-        <div class="actor-name" (click)="searchByActressName(cast?.actor?.name)">
+        <div
+          class="actor-name"
+          (click)="searchByActressName(cast?.actor?.name)"
+        >
           {{ cast?.actor?.name }}
         </div>
       </div>
@@ -85,7 +103,7 @@
   </div>
 </div>
 
-<div 
+<div
   class="sample-images"
   *ngIf="movieData?.props?.pageProps?.work?.products?.[0]?.sample_image_urls?.length"
 >

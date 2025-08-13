@@ -8,10 +8,14 @@ class TelegramBot:
 
     @staticmethod
     def Send_Message_With_Image(img,message):
+        if TELEGRAM_TOKEN == '':
+            return
         TelegramBot.bot.send_photo(TELEGRAM_CHAT_ID, img, caption=message, parse_mode='Markdown')
         
     @staticmethod
     def Send_Message(message):
+        if TELEGRAM_TOKEN == '':
+            return
         TelegramBot.bot.send_message(TELEGRAM_CHAT_ID, message, parse_mode='Markdown')
 
 def actressInformation(name, actress_info: Actress):

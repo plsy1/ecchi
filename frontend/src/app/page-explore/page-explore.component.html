@@ -1,57 +1,93 @@
-<div class="section-title" i18n >Monthly Ranking of Actress</div>
+<div class="section-title" i18n>Monthly Ranking of Actress</div>
 
 <div class="hover-container">
-  <!-- 左侧按钮 -->
-<button mat-icon-button class="floating-button left" (click)="prevPage()" [disabled]="currentPage === 1" color="primary">
-  <mat-icon>chevron_left</mat-icon>
-</button>
-
   <!-- 卡片网格 -->
   <div class="card-grid">
-    <div *ngFor="let actress of actressList" class="actress-card" (click)="cardClick(actress.name)">
+    <div
+      *ngFor="let actress of actressList"
+      class="actress-card"
+      (click)="cardClick(actress.name)"
+    >
       <div class="rank-badge">{{ actress.rank }}</div>
       <img [src]="actress.image" [alt]="actress.name" class="avatar-img" />
       <div class="title">{{ actress.name }}</div>
     </div>
   </div>
+</div>
 
-  <!-- 右侧按钮 -->
-<button mat-icon-button class="floating-button right" (click)="nextPage()" [disabled]="currentPage === 5" color="primary">
+
+<button
+  mat-icon-button
+  class="floating-button"
+  (click)="nextWorkPage()"
+  [disabled]="workList.length < 10"
+>
   <mat-icon>chevron_right</mat-icon>
 </button>
-</div>
+<button
+  mat-icon-button
+  class="floating-button"
+  (click)="prevWorkPage()"
+  [disabled]="currentWorkPage === 1"
+>
+  <mat-icon>chevron_left</mat-icon>
+</button>
+
+
 
 <h2 class="section-title" i18n>Ranking of Works</h2>
 
 <div class="poster-container">
-
-  <button mat-icon-button class="floating-button left" (click)="prevWorkPage()" [disabled]="currentWorkPage === 1" >
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-
   <mat-form-field appearance="outline" class="search-box">
-  <mat-label i18n>Ranking Type</mat-label>
-  <mat-select [(ngModel)]="workRankingType" (ngModelChange)="onWorkRankingTypeChange($event)">
-    <mat-select-trigger>
-      {{
-        workRankingType === RankingTypeOfWorks.Daily
-          ? 'Daily'
-          : workRankingType === RankingTypeOfWorks.Weekly
-          ? 'Weekly'
-          : workRankingType === RankingTypeOfWorks.Monthly
-          ? 'Monthly'
-          : 'Select Type'
-      }}
-    </mat-select-trigger>
+    <mat-label i18n>Ranking Type</mat-label>
+    <mat-select
+      [(ngModel)]="workRankingType"
+      (ngModelChange)="onWorkRankingTypeChange($event)"
+    >
+      <mat-select-trigger>
+        {{
+          workRankingType === RankingTypeOfWorks.Daily
+            ? "Daily"
+            : workRankingType === RankingTypeOfWorks.Weekly
+            ? "Weekly"
+            : workRankingType === RankingTypeOfWorks.Monthly
+            ? "Monthly"
+            : "Select Type"
+        }}
+      </mat-select-trigger>
 
-    <mat-option [value]="RankingTypeOfWorks.Daily" i18n>Daily</mat-option>
-    <mat-option [value]="RankingTypeOfWorks.Weekly" i18n>Weekly</mat-option>
-    <mat-option [value]="RankingTypeOfWorks.Monthly" i18n>Monthly</mat-option>
-  </mat-select>
-</mat-form-field>
+      <mat-option [value]="RankingTypeOfWorks.Daily" i18n>Daily</mat-option>
+      <mat-option [value]="RankingTypeOfWorks.Weekly" i18n>Weekly</mat-option>
+      <mat-option [value]="RankingTypeOfWorks.Monthly" i18n>Monthly</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+<button
+  mat-icon-button
+  class="floating-button"
+  (click)="nextWorkPage()"
+  [disabled]="workList.length < 10"
+>
+  <mat-icon>chevron_right</mat-icon>
+</button>
+<button
+  mat-icon-button
+  class="floating-button"
+  (click)="prevWorkPage()"
+  [disabled]="currentWorkPage === 1"
+>
+  <mat-icon>chevron_left</mat-icon>
+</button>
+
+
 
   <div class="poster-grid">
-    <div class="poster-card" *ngFor="let work of workList" (click)="posterClick(work.number)">
+    <div
+      class="poster-card"
+      *ngFor="let work of workList"
+      (click)="posterClick(work.number)"
+    >
       <div class="poster-image-wrapper">
         <img [src]="work.image" [alt]="work.title" class="poster-image" />
         <div class="overlay">
@@ -61,9 +97,23 @@
       </div>
     </div>
   </div>
-
-
-  <button mat-icon-button class="floating-button right" (click)="nextWorkPage()" [disabled]="workList.length < 10">
-    <mat-icon>chevron_right</mat-icon>
-  </button>
 </div>
+
+
+<button
+  mat-icon-button
+  class="floating-button"
+  (click)="nextWorkPage()"
+  [disabled]="workList.length < 10"
+>
+  <mat-icon>chevron_right</mat-icon>
+</button>
+<button
+  mat-icon-button
+  class="floating-button"
+  (click)="prevWorkPage()"
+  [disabled]="currentWorkPage === 1"
+>
+  <mat-icon>chevron_left</mat-icon>
+</button>
+

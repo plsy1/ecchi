@@ -63,38 +63,7 @@
   line-height: 1;
 }
 
-.floating-button {
-  position: absolute;
-  top: 50%;
-  background: var(--mat-primary);
-  color: var(--mat-on-primary);
-  transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-  z-index: 10;
-}
 
-.floating-button:hover:not(:disabled) {
-  transform: translateY(-50%) scale(1.08);
-}
-
-.floating-button:disabled {
-  background: var(--mat-disabled);
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.floating-button.left {
-  left: 0;
-}
-
-.floating-button.right {
-  right: 0;
-}
 
 .section-title {
   font-size: 20px;
@@ -107,7 +76,7 @@
 
 .poster-container {
   position: relative;
-  padding: 1rem;
+  padding-bottom: 10px;
 }
 
 .section-title {
@@ -181,4 +150,10 @@
   .card-grid{
       grid-template-columns: repeat(3, 1fr);
   }
+}
+
+
+.floating-button {
+  float: right;
+  margin-left: 5px;
 }
