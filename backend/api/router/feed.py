@@ -3,13 +3,16 @@ from core.auth import *
 from sqlalchemy.orm import Session
 from core.database import KeywordFeeds, RSSFeed, ActressCollect, get_db
 from core.prowlarr import Prowlarr
-from core.config import *
+from core.config import get_config
 from core.telegram import *
 from core.avbase.avbase import *
 from core.feed import *
 
 router = APIRouter()
 
+
+PROWLARR_URL = get_config("PROWLARR_URL")
+PROWLARR_KEY = get_config("PROWLARR_KEY")
 
 prowlarr = Prowlarr(PROWLARR_URL, PROWLARR_KEY)
 

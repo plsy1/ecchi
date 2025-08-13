@@ -90,6 +90,12 @@ def getLatestMovies(name: str):
 
 def refresh_movies_feeds():
     try:
+        
+        QB_HOST = get_config("QB_HOST")
+        QB_PORT = get_config("QB_PORT")
+        QB_USERNAME = get_config("QB_USERNAME")
+        QB_PASSWORD = get_config("QB_PASSWORD")
+        
         qb_client = QB(
             host=QB_HOST,
             port=QB_PORT,
@@ -97,6 +103,9 @@ def refresh_movies_feeds():
             password=QB_PASSWORD,
             tags=None,
         )
+        
+        PROWLARR_URL = get_config("PROWLARR_URL")
+        PROWLARR_KEY = get_config("PROWLARR_KEY")
 
         prowlarr = Prowlarr(PROWLARR_URL, PROWLARR_KEY)
 
@@ -123,6 +132,8 @@ def refresh_movies_feeds():
                 continue
 
             random_tag = str(uuid.uuid4())[:8]
+            
+            DOWNLOAD_PATH = get_config("DOWNLOAD_PATH")
 
             success = qb_client.add_torrent_url(
                 download_link, f'{DOWNLOAD_PATH}/{feed.actress_name}', random_tag
@@ -130,6 +141,9 @@ def refresh_movies_feeds():
 
             if success:
                 
+                QB_KEYWORD_FILTER = [
+    kw.strip() for kw in get_config("QB_KEYWORD_FILTER", "游戏大全,七龍珠").split(",") if kw.strip()
+]
                 
                 filter_after_add_by_tag(
                     

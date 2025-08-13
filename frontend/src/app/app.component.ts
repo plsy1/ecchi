@@ -77,7 +77,7 @@ export class AppComponent {
       try {
         const results = await this.homeService.search(this.searchTerm);
         console.log('Search results:', results);
-        this.router.navigate(['/']);
+        this.router.navigate(['/torrents']);
       } catch (error) {
         console.error('Search failed:', error);
       }

@@ -74,7 +74,7 @@ export class SearchDialogComponent {
           this.filteredOptions = [...this.searchKeywordsOptions];
         }
 
-        this.router.navigate(['/']);
+        this.router.navigate(['/torrents']);
         this.dialogRef.close();
       } catch (error) {
         this.snackBar.open('Search failed. Please try again.', 'Close', {
@@ -131,7 +131,7 @@ export class SearchDialogComponent {
           this.filteredOptions = [...this.searchKeywordsOptions];
         }
 
-        this.router.navigate(['/result']);
+        this.router.navigate(['/search',this.searchKeywords]);
         this.dialogRef.close();
       } catch (error) {
         this.snackBar.open('Search failed. Please try again.', 'Close', {

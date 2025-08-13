@@ -6,6 +6,9 @@ from core.config import *
 
 router = APIRouter()
 
+PROWLARR_URL = get_config("PROWLARR_URL")
+PROWLARR_KEY = get_config("PROWLARR_KEY")
+
 prowlarr = Prowlarr(PROWLARR_URL, PROWLARR_KEY)
 
 

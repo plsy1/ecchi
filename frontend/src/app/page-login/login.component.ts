@@ -44,7 +44,8 @@ export class LoginComponent {
       .login(this.username, this.password)
       .then((success) => {
         if (success) {
-          this.router.navigate(['/']);
+          localStorage.setItem('username', this.username);
+          this.router.navigate(['/dashboard']);
         } else {
           this.errorMessage = '用户名或密码错误';
         }

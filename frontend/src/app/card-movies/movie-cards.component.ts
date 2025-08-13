@@ -11,6 +11,8 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MovieStateService } from '../movie-state-service.service';
 
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-movie-cards',
   standalone: true,
@@ -37,11 +39,12 @@ export class MovieCards implements OnInit {
   constructor(
     public ApiService: ApiService,
     private movieState: MovieStateService,
-    private router: Router
+    private router: Router,
+    private getRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    this.searchKeyWords = this.ApiService.queryKeywords;
+    this.searchKeyWords = this.ApiService.queryKeywords || this.getRoute.snapshot.paramMap.get('keywords') || '';;
 
     const cacheMatches =
       this.movieState.searchKeyWords === this.searchKeyWords &&

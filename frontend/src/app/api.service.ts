@@ -19,6 +19,21 @@ interface KeywordFeed {
   img: string;
 }
 
+interface EnvironmentConfig {
+  PROWLARR_URL: string;
+  PROWLARR_KEY: string;
+  DOWNLOAD_PATH: string;
+
+  QB_HOST: string;
+  QB_PORT: string;
+  QB_USERNAME: string;
+  QB_PASSWORD: string;
+  QB_KEYWORD_FILTER: string[];
+
+  TELEGRAM_TOKEN: string;
+  TELEGRAM_CHAT_ID: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -540,4 +555,91 @@ export class ApiService {
       throw error;
     }
   }
+
+  async changePassword(
+    username: string,
+    old_password: string,
+    new_password: string
+  ): Promise<boolean> {
+    const url = `${this.apiUrl}/auth/changepassword`;
+
+    // 使用 FormData 发送表单数据
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('old_password', old_password);
+    formData.append('new_password', new_password);
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        // 如果 422 或其他状态码
+        const errorData = await response.json().catch(() => ({}));
+        console.error('修改密码失败:', errorData);
+        return false;
+      }
+
+      const data = await response.json();
+
+      return data.message === 'Password updated successfully';
+    } catch (error) {
+      console.error('修改密码请求失败:', error);
+      return false;
+    }
+  }
+
+  async getEnvironment() {
+    const url = `${this.apiUrl}/auth/getEnvironment`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data: EnvironmentConfig = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching keyword feeds:', error);
+      throw error;
+    }
+  }
+
+async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
+  const url = `${this.apiUrl}/auth/updateEnvironment`; // 后端修改环境变量的接口
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST', // 或 PUT，看后端定义
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(env),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('更新环境变量失败:', errorData);
+      return false;
+    }
+
+    const data = await response.json();
+    // 假设后端返回 { success: true } 或 { message: 'xxx' }
+    return data.success ?? true;
+  } catch (error) {
+    console.error('请求更新环境变量失败:', error);
+    return false;
+  }
+}
+
+
+
 }

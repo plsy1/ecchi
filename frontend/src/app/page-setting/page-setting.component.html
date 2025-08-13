@@ -1,0 +1,129 @@
+<div class="env-container">
+  <mat-card class="env-card">
+    <mat-card-title>Environment Variables</mat-card-title>
+    <mat-card-content>
+      <form (ngSubmit)="saveEnv()" #envForm="ngForm" class="env-form">
+        <div class="env-row">
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>PROWLARR_URL</mat-label>
+            <input matInput [(ngModel)]="env.PROWLARR_URL" name="PROWLARR_URL" >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>PROWLARR_KEY</mat-label>
+            <input matInput [(ngModel)]="env.PROWLARR_KEY" name="PROWLARR_KEY" >
+          </mat-form-field>
+        </div>
+
+        <div class="env-row">
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>DOWNLOAD_PATH</mat-label>
+            <input matInput [(ngModel)]="env.DOWNLOAD_PATH" name="DOWNLOAD_PATH" >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>QB_HOST</mat-label>
+            <input matInput [(ngModel)]="env.QB_HOST" name="QB_HOST" >
+          </mat-form-field>
+        </div>
+
+        <div class="env-row">
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>QB_PORT</mat-label>
+            <input matInput type="number" [(ngModel)]="env.QB_PORT" name="QB_PORT" >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>QB_USERNAME</mat-label>
+            <input matInput [(ngModel)]="env.QB_USERNAME" name="QB_USERNAME" >
+          </mat-form-field>
+        </div>
+
+        <div class="env-row">
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>QB_PASSWORD</mat-label>
+            <input matInput type="password" [(ngModel)]="env.QB_PASSWORD" name="QB_PASSWORD" >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>TELEGRAM_TOKEN</mat-label>
+            <input matInput [(ngModel)]="env.TELEGRAM_TOKEN" name="TELEGRAM_TOKEN" >
+          </mat-form-field>
+        </div>
+
+        <div class="env-row">
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>TELEGRAM_CHAT_ID</mat-label>
+            <input matInput [(ngModel)]="env.TELEGRAM_CHAT_ID" name="TELEGRAM_CHAT_ID" >
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>QB_KEYWORD_FILTER</mat-label>
+            <input matInput [(ngModel)]="env.QB_KEYWORD_FILTER" name="QB_KEYWORD_FILTER" >
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" type="submit">Save</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="setting-container">
+  <mat-card class="user-card">
+    <mat-card-title>User Info</mat-card-title>
+    <mat-card-content>
+      <p><strong>Username:</strong> {{ username }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="password-card">
+    <mat-card-title>Change Password</mat-card-title>
+    <mat-card-content>
+      <form (ngSubmit)="onChangePassword()" #passwordForm="ngForm">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Old Password</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="oldPassword"
+            name="oldPassword"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>New Password</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="newPassword"
+            name="newPassword"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Confirm New Password</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            required
+          />
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="isLoading"
+        >
+          Submit
+        </button>
+      </form>
+
+      <p class="message" *ngIf="message">{{ message }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>

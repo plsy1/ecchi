@@ -1,22 +1,29 @@
 import telebot
-from core.config import *
+from core.config import get_config
 from core.avbase.model import Actress, MovieInformation
 
 
 class TelegramBot:
-    bot = telebot.TeleBot(token=TELEGRAM_TOKEN)
+    @staticmethod
+    def get_bot():
+        token = get_config("TELEGRAM_TOKEN", "")
+        return telebot.TeleBot(token=token) if token else None
 
     @staticmethod
-    def Send_Message_With_Image(img,message):
-        if TELEGRAM_TOKEN == '':
+    def Send_Message_With_Image(img, message):
+        bot = TelegramBot.get_bot()
+        if not bot:
             return
-        TelegramBot.bot.send_photo(TELEGRAM_CHAT_ID, img, caption=message, parse_mode='Markdown')
-        
+        chat_id = get_config("TELEGRAM_CHAT_ID", "")
+        bot.send_photo(chat_id, img, caption=message, parse_mode='Markdown')
+
     @staticmethod
     def Send_Message(message):
-        if TELEGRAM_TOKEN == '':
+        bot = TelegramBot.get_bot()
+        if not bot:
             return
-        TelegramBot.bot.send_message(TELEGRAM_CHAT_ID, message, parse_mode='Markdown')
+        chat_id = get_config("TELEGRAM_CHAT_ID", "")
+        bot.send_message(chat_id, message, parse_mode='Markdown')
 
 def actressInformation(name, actress_info: Actress):
     actress_details = f"*【添加订阅】*: {name}\n"

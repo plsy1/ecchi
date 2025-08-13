@@ -73,7 +73,7 @@ export class MovieinformationComponent implements OnInit {
   async downloadMovie(): Promise<void> {
     try {
       const results = await this.homeService.search(this.movieData.props.pageProps.work.work_id);
-      this.router.navigate(['/']);
+      this.router.navigate(['/torrents']);
       this.homeService.movieLink = this.movieLink;
       this.homeService.queryKeywords = this.movieId;
     } catch (error) {

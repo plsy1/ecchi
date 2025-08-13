@@ -58,6 +58,12 @@ async def add_torrent_url(
     :return: 成功与否
     """
     try:
+        
+        QB_HOST = get_config("QB_HOST")
+        QB_PORT = get_config("QB_PORT")
+        QB_USERNAME = get_config("QB_USERNAME")
+        QB_PASSWORD = get_config("QB_PASSWORD")
+
         qb_client = QB(
             host=QB_HOST,
             port=QB_PORT,
@@ -71,10 +77,13 @@ async def add_torrent_url(
         success = qb_client.add_torrent_url(download_link, save_path, random_tag)
 
         if success:
+            QB_KEYWORD_FILTER = [
+    kw.strip() for kw in get_config("QB_KEYWORD_FILTER", "游戏大全,七龍珠").split(",") if kw.strip()
+]
             background_tasks.add_task(
                 filter_after_add_by_tag, qb_client, random_tag, QB_KEYWORD_FILTER
             )
-
+            
             if keywords != "":
                 movie_info = get_actors_from_work(movie_link)
                 movie_details = DownloadInformation(keywords, movie_info)
@@ -106,6 +115,11 @@ async def add_torrent_file(
     """
     try:
         torrent_data = BytesIO(await file.read())
+        
+        QB_HOST = get_config("QB_HOST")
+        QB_PORT = get_config("QB_PORT")
+        QB_USERNAME = get_config("QB_USERNAME")
+        QB_PASSWORD = get_config("QB_PASSWORD")
 
         qb_client = QB(
             host=QB_HOST,
