@@ -15,25 +15,22 @@
   </div>
 </div>
 
-
 <button
   mat-icon-button
   class="floating-button"
-  (click)="nextWorkPage()"
-  [disabled]="workList.length < 10"
+  (click)="nextPage()"
+  [disabled]="currentPage === 5"
 >
   <mat-icon>chevron_right</mat-icon>
 </button>
 <button
   mat-icon-button
   class="floating-button"
-  (click)="prevWorkPage()"
-  [disabled]="currentWorkPage === 1"
+  (click)="prevPage()"
+  [disabled]="currentPage === 1"
 >
   <mat-icon>chevron_left</mat-icon>
 </button>
-
-
 
 <h2 class="section-title" i18n>Ranking of Works</h2>
 
@@ -62,25 +59,22 @@
     </mat-select>
   </mat-form-field>
 
-
-<button
-  mat-icon-button
-  class="floating-button"
-  (click)="nextWorkPage()"
-  [disabled]="workList.length < 10"
->
-  <mat-icon>chevron_right</mat-icon>
-</button>
-<button
-  mat-icon-button
-  class="floating-button"
-  (click)="prevWorkPage()"
-  [disabled]="currentWorkPage === 1"
->
-  <mat-icon>chevron_left</mat-icon>
-</button>
-
-
+  <button
+    mat-icon-button
+    class="floating-button"
+    (click)="nextWorkPage()"
+    [disabled]="workList.length < 10"
+  >
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    class="floating-button"
+    (click)="prevWorkPage()"
+    [disabled]="currentWorkPage === 1"
+  >
+    <mat-icon>chevron_left</mat-icon>
+  </button>
 
   <div class="poster-grid">
     <div
@@ -99,7 +93,6 @@
   </div>
 </div>
 
-
 <button
   mat-icon-button
   class="floating-button"
@@ -116,4 +109,3 @@
 >
   <mat-icon>chevron_left</mat-icon>
 </button>
-
