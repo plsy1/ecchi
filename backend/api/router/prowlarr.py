@@ -6,11 +6,6 @@ from core.config import *
 
 router = APIRouter()
 
-PROWLARR_URL = get_config("PROWLARR_URL")
-PROWLARR_KEY = get_config("PROWLARR_KEY")
-
-prowlarr = Prowlarr(PROWLARR_URL, PROWLARR_KEY)
-
 
 def format_size(size_in_bytes: int) -> str:
     """
@@ -43,6 +38,11 @@ async def search(
     :param current_user: 当前已认证的用户，来自依赖项
     :return: 搜索结果的JSON响应
     """
+    
+    PROWLARR_URL = get_config("PROWLARR_URL")
+    PROWLARR_KEY = get_config("PROWLARR_KEY")
+
+    prowlarr = Prowlarr(PROWLARR_URL, PROWLARR_KEY)
 
     search_results = prowlarr.search(query=query, page=page, page_size=page_size)
 
