@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 interface EmbyLatestItem {
   name: string;
   primary: string;
+  primary_local:string;
   serverId: string;
   indexLink: string;
 }
@@ -43,4 +44,9 @@ export class CardEmbyLatestItemsComponent implements OnInit {
   formatName(name: string): string {
     return name.length > 20 ? name.slice(0, 20) + '…' : name;
   }
+
+    onImageError(event: Event, view: any) {
+  const img = event.target as HTMLImageElement;
+  img.src = view.primary;
+}
 }

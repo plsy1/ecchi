@@ -5,6 +5,14 @@ from fastapi import Query, HTTPException
 from fastapi.responses import StreamingResponse
 import httpx
 from io import BytesIO
+import os
+import hashlib
+
+CACHE_DIR = "data/cache_images"
+os.makedirs(CACHE_DIR, exist_ok=True)
+
+def get_cache_path(url: str):
+    return os.path.join(CACHE_DIR, hashlib.md5(url.encode()).hexdigest())
 
 router = APIRouter()
 
@@ -26,17 +34,34 @@ async def get_latest():
 
 
 @router.get("/get_image")
-async def get_image(url: str = Query(..., description="The image URL to fetch")):
-    """
-    Fetch an image from a given URL and return it.
-    """
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url)
-            if response.status_code != 200:
-                raise HTTPException(status_code=response.status_code, detail="Failed to fetch image")
-            image_bytes = BytesIO(response.content)
-            content_type = response.headers.get("Content-Type", "image/jpeg")
-            return StreamingResponse(image_bytes, media_type=content_type)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching image: {str(e)}")
+async def get_image(url: str = Query(...)):
+    cache_path = get_cache_path(url)
+    
+    if os.path.exists(cache_path):
+        etag = str(os.path.getmtime(cache_path))
+        return StreamingResponse(
+            open(cache_path, "rb"),
+            media_type="image/jpeg",
+            headers={
+                "Cache-Control": "public, max-age=86400",
+                "ETag": etag
+            }
+        )
+
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(url)
+        if resp.status_code != 200:
+            raise HTTPException(status_code=resp.status_code, detail="Failed to fetch image")
+        os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+        with open(cache_path, "wb") as f:
+            f.write(resp.content)
+        
+        etag = str(os.path.getmtime(cache_path))
+        return StreamingResponse(
+            BytesIO(resp.content),
+            media_type=resp.headers.get("Content-Type", "image/jpeg"),
+            headers={
+                "Cache-Control": "public, max-age=86400",
+                "ETag": etag
+            }
+        )

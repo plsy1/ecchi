@@ -40,11 +40,20 @@ export class MovieCards implements OnInit {
     public ApiService: ApiService,
     private movieState: MovieStateService,
     private router: Router,
-    private getRoute: ActivatedRoute,
+    private getRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.searchKeyWords = this.ApiService.queryKeywords || this.getRoute.snapshot.paramMap.get('keywords') || '';;
+    this.getRoute.paramMap.subscribe((params) => {
+      this.initData();
+    });
+  }
+
+  private initData(): void {
+    this.searchKeyWords =
+      this.ApiService.queryKeywords ||
+      this.getRoute.snapshot.paramMap.get('keywords') ||
+      '';
 
     const cacheMatches =
       this.movieState.searchKeyWords === this.searchKeyWords &&

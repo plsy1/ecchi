@@ -25,4 +25,9 @@ export class CardEmbyViewsComponent implements OnInit {
       console.error('Failed to load Emby views:', error);
     }
   }
+
+  onImageError(event: Event, view: any) {
+  const img = event.target as HTMLImageElement;
+  img.src = view.primary;
+}
 }

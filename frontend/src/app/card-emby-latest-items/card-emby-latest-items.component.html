@@ -7,7 +7,13 @@
     <div class="items-grid" *ngIf="latestItems.length > 0">
       <a *ngFor="let item of latestItems" [href]="item.indexLink" target="_blank" class="item-card">
         <div class="image-wrapper">
-          <img class="item-image" [src]="item.primary" alt="{{ item.name }}">
+<img
+loading="lazy"
+  class="item-image"
+  [src]="item.primary_local || item.primary"
+  alt="{{ item.name }}"
+  (error)="onImageError($event, item)"
+>
           <div class="hover-name">{{ item.name }}</div>
         </div>
       </a>

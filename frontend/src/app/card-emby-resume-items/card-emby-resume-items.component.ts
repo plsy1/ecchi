@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 interface ResumeItem {
   name: string;
   primary: string;
+    primary_local:string;
   serverId: string;
   indexLink: string;
   PlayedPercentage: number;
@@ -40,4 +41,8 @@ export class CardEmbyResumeItemsComponent {
     // 可根据需要截断长名字
     return name.length > 20 ? name.slice(0, 17) + '...' : name;
   }
+    onImageError(event: Event, view: any) {
+  const img = event.target as HTMLImageElement;
+  img.src = view.primary;
+}
 }
