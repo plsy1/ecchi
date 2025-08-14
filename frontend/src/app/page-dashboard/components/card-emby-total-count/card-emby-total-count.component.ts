@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../api.service';
+import { ApiService } from '../../../api.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 

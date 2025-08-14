@@ -8,7 +8,6 @@
 .feed-left,
 .feed-right {
   width: 50%;
-  padding: 20px;
   box-sizing: border-box; 
   display: flex;
   flex-direction: column;

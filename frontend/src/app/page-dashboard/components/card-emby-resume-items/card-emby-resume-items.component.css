@@ -10,21 +10,21 @@
   align-items: start;
   
   /* 默认大屏幕 10 列 */
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(2, auto);
 }
 
 /* 中等屏幕 */
 @media (max-width: 1200px) {
   .items-grid {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 /* 小屏幕平板 */
 @media (max-width: 768px) {
   .items-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

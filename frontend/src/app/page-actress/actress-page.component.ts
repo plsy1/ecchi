@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
-import { MovieCards } from '../card-movies/movie-cards.component';
-import { ActressInformationComponent } from '../card-actress-information/actress-information.component';
+import { MovieCards } from './components/card-movies/movie-cards.component';
+import { ActressInformationComponent } from './components/card-actress-information/actress-information.component';
 
 @Component({
   selector: 'app-actress-page',

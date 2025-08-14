@@ -14,6 +14,15 @@
   box-sizing: border-box;
 }
 
+.card-grid2 {
+  width: 97%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 8px;
+  box-sizing: border-box;
+}
+
 .actress-card {
   position: relative;
   background: var(--mat-card-background-color);

@@ -115,14 +115,15 @@ def get_actress_info_by_actress_name(name: str) -> Actress:
 
     return actress
 
+
 def get_movie_info_by_actress_name(name: str, page: int) -> List[Movie]:
     url = f"https://www.avbase.net/talents/{name}?q=&page={page}"
     return get_movies(url)
 
+
 def get_movie_info_by_keywords(keywords: str, page: int) -> List[Movie]:
     url = f"https://www.avbase.net/works?q={keywords}&page={page}"
     return get_movies(url)
-
 
 
 def get_actors_from_work(canonical_id: str) -> MovieInformation:
@@ -147,3 +148,28 @@ def get_actors_from_work(canonical_id: str) -> MovieInformation:
     movie_info = MovieInformation(**data)
 
     return movie_info
+
+
+def get_index():
+    url = f"https://www.avbase.net"
+    response = requests.get(url)
+    if response.status_code != 200:
+        raise HTTPException(status_code=response.status_code, detail="获取页面失败")
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    script_tag = soup.find("script", id="__NEXT_DATA__")
+    if not script_tag:
+        raise HTTPException(status_code=500, detail="页面数据不存在")
+
+    data = json.loads(script_tag.string)
+    data = data.get("props").get("pageProps")
+
+    works = data.get("works")
+    newbie_talents = data.get("newbie_talents")
+    popular_talents = data.get("popular_talents")
+
+    return {
+        "works": works,
+        "newbie_talents": newbie_talents,
+        "popular_talents": popular_talents,
+    }

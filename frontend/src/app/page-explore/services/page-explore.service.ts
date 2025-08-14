@@ -1,33 +1,6 @@
-
-export interface ActressRanking {
-  rank: string;
-  name: string;
-  image: string;
-  profile_url: string;
-  latest_work: string;
-  latest_work_url: string;
-  work_count: number;
-}
-
-export interface RankingItem {
-  rank: string;
-  title: string;
-  number: string;
-  image: string;
-  detail_url: string;
-  maker: string | null;
-  actresses: string[];
-}
-
-export enum RankingTypeOfWorks {
-  Daily = 'daily',
-  Weekly = 'weekly',
-  Monthly = 'monthly'
-}
-
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
-
+import { environment } from '../../../environments/environment';
+import { RankingTypeOfWorks,ActressRanking,RankingItem } from '../models/page-explore';
 @Injectable({
   providedIn: 'root',
 })
@@ -57,8 +30,7 @@ export class PageExploreServiceService {
     return this.lastFetchedPage;
   }
 
-  getWorkRankingType(): RankingTypeOfWorks
-  {
+  getWorkRankingType(): RankingTypeOfWorks {
     return this.workRankingType;
   }
 
@@ -76,7 +48,11 @@ export class PageExploreServiceService {
       });
   }
 
-  setWorkRankingData(data: RankingItem[], page: number,RankingType: RankingTypeOfWorks): void {
+  setWorkRankingData(
+    data: RankingItem[],
+    page: number,
+    RankingType: RankingTypeOfWorks
+  ): void {
     this.workRankingCache = data;
     this.lastFetchedWorkPage = page;
     this.workRankingType = RankingType;
@@ -90,7 +66,10 @@ export class PageExploreServiceService {
     return this.lastFetchedWorkPage;
   }
 
-  async fetchWorkRanking(page: number,term: RankingTypeOfWorks): Promise<RankingItem[]> {
+  async fetchWorkRanking(
+    page: number,
+    term: RankingTypeOfWorks
+  ): Promise<RankingItem[]> {
     const url = `${this.apiUrl}/fanza/monthlyworks?page=${page}&term=${term}`;
     return fetch(url)
       .then((response) => {

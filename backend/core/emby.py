@@ -51,11 +51,20 @@ def emby_get_item_counts() -> Dict:
 
 
 def emby_get_latest_items() -> List[Dict]:
+    
+    params = {
+        "Recursive": "true",
+        "Fields": "BasicSyncInfo,CanDelete,CanDownload,PrimaryImageAspectRatio,ProductionYear",
+        "ImageTypeLimit": 1,
+        "EnableImageTypes": "Primary,Backdrop,Thumb",
+        "MediaTypes": "Video",
+        "Limit": 16,
+    }
     try:
         EMBY_URL = get_config("EMBY_URL")
         result = []
         userId = emby_get_userId_of_administrator()
-        info = emby_request(f"/Users/{userId}/Items/Latest", use_header=True)
+        info = emby_request(f"/Users/{userId}/Items/Latest", use_header=True, params=params)
         for item in info:
             name = item.get("Name")
             id = item.get("Id")
@@ -84,7 +93,7 @@ def emby_get_resume_items() -> List[Dict]:
         "ImageTypeLimit": 1,
         "EnableImageTypes": "Primary,Backdrop,Thumb",
         "MediaTypes": "Video",
-        "Limit": 12,
+        "Limit": 16,
     }
     try:
         EMBY_URL = get_config("EMBY_URL")

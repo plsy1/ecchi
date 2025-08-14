@@ -10,9 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { MatIconModule } from '@angular/material/icon';
 
-import { MovieStateService } from '../movie-state-service.service';
-
-
+import { MovieStateService } from '../movie-state.service';
 
 @Component({
   selector: 'app-movieinformation',
@@ -38,7 +36,7 @@ export class MovieinformationComponent implements OnInit {
     private homeService: ApiService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private movieState: MovieStateService,
+    private movieState: MovieStateService
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +70,9 @@ export class MovieinformationComponent implements OnInit {
 
   async downloadMovie(): Promise<void> {
     try {
-      const results = await this.homeService.search(this.movieData.props.pageProps.work.work_id);
+      const results = await this.homeService.search(
+        this.movieData.props.pageProps.work.work_id
+      );
       this.router.navigate(['/torrents']);
       this.homeService.movieLink = this.movieLink;
       this.homeService.queryKeywords = this.movieId;
@@ -106,10 +106,27 @@ export class MovieinformationComponent implements OnInit {
   }
 
   onWheelScroll(event: WheelEvent) {
-  const container = event.currentTarget as HTMLElement;
-  // 阻止默认纵向滚动
-  event.preventDefault();
-  // 将纵向滚轮 deltaY 转为横向滚动
-  container.scrollLeft += event.deltaY;
-}
+    const container = event.currentTarget as HTMLElement;
+    // 阻止默认纵向滚动
+    event.preventDefault();
+    // 将纵向滚轮 deltaY 转为横向滚动
+    container.scrollLeft += event.deltaY;
+  }
+
+  async toJable(name: string) {
+    try {
+      const lowerName = name.toLowerCase();
+      window.open(`https://jable.tv/videos/${lowerName}/`, '_blank');
+    } catch (error) {
+      console.error('Failed:', error);
+    }
+  }
+  async toMissAV(name: string) {
+    try {
+      const lowerName = name.toLowerCase();
+      window.open(`https://missav.ai/${lowerName}`, '_blank');
+    } catch (error) {
+      console.error('Failed:', error);
+    }
+  }
 }

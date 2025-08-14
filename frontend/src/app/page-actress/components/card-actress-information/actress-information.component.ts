@@ -1,9 +1,9 @@
-import { ActressInformationService } from './../actress-information-service.service';
+import { ActressInformationService } from './services/actress-information.service';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
-import { ApiService } from '../api.service';
+import { ApiService } from '../../../api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 

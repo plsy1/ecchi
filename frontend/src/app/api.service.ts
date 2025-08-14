@@ -616,32 +616,32 @@ export class ApiService {
     }
   }
 
-async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
-  const url = `${this.apiUrl}/auth/updateEnvironment`;
+  async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
+    const url = `${this.apiUrl}/auth/updateEnvironment`;
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST', 
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(env),
-    });
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(env),
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error('Error:', errorData);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Error:', errorData);
+        return false;
+      }
+
+      const data = await response.json();
+      // 假设后端返回 { success: true } 或 { message: 'xxx' }
+      return data.success ?? true;
+    } catch (error) {
+      console.error('Error:', error);
       return false;
     }
-
-    const data = await response.json();
-    // 假设后端返回 { success: true } 或 { message: 'xxx' }
-    return data.success ?? true;
-  } catch (error) {
-    console.error('Error:', error);
-    return false;
   }
-}
 
   async getEmbyItemTotalCount() {
     const url = `${this.apiUrl}/emby/get_item_counts`;
@@ -665,7 +665,7 @@ async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
     }
   }
 
-    async getEmbyLatestItems() {
+  async getEmbyLatestItems() {
     const url = `${this.apiUrl}/emby/get_latest`;
     try {
       const response = await fetch(url, {
@@ -687,7 +687,7 @@ async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
     }
   }
 
-      async getEmbyResumeItems() {
+  async getEmbyResumeItems() {
     const url = `${this.apiUrl}/emby/get_resume`;
     try {
       const response = await fetch(url, {
@@ -709,7 +709,7 @@ async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
     }
   }
 
-        async getEmbyViews() {
+  async getEmbyViews() {
     const url = `${this.apiUrl}/emby/get_views`;
     try {
       const response = await fetch(url, {
@@ -731,6 +731,26 @@ async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
     }
   }
 
+    async getAvbaseIndex() {
+    const url = `${this.apiUrl}/avbase/get_index`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error get avbase index:', error);
+      throw error;
+    }
+  }
 
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../api.service';
+import { ApiService } from '../../../api.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -45,19 +45,18 @@ export class ActressFeedListComponent {
       }
     }
   
-    async onUnsubscribeClick(event: MouseEvent, movie: any) {
-      event.stopPropagation();
-      try {
-        this.homeService.removeFeedsRSS(movie.url);
-        this.homeService.getActressFeed().then((data: ActressList[]) => {
-          this.ActressList = data;
-        }).catch(error => {
-          console.error('Error fetching actress feeds:', error);
-        });
-      } catch (error) {
-        console.error('Failed:', error);
-      }
-    }
+async onUnsubscribeClick(event: MouseEvent, movie: any) {
+  event.stopPropagation();
+  try {
+
+    await this.homeService.removeFeedsRSS(movie.url);
+
+    const data: ActressList[] = await this.homeService.getActressFeed();
+    this.ActressList = data;
+  } catch (error) {
+    console.error('Failed:', error);
+  }
+}
 
     contextActress: any;
 

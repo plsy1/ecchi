@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { TorrentsList } from './list-torrents-search-result/torrents-list.component';
-import { MovieCards } from './card-movies/movie-cards.component';
+import { TorrentsList } from './page-torrents-search-result/torrents-list.component';
+import { MovieCards } from './page-actress/components/card-movies/movie-cards.component';
 import { FeedActress } from './page-feed-actress/feed-actress';
 import { LoginComponent } from './page-login/login.component';
 import { MovieinformationComponent } from './page-movie/movie-information.component';

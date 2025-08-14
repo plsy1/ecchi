@@ -147,7 +147,7 @@ export class SearchDialogComponent {
   }
 
   showErrorNotification(message: string) {
-    this.snackBar.open(message, '关闭', {
+    this.snackBar.open(message, 'Close', {
       duration: 3000,
       panelClass: ['error-snackbar'],
     });

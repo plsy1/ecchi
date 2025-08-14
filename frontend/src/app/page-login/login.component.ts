@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms'; 
-import { CommonModule } from '@angular/common'; 
-import { Router } from '@angular/router'; 
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 
 import { MatInputModule } from '@angular/material/input';
@@ -21,7 +21,6 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
     FormsModule,
     CommonModule,
-    
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -35,8 +34,8 @@ export class LoginComponent {
 
   ngOnInit(): void {
     if (localStorage.getItem('loggedIn') === 'true') {
-      this.router.navigate([''])
-    } 
+      this.router.navigate(['']);
+    }
   }
 
   onSubmit(): void {

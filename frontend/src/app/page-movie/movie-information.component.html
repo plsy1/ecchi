@@ -37,7 +37,7 @@
         matTooltip="搜索"
         aria-label="搜索"
       >
-        <i class="fas fa-search"></i>
+        <i class="fas fa-search"></i> Search
       </button>
 
       <button
@@ -46,7 +46,23 @@
         matTooltip="订阅"
         aria-label="订阅"
       >
-        <i class="fas fa-rss"></i>
+        <i class="fas fa-rss"></i> Subscribe
+      </button>
+      <button
+        mat-icon-button
+        (click)="toJable(movieData?.props?.pageProps?.work?.work_id)"
+        matTooltip="Jable"
+        aria-label="Jable"
+      >
+        <i class="fas fa-play-circle"></i> Jable
+      </button>
+            <button
+        mat-icon-button
+        (click)="toMissAV(movieData?.props?.pageProps?.work?.work_id)"
+        matTooltip="MissAV"
+        aria-label="MissAV"
+      >
+        <i class="fas fa-video"></i> MissAV
       </button>
     </div>
 

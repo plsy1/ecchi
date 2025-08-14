@@ -43,7 +43,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.3);
   color: #fff;
   padding: 4px 6px;
   font-size: 0.75rem;
@@ -55,6 +55,7 @@
 
 .image-wrapper:hover .hover-name {
   opacity: 1;
+  
 }
 
 @media (max-width: 768px) {
