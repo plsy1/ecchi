@@ -165,4 +165,5 @@
 .floating-button {
   float: right;
   margin-left: 5px;
+  margin-top: 10px;
 }

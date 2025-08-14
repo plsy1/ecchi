@@ -118,6 +118,23 @@
       </mat-select>
     </mat-form-field>
 
+    <button
+  mat-icon-button
+  class="floating-button"
+  (click)="nextWorkPage()"
+  [disabled]="workList.length < 10"
+>
+  <mat-icon>chevron_right</mat-icon>
+</button>
+<button
+  mat-icon-button
+  class="floating-button"
+  (click)="prevWorkPage()"
+  [disabled]="currentWorkPage === 1"
+>
+  <mat-icon>chevron_left</mat-icon>
+</button>
+
     <div class="poster-grid">
       <div
         class="poster-card"
@@ -132,5 +149,22 @@
         </div>
       </div>
     </div>
+
+    <button
+  mat-icon-button
+  class="floating-button"
+  (click)="nextWorkPage()"
+  [disabled]="workList.length < 10"
+>
+  <mat-icon>chevron_right</mat-icon>
+</button>
+<button
+  mat-icon-button
+  class="floating-button"
+  (click)="prevWorkPage()"
+  [disabled]="currentWorkPage === 1"
+>
+  <mat-icon>chevron_left</mat-icon>
+</button>
   </mat-tab>
 </mat-tab-group>
