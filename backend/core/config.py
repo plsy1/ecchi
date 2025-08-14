@@ -35,6 +35,8 @@ def get_environment():
         "QB_KEYWORD_FILTER": get_config("QB_KEYWORD_FILTER", ["游戏大全", "七龍珠"]),
         "TELEGRAM_TOKEN": get_config("TELEGRAM_TOKEN", ""),
         "TELEGRAM_CHAT_ID": get_config("TELEGRAM_CHAT_ID", ""),
+        "EMBY_URL": get_config("EMBY_URL",""),
+        "EMBY_API_KEY": get_config("EMBY_API_KEY",""),
     }
     return env
 

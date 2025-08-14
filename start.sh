@@ -16,6 +16,8 @@ QB_PASSWORD: "${QB_PASSWORD:-}"
 QB_KEYWORD_FILTER: "${QB_KEYWORD_FILTER:-游戏大全,七龍珠}"
 TELEGRAM_TOKEN: "${TELEGRAM_TOKEN:-}"
 TELEGRAM_CHAT_ID: "${TELEGRAM_CHAT_ID:-}"
+EMBY_URL: "${EMBY_URL:-}"
+EMBY_API_KEY: "${EMBY_API_KEY:-}"
 EOL
 else
     echo "$CONFIG_FILE already exists. Skipping generation."

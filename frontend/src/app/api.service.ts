@@ -32,6 +32,9 @@ interface EnvironmentConfig {
 
   TELEGRAM_TOKEN: string;
   TELEGRAM_CHAT_ID: string;
+
+  EMBY_URL: string;
+  EMBY_API_KEY: string;
 }
 
 @Injectable({
@@ -614,11 +617,11 @@ export class ApiService {
   }
 
 async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
-  const url = `${this.apiUrl}/auth/updateEnvironment`; // 后端修改环境变量的接口
+  const url = `${this.apiUrl}/auth/updateEnvironment`;
 
   try {
     const response = await fetch(url, {
-      method: 'POST', // 或 PUT，看后端定义
+      method: 'POST', 
       headers: {
         'Content-Type': 'application/json',
       },
@@ -627,7 +630,7 @@ async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error('更新环境变量失败:', errorData);
+      console.error('Error:', errorData);
       return false;
     }
 
@@ -635,10 +638,98 @@ async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
     // 假设后端返回 { success: true } 或 { message: 'xxx' }
     return data.success ?? true;
   } catch (error) {
-    console.error('请求更新环境变量失败:', error);
+    console.error('Error:', error);
     return false;
   }
 }
+
+  async getEmbyItemTotalCount() {
+    const url = `${this.apiUrl}/emby/get_item_counts`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error get emby item total count:', error);
+      throw error;
+    }
+  }
+
+    async getEmbyLatestItems() {
+    const url = `${this.apiUrl}/emby/get_latest`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error get emby latest items:', error);
+      throw error;
+    }
+  }
+
+      async getEmbyResumeItems() {
+    const url = `${this.apiUrl}/emby/get_resume`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error get emby latest items:', error);
+      throw error;
+    }
+  }
+
+        async getEmbyViews() {
+    const url = `${this.apiUrl}/emby/get_views`;
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error get emby views:', error);
+      throw error;
+    }
+  }
 
 
 

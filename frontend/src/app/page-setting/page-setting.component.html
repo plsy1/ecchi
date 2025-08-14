@@ -62,6 +62,17 @@
           </mat-form-field>
         </div>
 
+          <div class="env-row">
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>EMBY_URL</mat-label>
+            <input matInput [(ngModel)]="env.EMBY_URL" name="EMBY_URL" >
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="env-field">
+            <mat-label>EMBY_API_KEY</mat-label>
+            <input matInput [(ngModel)]="env.EMBY_API_KEY" name="EMBY_API_KEY" >
+          </mat-form-field>
+        </div>
+
         <button mat-raised-button color="primary" type="submit">Save</button>
       </form>
     </mat-card-content>
@@ -69,12 +80,12 @@
 </div>
 
 <div class="setting-container">
-  <mat-card class="user-card">
+  <!-- <mat-card class="user-card">
     <mat-card-title>User Info</mat-card-title>
     <mat-card-content>
       <p><strong>Username:</strong> {{ username }}</p>
     </mat-card-content>
-  </mat-card>
+  </mat-card> -->
 
   <mat-card class="password-card">
     <mat-card-title>Change Password</mat-card-title>

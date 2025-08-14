@@ -22,6 +22,9 @@ interface EnvironmentConfig {
 
   TELEGRAM_TOKEN: string;
   TELEGRAM_CHAT_ID: string;
+
+  EMBY_URL: string;
+  EMBY_API_KEY: string;
 }
 
 
@@ -52,6 +55,8 @@ export class PageSettingComponent {
     QB_KEYWORD_FILTER: [],
     TELEGRAM_TOKEN: '',
     TELEGRAM_CHAT_ID: '',
+    EMBY_URL: "",
+    EMBY_API_KEY: ""
   };
 
   ngOnInit() {
@@ -70,13 +75,10 @@ export class PageSettingComponent {
     try {
       const success = await this.apiService.updateEnvironment(this.env);
       if (success) {
-        this.message = '环境变量保存成功';
       } else {
-        this.message = '环境变量保存失败';
       }
     } catch (error) {
       console.error('保存环境变量出错:', error);
-      this.message = '保存环境变量时发生错误';
     }
   }
 
