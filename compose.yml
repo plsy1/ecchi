@@ -39,13 +39,3 @@ services:
       - "12450:80"
     environment:
       - TZ=Asia/Shanghai
-      - PROWLARR_URL=http://prowlarr:9696
-      - PROWLARR_KEY=
-      - DOWNLOAD_PATH=/downloads
-      - QB_HOST=qbittorrent
-      - QB_PORT=8080
-      - QB_USERNAME=admin
-      - QB_PASSWORD=adminadmin
-      - QB_KEYWORD_FILTER=游戏大全,996gg.cc
-      - TELEGRAM_TOKEN=
-      - TELEGRAM_CHAT_ID=
