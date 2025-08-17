@@ -1,0 +1,62 @@
+.table-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-table {
+  width: 100%;
+  display: table;
+}
+
+.mat-header-cell,
+.mat-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.indexer-column {
+  flex: 1;
+}
+
+.title-column {
+  flex: 10;
+}
+
+.size-column {
+  flex: 1;
+}
+
+.seeders-column {
+  flex: 1;
+}
+
+.publishDate-column {
+  flex: 1;
+}
+
+.mat-header-row,
+.mat-row {
+  display: flex;
+}
+
+.loading {
+  background-color: #ffeb3b;
+}
+
+.success {
+  background-color: #4caf50;
+}
+
+.error {
+  background-color: #f44336;
+}
+
+mat-cell.indexer-column:hover {
+  cursor: pointer;
+}
+
+mat-cell.title-column:hover {
+  cursor: pointer;
+}

@@ -1,0 +1,118 @@
+ <h2 class="section-title" >Monthly Ranking of Actress</h2>
+
+    <div class="hover-container">
+      <div class="card-grid">
+        <div
+          *ngFor="let actress of actressList"
+          class="actress-card"
+          (click)="cardClick(actress.name)"
+        >
+          <div class="rank-badge">{{ actress.rank }}</div>
+          <img
+            [src]="actress.image"
+            [alt]="actress.name"
+            class="avatar-img"
+            loading="lazy"
+          />
+          <div class="title">{{ actress.name }}</div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      mat-icon-button
+      class="floating-button"
+      (click)="nextPage()"
+      [disabled]="currentPage === 5"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      class="floating-button"
+      (click)="prevPage()"
+      [disabled]="currentPage === 1"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <h2 class="section-title" >Ranking of Works</h2>
+    <mat-form-field appearance="outline" class="search-box">
+      <mat-label >Ranking Type</mat-label>
+      <mat-select
+        [(ngModel)]="workRankingType"
+        (ngModelChange)="onWorkRankingTypeChange($event)"
+      >
+        <mat-select-trigger>
+          {{
+            workRankingType === RankingTypeOfWorks.Daily
+              ? "Daily"
+              : workRankingType === RankingTypeOfWorks.Weekly
+              ? "Weekly"
+              : workRankingType === RankingTypeOfWorks.Monthly
+              ? "Monthly"
+              : "Select Type"
+          }}
+        </mat-select-trigger>
+
+        <mat-option [value]="RankingTypeOfWorks.Daily" >Daily</mat-option>
+        <mat-option [value]="RankingTypeOfWorks.Weekly" >Weekly</mat-option>
+        <mat-option [value]="RankingTypeOfWorks.Monthly" 
+          >Monthly</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+
+    <button
+      mat-icon-button
+      class="floating-button"
+      (click)="nextWorkPage()"
+      [disabled]="workList.length < 10"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      class="floating-button"
+      (click)="prevWorkPage()"
+      [disabled]="currentWorkPage === 1"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <div class="poster-grid">
+      <div
+        class="poster-card"
+        *ngFor="let work of workList"
+        (click)="posterClick(work.number)"
+      >
+        <div class="poster-image-wrapper">
+          <img
+            [src]="work.image"
+            [alt]="work.title"
+            class="poster-image"
+            loading="lazy"
+          />
+          <div class="overlay">
+            <div class="title">{{ work.rank }}.{{ work.title }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      mat-icon-button
+      class="floating-button"
+      (click)="nextWorkPage()"
+      [disabled]="workList.length < 10"
+    >
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      class="floating-button"
+      (click)="prevWorkPage()"
+      [disabled]="currentWorkPage === 1"
+    >
+      <mat-icon>chevron_left</mat-icon>
+    </button>

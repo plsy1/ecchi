@@ -1,0 +1,128 @@
+.dialog-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 480px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #f0f2f5;
+}
+
+.dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.mat-autocomplete-panel {
+  width: 100% !important;
+  max-width: 480px;
+  margin-top: 4px;
+  border-radius: 4px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.search-type-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.search-type-buttons button {
+  all: unset;
+  padding: 12px 16px;
+  color: var(--mat-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.search-type-buttons button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.search-type-buttons button.selected {
+  border-bottom: 2px solid;
+}
+
+/* Recent Searches */
+.recent-searches {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: -8px;
+}
+
+.recent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.recent-item {
+  padding: 6px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.recent-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.search-button {
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  transition: background-color 0.2s ease;
+  gap: 8px;
+}
+
+.search-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.icon-left {
+  position: absolute;
+  left: 16px;
+  pointer-events: none;
+}
+
+.label-text {
+  flex: 1;
+  text-align: center;
+  user-select: none;
+}

@@ -1,0 +1,78 @@
+.login-container {
+  background-image: url("https://www.loliapi.com/acg/");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 80px;
+  box-sizing: border-box;
+}
+
+mat-card.login-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 32px 48px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.login-card h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 24px;
+  font-weight: 500;
+  color: #000;
+}
+
+mat-form-field.form-group {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+mat-form-field.mat-form-field {
+  width: 100%;
+}
+
+input[matInput] {
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  color: #000;
+}
+
+button[mat-raised-button] {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+button[mat-raised-button]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 480px) {
+  mat-card.login-card {
+    padding: 24px 16px;
+  }
+
+  .login-card h2 {
+    font-size: 24px;
+  }
+
+  button[mat-raised-button] {
+    font-size: 14px;
+    padding: 10px 0;
+  }
+}

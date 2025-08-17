@@ -3,13 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "frontend": {
-      "i18n": {
-  "sourceLocale": "en-US",
-  "locales": {
-    "zh": "messages.zh.xlf"
-  }
-},
+    "test": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -19,12 +13,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/frontend",
+            "outputPath": "dist/test",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js",
-              "@angular/localize/init"
+              "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -40,9 +33,9 @@
               }
             ],
             "styles": [
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/styles.css"
+              "src/custom-theme.scss",
+              "src/styles.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
             "scripts": []
           },
@@ -57,8 +50,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "2MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -66,18 +59,13 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all",
-              "serviceWorker": "ngsw-config.json"
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
-            },"zh": {
-  "localize": ["zh"],
-  "optimization": false,
-  "sourceMap": true
-}
+            }
           },
           "defaultConfiguration": "production"
         },
@@ -85,14 +73,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend:build:production"
+              "buildTarget": "test:build:production"
             },
             "development": {
-              "buildTarget": "frontend:build:development"
-            },
-            "zh": {
-  "buildTarget": "frontend:build:zh"
-}
+              "buildTarget": "test:build:development"
+            }
           },
           "defaultConfiguration": "development"
         },
@@ -104,8 +89,7 @@
           "options": {
             "polyfills": [
               "zone.js",
-              "zone.js/testing",
-              "@angular/localize/init"
+              "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
@@ -115,7 +99,6 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.css"
             ],
             "scripts": []

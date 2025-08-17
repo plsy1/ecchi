@@ -6,4 +6,29 @@ body {
 }
 body {
   margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.movie-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+button[mat-icon-button] {
+  background-color: var(--md-sys-color-primary);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+button[mat-icon-button]:hover {
+  transform: scale(1.1);
+}
+
+div {
+  background-color: var(--md-sys-color-surface-container);
 }

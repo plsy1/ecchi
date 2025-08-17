@@ -1,0 +1,32 @@
+.top-row {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  align-items: stretch;
+}
+
+.top-row .left {
+  padding: 10px;
+  text-align: center;
+}
+
+.top-row .right {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .top-row {
+    flex-direction: column;
+  }
+  .top-row .left,
+  .top-row .right {
+    width: 100%;
+  }
+}
+
+.section {
+  padding: 10px;
+}
+

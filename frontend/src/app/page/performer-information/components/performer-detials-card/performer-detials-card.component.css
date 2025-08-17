@@ -1,0 +1,107 @@
+.actress-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+  width: 100%;
+  background-color: var(--md-sys-color-surface-container);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.actress-content-wrapper {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.avatar-section {
+  flex: 0 0 160px;
+  display: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.actress-avatar-img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.info-section {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.actress-name {
+  margin: 0 0 12px;
+}
+
+.social-title {
+  margin: 0 0 8px;
+}
+
+.action-icons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.actress-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.actress-info p {
+  margin: 0;
+}
+
+
+
+@media (max-width: 600px) {
+  .actress-content-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .avatar-section {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .actress-avatar-img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .info-section {
+    width: 100%;
+    text-align: left
+  }
+
+  .action-icons {
+    justify-content: center;
+  }
+
+  .actress-info {
+    text-align: left;
+    align-items: flex-start;
+  }
+}

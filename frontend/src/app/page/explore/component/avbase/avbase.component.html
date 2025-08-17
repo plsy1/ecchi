@@ -1,0 +1,54 @@
+<h2 class="section-title">Newbie</h2>
+<div class="card-grid2">
+  <div
+    *ngFor="let actress of avbaseIndexData?.newbie_talents"
+    class="actress-card"
+    (click)="cardClick(actress.actors[0].name)"
+  >
+    <img
+      [src]="actress.actors[0].image_url"
+      [alt]="actress.actors[0].name"
+      class="avatar-img"
+      loading="lazy"
+    />
+    <div class="title">{{ actress.actors[0].name }}</div>
+  </div>
+</div>
+
+<h2 class="section-title">Popular</h2>
+<div class="card-grid2">
+  <div
+    *ngFor="let actress of avbaseIndexData?.popular_talents"
+    class="actress-card"
+    (click)="cardClick(actress.actors[0].name)"
+  >
+    <img
+      [src]="actress.actors[0].image_url"
+      [alt]="actress.actors[0].name"
+      class="avatar-img"
+      loading="lazy"
+    />
+    <div class="title">{{ actress.actors[0].name }}</div>
+  </div>
+</div>
+
+<h2 class="section-title">Release Today</h2>
+<div class="poster-grid">
+  <div
+    class="poster-card"
+    *ngFor="let work of avbaseIndexData?.works"
+    (click)="posterClick(work.work_id)"
+  >
+    <div class="poster-image-wrapper">
+      <img
+        [src]="work.products[0].image_url"
+        [alt]="work.title"
+        class="poster-image"
+        loading="lazy"
+      />
+      <div class="overlay">
+        <div class="title">{{ work.title }}</div>
+      </div>
+    </div>
+  </div>
+</div>

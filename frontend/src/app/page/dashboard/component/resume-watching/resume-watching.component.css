@@ -1,0 +1,77 @@
+.items-grid {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  align-items: start;
+
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(2, auto);
+    overflow: hidden; /* 超出的内容不显示 */
+}
+
+/* 中等屏幕 */
+@media (max-width: 1200px) {
+  .items-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 小屏幕平板 */
+@media (max-width: 768px) {
+  .items-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 手机屏幕 */
+@media (max-width: 480px) {
+  .items-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.image-wrapper:hover {
+  transform: translateY(-2px);
+}
+
+.item-image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 2 / 3;
+  transition: filter 0.2s;
+}
+
+.image-wrapper:hover .item-image {
+  filter: brightness(50%);
+}
+
+.hover-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: #fff;
+  padding: 4px 6px;
+  text-align: center;
+  box-sizing: border-box;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.image-wrapper:hover .hover-name {
+  opacity: 1;
+}
+
+mat-card-header {
+  padding: 16px;
+}

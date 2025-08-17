@@ -46,7 +46,7 @@ export class ActressInformationComponent {
         this.ActressInformation.saveState(this.actressData);
       })
       .catch((error) => {
-        console.error('加载电影信息失败', error);
+        console.error('Failed to load', error);
       });
   }
 
@@ -54,15 +54,13 @@ export class ActressInformationComponent {
     this.ApiService.addFeedsRSS(rssLink, this.name, '')
       .then((response) => {
         if (response.status === 200) {
-          console.log('订阅成功！');
-
-          this.snackBar.open('添加成功', 'Close', { duration: 2000 });
+          this.snackBar.open('Added successfully', 'Close', { duration: 2000 });
         } else {
-          this.snackBar.open('添加失败', 'Close', { duration: 2000 });
+          this.snackBar.open('Failed to add', 'Close', { duration: 2000 });
         }
       })
       .catch((error) => {
-        this.snackBar.open('添加订阅失败', 'Close', { duration: 2000 });
+        this.snackBar.open('Failed to add', 'Close', { duration: 2000 });
       });
   }
 
@@ -72,13 +70,13 @@ export class ActressInformationComponent {
         if (response.status === 200) {
           console.log('订阅成功！');
 
-          this.snackBar.open('添加成功', 'Close', { duration: 2000 });
+          this.snackBar.open('Added successfully', 'Close', { duration: 2000 });
         } else {
-          this.snackBar.open('添加失败', 'Close', { duration: 2000 });
+          this.snackBar.open('Failed to add', 'Close', { duration: 2000 });
         }
       })
       .catch((error) => {
-        this.snackBar.open('添加订阅失败', 'Close', { duration: 2000 });
+        this.snackBar.open('Failed to add', 'Close', { duration: 2000 });
       });
   }
 

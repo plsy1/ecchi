@@ -1,0 +1,111 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { KeywordsSearchService } from './service/keywords-search.service';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-keywords-search',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatOptionModule,
+    MatSelectModule,
+  ],
+  templateUrl: './keywords-search.component.html',
+  styleUrl: './keywords-search.component.css',
+})
+export class KeywordsSearchComponent implements OnInit {
+  discoverResults: any[] = [];
+  isLoading: boolean = false;
+  searchKeyWords: string = '';
+  page: number = 1;
+
+  actressNumberFilter: string = '0';
+
+  constructor(
+    private keywordsService: KeywordsSearchService,
+    private router: Router,
+    private getRoute: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.getRoute.paramMap.subscribe((params) => {
+      this.searchKeyWords = params.get('value') || '';
+      if (
+        this.keywordsService.searchKeyWords === this.searchKeyWords ||
+        this.searchKeyWords === ''
+      ) {
+        this.discoverResults = this.keywordsService.discoverResults;
+      } else {
+        this.loadDiscoverData(this.searchKeyWords, this.page);
+      }
+    });
+  }
+
+  loadDiscoverData(filter_value: string, page: number): void {
+    if (this.isLoading == true) return;
+    this.isLoading = true;
+
+    this.keywordsService
+      .discoverByKeywords(filter_value, page)
+      .then((data) => {
+        this.discoverResults = data.movies;
+        this.isLoading = false;
+        this.keywordsService.saveState(
+          this.discoverResults,
+          this.searchKeyWords,
+          this.page,
+          this.actressNumberFilter
+        );
+      })
+      .catch((error) => {
+        console.error('Failed to load discover data:', error);
+      });
+  }
+
+  onImageError(event: any): void {}
+
+  async onMovieClick(movie: any) {
+    try {
+      this.keywordsService.saveSelectedMovie(movie);
+      this.router.navigate(['production', movie.avbase_link]);
+    } catch (error) {}
+  }
+
+  loadPreviousPage(): void {
+    if (this.page > 1) {
+      this.page -= 1;
+      this.loadDiscoverData(this.searchKeyWords, this.page);
+    }
+  }
+
+  loadNextPage(): void {
+    this.page += 1;
+    this.loadDiscoverData(this.searchKeyWords, this.page);
+  }
+  shouldShowMovie(movie: any): boolean {
+    if (!this.actressNumberFilter) return true;
+
+    const actorCount = movie.actors?.length || 0;
+
+    if (this.actressNumberFilter === '1') return actorCount === 1;
+    if (this.actressNumberFilter === '2') return actorCount >= 2;
+
+    return true;
+  }
+
+  onFilterChange(value: string) {
+    this.keywordsService.actressNumberFilter = value;
+  }
+}

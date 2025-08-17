@@ -1,0 +1,33 @@
+<h2>Favorites</h2>
+<div class="card-grid">
+<mat-card
+  *ngFor="let actress of ActressList"
+  class="actress-card"
+>
+  <div class="card-content" (click)="onClick(actress.name)">
+    <img [src]="actress.avatar_url" alt="Actress Avatar" class="avatar-img" />
+    <mat-card-title class="title">{{ actress.name }}</mat-card-title>
+  </div>
+
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    class="menu-button"
+    (click)="openMenu($event, actress)"
+  >
+    <mat-icon>more_vert</mat-icon>
+  </button>
+</mat-card>
+
+<!-- 公共菜单 -->
+<mat-menu #menu="matMenu">
+<button mat-menu-item (click)="onClick(contextActress.title)">
+  <mat-icon>info</mat-icon>
+  <span>View Details</span>
+</button>
+<button mat-menu-item (click)="onUnsubscribeClick($event, contextActress)">
+  <mat-icon>cancel</mat-icon>
+  <span>Unsubscribe</span>
+</button>
+</mat-menu>
+</div>

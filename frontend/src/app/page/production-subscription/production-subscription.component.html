@@ -1,0 +1,27 @@
+<h2>Subscription</h2>
+<div class="poster-grid">
+  <div
+    class="poster-card"
+    *ngFor="let movie of keywordFeeds"
+    (click)="onMovieCardClick(movie)"
+  >
+    <div class="poster-image-wrapper">
+      <img
+        [src]="movie.img"
+        [alt]="movie.keyword"
+        class="poster-image"
+        loading="lazy"
+      />
+      <div class="overlay">
+        <div class="title">{{ movie.keyword }}</div>
+        <span class="spacer"></span>
+        <button
+          class="unsubscribe-btn"
+          (click)="onUnsubscribeClick($event, movie)"
+        >
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

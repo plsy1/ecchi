@@ -1,0 +1,27 @@
+<mat-card class="views-card">
+  <mat-card-header>
+    <mat-card-title>Library</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="items-grid" *ngIf="views.length > 0">
+      <a
+        *ngFor="let view of views"
+        [href]="view.indexLink"
+        target="_blank"
+        class="item-card"
+      >
+        <div class="image-wrapper">
+          <img
+            loading="lazy"
+            class="item-image"
+            [src]="view.primary_local || view.primary"
+            alt="{{ view.name }}"
+            (error)="onImageError($event, view)"
+          />
+          <div class="hover-name">{{ view.name }}</div>
+        </div>
+      </a>
+    </div>
+  </mat-card-content>
+</mat-card>

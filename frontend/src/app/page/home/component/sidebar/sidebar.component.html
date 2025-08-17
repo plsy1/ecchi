@@ -1,0 +1,56 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #sidenav
+    class="sidenav"
+    mode="side"
+  [opened]="homeService.isSidebarOpen"
+  (openedChange)="homeService.setSidebarOpen($event)"
+  >
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a mat-list-item routerLink="/explore" routerLinkActive="active">
+        <i class="fas fa-compass"></i>
+        <span>Explore</span>
+      </a>
+      <a mat-list-item routerLink="/torrents" routerLinkActive="active">
+        <i class="fas fa-magnet"></i>
+        <span>Torrents</span>
+      </a>
+      <a mat-list-item routerLink="/keywords" routerLinkActive="active">
+        <i class="fas fa-search"></i>
+        <span>Search Results</span>
+      </a>
+      <a mat-list-item routerLink="/download" routerLinkActive="active">
+        <i class="fas fa-download"></i>
+        <span>Download</span>
+      </a>
+      <a
+        mat-list-item
+        routerLink="/subscription/performer"
+        routerLinkActive="active"
+      >
+        <i class="fas fa-heart"></i>
+        <span>Performer</span>
+      </a>
+      <a
+        mat-list-item
+        routerLink="/subscription/production"
+        routerLinkActive="active"
+      >
+        <i class="fas fa-film"></i>
+        <span>Production</span>
+      </a>
+      <a mat-list-item routerLink="/settings" routerLinkActive="active">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+      <a mat-list-item (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav></mat-sidenav-container
+>

@@ -1,0 +1,97 @@
+<mat-card class="actress-card">
+  <div class="actress-content-wrapper">
+    <!-- 左侧头像 -->
+    <div class="avatar-section">
+      <img
+        [src]="performerInformation?.avatar_url"
+        alt="Actress Avatar"
+        class="actress-avatar-img"
+      />
+      <!-- 操作按钮 -->
+      <div class="action-icons">
+        <button
+          mat-icon-button
+          (click)="subscribeActress(performerInformation?.avatar_url)"
+          matTooltip="Add to Feed"
+        >
+          <i class="fas fa-rss"></i>
+        </button>
+        <button
+          mat-icon-button
+          (click)="collectActress(performerInformation?.avatar_url)"
+          matTooltip="Add to Collection"
+        >
+          <i class="fas fa-heart"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 右侧信息 -->
+    <div class="info-section">
+      <!-- 名字 -->
+      <h2 class="actress-name">{{ name || "N/A" }}</h2>
+
+      <!-- 社交媒体标题 + 图标 -->
+      <div class="social-title"><strong>Social Media</strong></div>
+      <div class="social-icons">
+        <div *ngFor="let platform of performerInformation?.social_media">
+          <a
+            *ngIf="platform.platform !== 'RSS'"
+            [href]="platform.link"
+            target="_blank"
+          >
+            <button mat-icon-button>
+              <i [ngClass]="getFaIcon(platform.platform)"></i>
+            </button>
+          </a>
+        </div>
+      </div>
+
+      <!-- 个人信息 -->
+      <div class="actress-info">
+        <p *ngIf="performerInformation?.aliases?.length">
+          <strong>Alias:</strong> {{ performerInformation.aliases.join(", ") }}
+        </p>
+        <p *ngIf="performerInformation?.hobby">
+          <strong>Hobbies:</strong> {{ performerInformation.hobby }}
+        </p>
+        <p *ngIf="performerInformation?.birthday">
+          <strong>Birth:</strong> {{ performerInformation.birthday }}
+        </p>
+        <p *ngIf="performerInformation?.height">
+          <strong>Height:</strong> {{ performerInformation.height }} cm
+        </p>
+        <p
+          *ngIf="
+            performerInformation?.bust ||
+            performerInformation?.waist ||
+            performerInformation?.hip ||
+            performerInformation?.cup
+          "
+        >
+          <strong>Measurements:</strong>
+          {{
+            performerInformation.bust ? performerInformation.bust + " cm" : ""
+          }}
+          {{
+            performerInformation.waist
+              ? "/ " + performerInformation.waist + " cm"
+              : ""
+          }}
+          {{
+            performerInformation.hip
+              ? "/ " + performerInformation.hip + " cm"
+              : ""
+          }}
+          {{ performerInformation.cup ? "/ " + performerInformation.cup : "" }}
+        </p>
+        <p *ngIf="performerInformation?.prefectures">
+          <strong>Region:</strong> {{ performerInformation.prefectures }}
+        </p>
+        <p *ngIf="performerInformation?.blood_type">
+          <strong>Blood Type:</strong> {{ performerInformation.blood_type }}
+        </p>
+      </div>
+    </div>
+  </div>
+</mat-card>
