@@ -1,69 +1,58 @@
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../../common.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductionInformationService {
-  constructor(private common: CommonService) {}
+  constructor(private common: CommonService, private http: HttpClient) {}
 
-  async singleMovieInformation(movie_url: string): Promise<any> {
+  getSingleProductionInformation(movie_url: string): Observable<any> {
     const url = `${this.common.apiUrl}/avbase/movie/information?url=${movie_url}`;
+    const accessToken = localStorage.getItem('access_token') || '';
 
-    const accessToken = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
 
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
+    return this.http.get<any>(url, { headers }).pipe(
+      catchError((error) => {
+        if (error.status === 401) {
           this.common.logout();
         }
-        throw new Error('请求失败');
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('请求失败:', error);
-      throw new Error('请求失败，请稍后再试');
-    }
+        return throwError(
+          () => new Error('Error occurred while getting information')
+        );
+      })
+    );
   }
 
-  async addKeywordsRSS(
+  addProductionSubscribe(
     keyword: string,
     img: string,
     link: string
-  ): Promise<any> {
+  ): Observable<any> {
     const url = `${this.common.apiUrl}/feed/addKeywords`;
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          keyword: keyword,
-          img: img,
-          link: link,
-        }),
-      });
+    const body = new URLSearchParams({
+      keyword,
+      img,
+      link,
+    }).toString();
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Error adding RSS feed');
-      }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+    });
 
-      const responseData = await response.json();
-      return responseData;
-    } catch (error) {
-      console.error('Error occurred while adding RSS feed:', error);
-      throw error;
-    }
+    return this.http.post<any>(url, body, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error occurred while adding RSS feed:', error);
+        const message =
+          error.error?.detail || 'Error occurred while adding RSS feed';
+        return throwError(() => new Error(message));
+      })
+    );
   }
 }

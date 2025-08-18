@@ -165,11 +165,12 @@ def get_index():
     data = data.get("props").get("pageProps")
 
     works = data.get("works")
+    products = [p for work in works for p in work.get("products", [])]
     newbie_talents = data.get("newbie_talents")
     popular_talents = data.get("popular_talents")
 
     return {
-        "works": works,
+        "products": products,
         "newbie_talents": newbie_talents,
         "popular_talents": popular_talents,
     }

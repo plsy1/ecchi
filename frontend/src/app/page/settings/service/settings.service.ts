@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { EnvironmentConfig } from '../models/settings.interface';
 import { CommonService } from '../../../common.service';
 
@@ -6,90 +9,46 @@ import { CommonService } from '../../../common.service';
   providedIn: 'root',
 })
 export class SettingsService {
-  constructor(private common: CommonService) {}
-  async updateEnvironment(env: EnvironmentConfig): Promise<boolean> {
+  constructor(private common: CommonService, private http: HttpClient) {}
+
+  updateEnvironment(env: EnvironmentConfig): Observable<boolean> {
     const url = `${this.common.apiUrl}/auth/updateEnvironment`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(env),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Error:', errorData);
-        return false;
-      }
-
-      const data = await response.json();
-      return data.success ?? true;
-    } catch (error) {
-      console.error('Error:', error);
-      return false;
-    }
+    return this.http.post<{ success?: boolean }>(url, env).pipe(
+      map((data) => data.success ?? true),
+      catchError((error) => {
+        console.error('Error updating environment:', error);
+        return of(false);
+      })
+    );
   }
 
-
-    async getEnvironment() {
+  getEnvironment(): Observable<EnvironmentConfig> {
     const url = `${this.common.apiUrl}/auth/getEnvironment`;
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error fetching data: ${response.statusText}`);
-      }
-
-      const data: EnvironmentConfig = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching keyword feeds:', error);
-      throw error;
-    }
+    return this.http.get<EnvironmentConfig>(url).pipe(
+      catchError((error) => {
+        console.error('Error fetching environment:', error);
+        throw error;
+      })
+    );
   }
 
-    async changePassword(
+  changePassword(
     username: string,
     old_password: string,
     new_password: string
-  ): Promise<boolean> {
+  ): Observable<boolean> {
     const url = `${this.common.apiUrl}/auth/changepassword`;
-
-    // 使用 FormData 发送表单数据
     const formData = new FormData();
     formData.append('username', username);
     formData.append('old_password', old_password);
     formData.append('new_password', new_password);
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        // 如果 422 或其他状态码
-        const errorData = await response.json().catch(() => ({}));
-        console.error('修改密码失败:', errorData);
-        return false;
-      }
-
-      const data = await response.json();
-
-      return data.message === 'Password updated successfully';
-    } catch (error) {
-      console.error('修改密码请求失败:', error);
-      return false;
-    }
+    return this.http.post<{ message: string }>(url, formData).pipe(
+      map((data) => data.message === 'Password updated successfully'),
+      catchError((error) => {
+        console.error('Failed to change password:', error);
+        return of(false);
+      })
+    );
   }
-
-
 }

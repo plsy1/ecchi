@@ -3,7 +3,7 @@ import { PerformerSubscriptionService } from '../../service/performer-subscripti
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -33,35 +33,48 @@ export class PerformerSubscriptionListComponent {
   ActressList: performerList[] = [];
   constructor(
     private PerformerSubscriptionService: PerformerSubscriptionService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.PerformerSubscriptionService.getActressFeed()
-      .then((data: performerList[]) => {
+    this.loadActressFeed();
+  }
+
+  loadActressFeed(): void {
+    this.PerformerSubscriptionService.getActressFeed().subscribe({
+      next: (data: performerList[]) => {
         this.ActressList = data;
-      })
-      .catch((error) => {
+      },
+      error: (error) => {
         console.error('Error fetching actress feeds:', error);
-      });
+        this.snackBar.open('Failed to load feeds', 'Close', { duration: 2000 });
+      },
+    });
+  }
+
+  onUnsubscribeClick(event: MouseEvent, movie: any): void {
+    event.stopPropagation();
+
+    this.PerformerSubscriptionService.removeFeedsRSS(movie.url).subscribe({
+      next: () => {
+        this.snackBar.open('Unsubscribed successfully', 'Close', {
+          duration: 2000,
+        });
+        this.loadActressFeed();
+      },
+      error: (error) => {
+        console.error('Failed to unsubscribe:', error);
+        this.snackBar.open('Failed to unsubscribe', 'Close', {
+          duration: 2000,
+        });
+      },
+    });
   }
 
   async onClick(name: string) {
     try {
       this.router.navigate(['/performer', name]);
-    } catch (error) {
-      console.error('Failed:', error);
-    }
-  }
-
-  async onUnsubscribeClick(event: MouseEvent, movie: any) {
-    event.stopPropagation();
-    try {
-      await this.PerformerSubscriptionService.removeFeedsRSS(movie.url);
-
-      const data: performerList[] =
-        await this.PerformerSubscriptionService.getActressFeed();
-      this.ActressList = [...data];
     } catch (error) {
       console.error('Failed:', error);
     }

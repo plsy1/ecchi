@@ -15,13 +15,16 @@ export class LibraryStatisticComponent implements OnInit {
 
   constructor(private dashboardService: DashboardService) {}
 
-  async ngOnInit(): Promise<void> {
-    try {
-      this.counts = await this.dashboardService.getEmbyItemTotalCount();
-    } catch (error) {
-      console.error('Failed to load Library Statistic data.', error);
-    }
-  }
+ngOnInit(): void {
+  this.dashboardService.getEmbyItemTotalCount().subscribe({
+    next: (data) => {
+      this.counts = data;
+    },
+    error: (err) => {
+      console.error('Failed to load Library Statistic data.', err);
+    },
+  });
+}
 
   getIconClass(key: string): string {
     switch (key) {

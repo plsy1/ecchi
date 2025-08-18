@@ -15,13 +15,16 @@ export class ResumeWatchingComponent implements OnInit {
 
   constructor(private dashboardService: DashboardService) {}
 
-  async ngOnInit(): Promise<void> {
-    try {
-      this.resumeItems = await this.dashboardService.getEmbyResumeItems();
-    } catch (error) {
-      console.error('Failed to load Emby Resume watching data.', error);
-    }
-  }
+ngOnInit(): void {
+  this.dashboardService.getEmbyResumeItems().subscribe({
+    next: (data) => {
+      this.resumeItems = data;
+    },
+    error: (err) => {
+      console.error('Failed to load Emby Resume watching data.', err);
+    },
+  });
+}
 
 onImageError(event: Event, item: any) {
   item.hideImage = true;

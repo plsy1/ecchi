@@ -20,13 +20,8 @@
   .top-row {
     flex-direction: column;
   }
-  .top-row .left,
-  .top-row .right {
-    width: 100%;
-  }
 }
 
 .section {
   padding: 10px;
 }
-

@@ -36,45 +36,37 @@ export class ActressInformationComponent {
   }
 
   loadActressInformation(name: string): void {
-    this.service
-      .getActressInformation(encodeURIComponent(name))
-      .then((data) => {
+    this.service.getActressInformation(encodeURIComponent(name)).subscribe({
+      next: (data) => {
         this.performerInformation = data;
         this.service.savePerformerInformation(data);
-      })
-      .catch((error) => {
+      },
+      error: (error) => {
         console.error('Failed to load', error);
-      });
+      },
+    });
   }
 
   subscribeActress(rssLink: string): void {
-    this.service
-      .addFeedsRSS(rssLink, this.name, '')
-      .then((response) => {
-        if (response.status === 200) {
-          this.snackBar.open('Added successfully', 'Close', { duration: 2000 });
-        } else {
-          this.snackBar.open('Failed to add', 'Close', { duration: 2000 });
-        }
-      })
-      .catch((error) => {
+    this.service.addFeedsRSS(rssLink, this.name, '').subscribe({
+      next: (response) => {
+        this.snackBar.open('Added successfully', 'Close', { duration: 2000 });
+      },
+      error: (error) => {
         this.snackBar.open('Failed to add', 'Close', { duration: 2000 });
-      });
+      },
+    });
   }
 
   collectActress(rssLink: string): void {
-    this.service
-      .addActressCollect(rssLink, this.name)
-      .then((response) => {
-        if (response.status === 200) {
-          this.snackBar.open('Added successfully', 'Close', { duration: 2000 });
-        } else {
-          this.snackBar.open('Failed to add', 'Close', { duration: 2000 });
-        }
-      })
-      .catch((error) => {
+    this.service.addActressCollect(rssLink, this.name).subscribe({
+      next: (response) => {
+        this.snackBar.open('Added successfully', 'Close', { duration: 2000 });
+      },
+      error: (error) => {
         this.snackBar.open('Failed to add', 'Close', { duration: 2000 });
-      });
+      },
+    });
   }
 
   getFaIcon(platform: string): string {

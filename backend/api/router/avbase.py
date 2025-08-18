@@ -23,10 +23,10 @@ async def get_movie_information(url: str, isValid: str = Depends(tokenIntercepto
 @router.get("/keywords")
 async def search_movies_by_keywords(keywords: str, page: int, isValid: str = Depends(tokenInterceptor)):
     movies = get_movie_info_by_keywords(keywords, page)
-    return {"movies": movies, "page": page}
+    return movies
 
 @router.get("/get_index")
-async def get_index_data():
+async def get_index_data(isValid: str = Depends(tokenInterceptor)):
     return get_index()
 
 

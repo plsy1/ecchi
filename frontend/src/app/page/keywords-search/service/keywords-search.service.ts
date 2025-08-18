@@ -1,10 +1,17 @@
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../../common.service';
+import { keywordsSearchResponse } from '../models/keywordSearch.interface';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
+import { catchError, throwError, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class KeywordsSearchService {
-  public discoverResults: any[] = [];
+  public discoverResults?: keywordsSearchResponse[];
   public searchKeyWords: string = '';
   public currentPage: number = 1;
   public discoverType: number = 1;
@@ -12,10 +19,10 @@ export class KeywordsSearchService {
 
   public selectedMovie: any = null;
 
-  constructor(private common: CommonService) {}
+  constructor(private common: CommonService, private http: HttpClient) {}
 
   saveState(
-    results: any[],
+    results: keywordsSearchResponse[],
     keywords: string,
     page: number,
     actressNumberFilter: string
@@ -34,32 +41,22 @@ export class KeywordsSearchService {
     return this.selectedMovie;
   }
 
-  async discoverByKeywords(filter_value: string, page: number): Promise<any> {
+  discoverByKeywords(filter_value: string, page: number): Observable<any> {
     const url = `${this.common.apiUrl}/avbase/keywords?keywords=${filter_value}&page=${page}`;
+    const accessToken = localStorage.getItem('access_token') ?? '';
 
-    const accessToken = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
 
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
+    return this.http.get<any>(url, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
           this.common.logout();
         }
-        throw new Error('请求失败');
-      }
-
-      const data = await response.json();
-
-      return data;
-    } catch (error) {
-      console.error('请求失败:', error);
-      throw new Error('请求失败，请稍后再试');
-    }
+        console.error('Request Failed', error);
+        return throwError(() => new Error('Request Failed'));
+      })
+    );
   }
 }

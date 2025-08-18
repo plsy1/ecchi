@@ -1,3 +1,6 @@
+.resume-items-card {
+  background-color: var(--app-background);
+}
 .items-grid {
   display: grid;
   gap: 12px;
@@ -6,24 +9,21 @@
 
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(2, auto);
-    overflow: hidden; /* 超出的内容不显示 */
+  overflow: hidden;
 }
 
-/* 中等屏幕 */
 @media (max-width: 1200px) {
   .items-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
-/* 小屏幕平板 */
 @media (max-width: 768px) {
   .items-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* 手机屏幕 */
 @media (max-width: 480px) {
   .items-grid {
     grid-template-columns: repeat(2, 1fr);

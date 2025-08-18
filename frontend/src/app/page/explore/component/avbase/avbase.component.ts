@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { PageExploreServiceService } from '../../services/page-explore.service';
-import { CommonService } from '../../../../common.service';
 import { CommonModule } from '@angular/common';
+import { AvbaseIndexData } from '../../models/page-explore';
+
 @Component({
   selector: 'app-avbase',
   standalone: true,
@@ -12,23 +13,26 @@ import { CommonModule } from '@angular/common';
   styleUrl: './avbase.component.css',
 })
 export class AvbaseComponent implements OnInit {
-  avbaseIndexData: any;
+  avbaseIndexData?: AvbaseIndexData;
   constructor(
     private PageExploreService: PageExploreServiceService,
-    private router: Router,
-    private common: CommonService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadAvbaseIndex();
   }
 
-  async loadAvbaseIndex() {
-    try {
-      this.avbaseIndexData = await this.PageExploreService.getAvbaseIndex();
-    } catch (error) {
-      console.error('Failed to load Avbase index:', error);
-    }
+  loadAvbaseIndex(): void {
+    this.PageExploreService.getAvbaseIndex().subscribe({
+      next: (data) => {
+        this.avbaseIndexData = data;
+        console.log('Avbase index loaded:', data);
+      },
+      error: (err) => {
+        console.error('Failed to load Avbase index:', err);
+      },
+    });
   }
 
   async cardClick(name: string) {
@@ -41,7 +45,6 @@ export class AvbaseComponent implements OnInit {
 
   async posterClick(name: string) {
     try {
-      this.common.vauleOfPerformerSearch = name;
       this.router.navigate(['keywords', name]);
     } catch (error) {
       console.error('Failed:', error);

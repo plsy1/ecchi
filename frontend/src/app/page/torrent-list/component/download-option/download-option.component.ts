@@ -31,16 +31,21 @@ export class DownloadOptionComponent {
   savePathOptions: string[] = [];
   savePath: string = '';
   filteredOptions: string[] = [];
+  id: string = '';
+  keywords: string = '';
 
   constructor(
     private dialogRef: MatDialogRef<DownloadOptionComponent>,
     private snackBar: MatSnackBar,
     private torrentService: TorrentService,
     private common: CommonService,
-    @Inject(MAT_DIALOG_DATA) public data: { downloadUrl: string }
+    @Inject(MAT_DIALOG_DATA)
+    public data: { downloadUrl: string; id: string; keywords: string }
   ) {
     this.downloadUrl = data.downloadUrl;
     this.filteredOptions = this.savePathOptions;
+    this.id = data.id;
+    this.keywords = data.keywords;
   }
 
   ngOnInit(): void {
@@ -55,8 +60,8 @@ export class DownloadOptionComponent {
     try {
       this.snackBar.open('Sending......', 'Close', { duration: 2000 });
       const results = await this.torrentService.pushTorrent(
-        this.common.vauleOfPerformerSearch,
-        this.common.productionLink,
+        this.keywords,
+        this.id,
         this.downloadUrl,
         this.savePath,
         ''

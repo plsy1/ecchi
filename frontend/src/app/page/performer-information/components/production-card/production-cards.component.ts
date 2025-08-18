@@ -55,27 +55,28 @@ export class MovieCards implements OnInit {
   }
 
   loadDiscoverData(filter_value: string, page: number): void {
-    if (this.isLoading == true) return;
+    if (this.isLoading) return;
     this.isLoading = true;
 
-    this.service
-      .discoverByActress(filter_value, page)
-      .then((data) => {
+    this.service.discoverByActress(filter_value, page).subscribe({
+      next: (data) => {
         this.discoverResults = data.movies;
         this.isLoading = false;
         this.service.saveProductionInformation(data.movies);
         this.service.savePage(this.page);
-      })
-      .catch((error) => {
+      },
+      error: (error) => {
         console.error('Failed to load discover data:', error);
-      });
+        this.isLoading = false;
+      },
+    });
   }
 
   onImageError(event: any): void {}
 
   async onMovieClick(movie: any) {
     try {
-      this.router.navigate(['production', movie.avbase_link]);
+      this.router.navigate(['production', movie.full_id]);
     } catch (error) {}
   }
 

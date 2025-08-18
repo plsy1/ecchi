@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CommonService } from '../../../../common.service';
-import { HomeService } from '../../service/home.service';
 
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -41,7 +40,6 @@ export class SearchOptionComponent {
   constructor(
     private dialogRef: MatDialogRef<SearchOptionComponent>,
     private snackBar: MatSnackBar,
-    private apiService: HomeService,
     private router: Router,
     private common: CommonService,
     @Inject(MAT_DIALOG_DATA) public data: { title: string; type: string }
@@ -59,8 +57,7 @@ export class SearchOptionComponent {
   async searchTorrents(): Promise<void> {
     try {
       this.snackBar.open('Searching......', 'Close', { duration: 2000 });
-      await this.apiService.search(this.searchVaule);
-      this.router.navigate(['/torrents']);
+      this.router.navigate(['/torrents', this.searchVaule]);
       this.setRecentlySearch();
     } catch (error) {
       this.snackBar.open('Failed. Please try again.', 'Close', {

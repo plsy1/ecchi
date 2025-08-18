@@ -54,7 +54,7 @@ def get_movies(url: str) -> List[Movie]:
             Movie(
                 id=movie_id,
                 title=title,
-                avbase_link=link,
+                full_id=link,
                 release_date=date,
                 img_url=img_url,
                 actors=actors,

@@ -20,6 +20,8 @@ import {
   AfterViewInit,
   inject,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TorrentService } from './service/torrent.service';
 
 @Component({
   selector: 'app-torrent-list',
@@ -41,7 +43,10 @@ import {
 })
 export class TorrentListComponent implements OnInit, AfterViewInit {
   searchResults: any[] = [];
-  query: string = '';
+  searchKeyWords: string = '';
+
+  movieId: string = '';
+  keywords: string = '';
   dataSource = new MatTableDataSource<any>(this.searchResults);
   dialog: MatDialog = inject(MatDialog);
   @ViewChild(MatSort) sort: MatSort | undefined;
@@ -53,12 +58,29 @@ export class TorrentListComponent implements OnInit, AfterViewInit {
     'publishDate',
   ];
 
-  constructor(private common: CommonService) {}
+  constructor(
+    private common: CommonService,
+    private getRoute: ActivatedRoute,
+    private TorrentService: TorrentService
+  ) {}
 
   ngOnInit(): void {
-    this.common.torrentSearchResults$.subscribe((results) => {
-      this.searchResults = results;
-      this.dataSource.data = this.searchResults;
+    this.getRoute.queryParamMap.subscribe((params) => {
+      this.movieId = params.get('fullId') || '';
+      this.keywords = params.get('Id') || '';
+    });
+
+    this.getRoute.paramMap.subscribe((params) => {
+      this.searchKeyWords = params.get('value') || '';
+      if (
+        this.TorrentService.searchKeyWords === this.searchKeyWords ||
+        this.searchKeyWords === ''
+      ) {
+        this.searchResults = this.TorrentService.searchResults;
+        this.dataSource.data = this.searchResults;
+      } else {
+        this.loadDiscoverData(this.searchKeyWords);
+      }
     });
 
     setTimeout(() => {
@@ -67,6 +89,19 @@ export class TorrentListComponent implements OnInit, AfterViewInit {
         this.sort.active = 'seeders';
         this.sort.direction = 'desc';
       }
+    });
+  }
+
+  loadDiscoverData(keywords: string): void {
+    this.TorrentService.search(keywords).subscribe({
+      next: (results: any) => {
+        this.searchResults = results;
+        this.dataSource.data = this.searchResults;
+        this.TorrentService.saveState(this.searchResults, keywords);
+      },
+      error: (error) => {
+        console.error('Failed to load discover data:', error);
+      },
     });
   }
 
@@ -99,6 +134,8 @@ export class TorrentListComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(DownloadOptionComponent, {
       data: {
         downloadUrl: downloadUrl,
+        id: this.movieId,
+        keywords: this.keywords,
       },
     });
 

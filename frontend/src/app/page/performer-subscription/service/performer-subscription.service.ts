@@ -1,109 +1,56 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CommonService } from '../../../common.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PerformerSubscriptionService {
-  constructor(private common: CommonService) {}
+  constructor(private http: HttpClient, private common: CommonService) {}
 
-  async getActressCollect(): Promise<any> {
+  getActressCollect(): Observable<any> {
     const url = `${this.common.apiUrl}/feed/getCollectList`;
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching keywords:', error);
-      throw error;
-    }
+    return this.http.get(url).pipe(
+      catchError((error) => {
+        console.error('Failed to fetch actress collect list:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async removeActressCollect(url: string): Promise<any> {
-    const urlToDelete = `${this.common.apiUrl}/feed/delActressCollect`;
+  removeActressCollect(urlParam: string): Observable<any> {
+    const url = `${this.common.apiUrl}/feed/delActressCollect`;
+    const body = new HttpParams().set('url', urlParam);
 
-    try {
-      const response = await fetch(urlToDelete, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          url: url,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Error removing RSS feed');
-      }
-
-      const responseData = await response.json();
-      return responseData;
-    } catch (error) {
-      console.error('Error occurred while removing RSS feed:', error);
-      throw error;
-    }
+    return this.http.delete(url, { body }).pipe(
+      catchError((error) => {
+        console.error('Failed to remove actress collect:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-    async getActressFeed(): Promise<any> {
+  getActressFeed(): Observable<any> {
     const url = `${this.common.apiUrl}/feed/getFeedsList`;
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching keywords:', error);
-      throw error;
-    }
+    return this.http.get(url).pipe(
+      catchError((error) => {
+        console.error('Failed to fetch RSS feeds:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-    async removeFeedsRSS(url: string): Promise<any> {
-    const urlToDelete = `${this.common.apiUrl}/feed/delFeeds`;
+  removeFeedsRSS(urlParam: string): Observable<any> {
+    const url = `${this.common.apiUrl}/feed/delFeeds`;
+    const body = new HttpParams().set('url', urlParam);
 
-    try {
-      const response = await fetch(urlToDelete, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          url: url,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Error removing RSS feed');
-      }
-
-      const responseData = await response.json();
-      return responseData;
-    } catch (error) {
-      console.error('Error occurred while removing RSS feed:', error);
-      throw error;
-    }
+    return this.http.delete(url, { body }).pipe(
+      catchError((error) => {
+        console.error('Failed to remove RSS feed:', error);
+        return throwError(() => error);
+      })
+    );
   }
-
-
 }

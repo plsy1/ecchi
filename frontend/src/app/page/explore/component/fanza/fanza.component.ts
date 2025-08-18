@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { PageExploreServiceService } from '../../services/page-explore.service';
-import { CommonService } from '../../../../common.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,48 +38,51 @@ export class FanzaComponent implements OnInit {
 
   constructor(
     private PageExploreService: PageExploreServiceService,
-    private router: Router,
-    private common: CommonService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    // ------- Actress -------
     const cachedData = this.PageExploreService.getRankingData();
 
     if (cachedData && cachedData.length > 0) {
-      //加载缓存
-      this.actressList = this.PageExploreService.getRankingData();
+      this.actressList = cachedData;
       this.currentPage = this.PageExploreService.getLastPage();
       this.workRankingType = this.PageExploreService.getWorkRankingType();
     } else {
-      this.PageExploreService.fetchActressRanking(1)
-        .then((data) => {
+      this.PageExploreService.fetchActressRanking(1).subscribe({
+        next: (data) => {
           this.actressList = data;
+          this.currentPage = 1;
           this.PageExploreService.setRankingData(data, 1);
-        })
-        .catch((error) => {
+        },
+        error: (error) => {
           console.error('Failed to fetch actress ranking:', error);
-        });
+        },
+      });
     }
 
-    // ------- Work -------
     const cachedWorkData = this.PageExploreService.getWorkRankingData();
     if (cachedWorkData && cachedWorkData.length > 0) {
       this.workList = cachedWorkData;
       this.currentWorkPage = this.PageExploreService.getLastWorkPage();
     } else {
-      this.PageExploreService.fetchWorkRanking(1, this.workRankingType)
-        .then((data) => {
+      this.PageExploreService.fetchWorkRanking(
+        1,
+        this.workRankingType
+      ).subscribe({
+        next: (data) => {
           this.workList = data;
           this.PageExploreService.setWorkRankingData(
             data,
             1,
             this.workRankingType
           );
-        })
-        .catch((error) => {
+          this.currentWorkPage = 1;
+        },
+        error: (error) => {
           console.error('Failed to fetch work ranking:', error);
-        });
+        },
+      });
     }
   }
 
@@ -94,7 +96,6 @@ export class FanzaComponent implements OnInit {
 
   async posterClick(name: string) {
     try {
-      this.common.vauleOfPerformerSearch = name;
       this.router.navigate(['keywords', name]);
     } catch (error) {
       console.error('Failed:', error);
@@ -112,35 +113,46 @@ export class FanzaComponent implements OnInit {
   }
 
   loadPage(page: number): void {
-    this.PageExploreService.fetchActressRanking(page).then((data) => {
-      this.actressList = data;
-      this.currentPage = page;
-      this.PageExploreService.setRankingData(data, page);
+    this.PageExploreService.fetchActressRanking(page).subscribe({
+      next: (data) => {
+        this.actressList = data;
+        this.currentPage = page;
+        this.PageExploreService.setRankingData(data, page);
+      },
+      error: (err) => {
+        console.error('Failed to fetch actress ranking:', err);
+      },
     });
   }
 
   onWorkRankingTypeChange(value: RankingTypeOfWorks) {
     this.workRankingType = value;
 
-    this.PageExploreService.fetchWorkRanking(1, this.workRankingType)
-      .then((data) => {
-        this.workList = data;
-        this.PageExploreService.setWorkRankingData(
-          data,
-          1,
-          this.workRankingType
-        );
-        this.currentWorkPage = 1;
-      })
-      .catch((error) => {
-        console.error('Failed to fetch work ranking:', error);
-      });
+    this.PageExploreService.fetchWorkRanking(1, this.workRankingType).subscribe(
+      {
+        next: (data) => {
+          this.workList = data;
+          this.PageExploreService.setWorkRankingData(
+            data,
+            1,
+            this.workRankingType
+          );
+          this.currentWorkPage = 1;
+        },
+        error: (error) => {
+          console.error('Failed to fetch work ranking:', error);
+        },
+      }
+    );
   }
 
   nextWorkPage(): void {
     const nextPage = this.currentWorkPage + 1;
-    this.PageExploreService.fetchWorkRanking(nextPage, this.workRankingType)
-      .then((data) => {
+    this.PageExploreService.fetchWorkRanking(
+      nextPage,
+      this.workRankingType
+    ).subscribe({
+      next: (data) => {
         this.workList = data;
         this.currentWorkPage = nextPage;
         this.PageExploreService.setWorkRankingData(
@@ -148,17 +160,21 @@ export class FanzaComponent implements OnInit {
           nextPage,
           this.workRankingType
         );
-      })
-      .catch((error) => {
+      },
+      error: (error) => {
         console.error('Failed to fetch next work page:', error);
-      });
+      },
+    });
   }
 
   prevWorkPage(): void {
     if (this.currentWorkPage <= 1) return;
     const prevPage = this.currentWorkPage - 1;
-    this.PageExploreService.fetchWorkRanking(prevPage, this.workRankingType)
-      .then((data) => {
+    this.PageExploreService.fetchWorkRanking(
+      prevPage,
+      this.workRankingType
+    ).subscribe({
+      next: (data) => {
         this.workList = data;
         this.currentWorkPage = prevPage;
         this.PageExploreService.setWorkRankingData(
@@ -166,9 +182,10 @@ export class FanzaComponent implements OnInit {
           prevPage,
           this.workRankingType
         );
-      })
-      .catch((error) => {
+      },
+      error: (error) => {
         console.error('Failed to fetch previous work page:', error);
-      });
+      },
+    });
   }
 }

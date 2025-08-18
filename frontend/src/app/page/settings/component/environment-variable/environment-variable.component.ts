@@ -29,13 +29,12 @@ export class EnvironmentVariableComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.SettingsService.getEnvironment()
-      .then((data: EnvironmentConfig) => {
+    this.SettingsService.getEnvironment().subscribe({
+      next: (data: EnvironmentConfig) => {
         this.env = data;
-      })
-      .catch((error) => {
-        console.error('获取环境变量失败:', error);
-      });
+      },
+      error: (error) => {},
+    });
   }
 
   env: EnvironmentConfig = {
@@ -53,20 +52,19 @@ export class EnvironmentVariableComponent implements OnInit {
     EMBY_API_KEY: '',
   };
 
-  async saveEnv() {
-    try {
-      const success = await this.SettingsService.updateEnvironment(this.env);
+saveEnv() {
+  this.SettingsService.updateEnvironment(this.env).subscribe({
+    next: (success: boolean) => {
       if (success) {
         this.snackBar.open('Saved successfully.', 'Close', { duration: 2000 });
       } else {
-        this.snackBar.open('Failed. Please try again.', 'Close', {
-          duration: 2000,
-        });
+        this.snackBar.open('Failed. Please try again.', 'Close', { duration: 2000 });
       }
-    } catch (error) {
-      this.snackBar.open('Failed. Please try again.', 'Close', {
-        duration: 2000,
-      });
-    }
-  }
+    },
+    error: (error) => {
+      console.error('Error saving environment:', error);
+      this.snackBar.open('Failed. Please try again.', 'Close', { duration: 2000 });
+    },
+  });
+}
 }

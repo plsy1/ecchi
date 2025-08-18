@@ -14,13 +14,16 @@ export class LibraryViewComponent implements OnInit {
   views: EmbyView[] = [];
   constructor(private dashboardService: DashboardService) {}
 
-  async ngOnInit(): Promise<void> {
-    try {
-      this.views = await this.dashboardService.getEmbyViews();
-    } catch (error) {
-      console.error('Failed to load Emby View data.', error);
-    }
-  }
+ngOnInit(): void {
+  this.dashboardService.getEmbyViews().subscribe({
+    next: (data) => {
+      this.views = data;
+    },
+    error: (err) => {
+      console.error('Failed to load Emby View data.', err);
+    },
+  });
+}
 
   onImageError(event: Event, view: any) {
     const img = event.target as HTMLImageElement;

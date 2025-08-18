@@ -14,13 +14,16 @@ import { EmbyLatestItem } from '../../models/dashboard.interface';
 export class RecentlyAddedComponent implements OnInit {
   latestItems: EmbyLatestItem[] = [];
   constructor(private dashboardService: DashboardService) {}
-  async ngOnInit(): Promise<void> {
-    try {
-      this.latestItems = await this.dashboardService.getEmbyLatestItems();
-    } catch (error) {
-      console.error('Failed to load Emby Recently Added data.', error);
-    }
-  }
+ngOnInit(): void {
+  this.dashboardService.getEmbyLatestItems().subscribe({
+    next: (data) => {
+      this.latestItems = data;
+    },
+    error: (err) => {
+      console.error('Failed to load Emby Recently Added data.', err);
+    },
+  });
+}
 
 onImageError(event: Event, item: any) {
   item.hideImage = true;

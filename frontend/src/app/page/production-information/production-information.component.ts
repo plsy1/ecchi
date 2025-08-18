@@ -25,7 +25,6 @@ import { HomeService } from '../home/service/home.service';
 })
 export class ProductionInformationComponent implements OnInit {
   movieData: any;
-  movieLink: any;
   movieId: string = '';
   isLoading: boolean = false;
 
@@ -37,34 +36,36 @@ export class ProductionInformationComponent implements OnInit {
     private HomeService: HomeService
   ) {}
 
-  ngOnInit(): void {
-    this.getRoute.paramMap.subscribe((params) => {
-      this.movieId = params.get('id') || '';
-      this.movieLink = this.movieId;
-      this.loadMovieData(this.movieId);
-    });
-  }
+ngOnInit(): void {
+  this.getRoute.paramMap.subscribe((params) => {
+    this.movieId = params.get('id') || '';
+    this.loadMovieData(this.movieId);
+  });
+}
 
-  loadMovieData(movieUrl: string): void {
-    this.isLoading = true;
-    this.ProductionInformationService.singleMovieInformation(
-      encodeURIComponent(movieUrl)
-    )
-      .then((data) => {
+loadMovieData(movieUrl: string): void {
+  this.isLoading = true;
+
+  this.ProductionInformationService
+    .getSingleProductionInformation(encodeURIComponent(movieUrl))
+    .subscribe({
+      next: (data) => {
         this.movieData = data;
         this.isLoading = false;
-      })
-      .catch((error) => {
+      },
+      error: (error) => {
+        console.error('Failed to load movie data:', error);
         this.isLoading = false;
-      });
-  }
+      },
+    });
+}
 
   async downloadMovie(): Promise<void> {
     try {
-      const results = await this.HomeService.search(
-        this.movieData.props.pageProps.work.work_id
+      this.router.navigate(
+        ['/torrents', this.movieData.props.pageProps.work.work_id],
+        { queryParams: { fullId: this.movieId, Id: this.movieData.props.pageProps.work.work_id } }
       );
-      this.router.navigate(['/torrents']);
     } catch (error) {
       console.error('Failed:', error);
     }
@@ -72,10 +73,10 @@ export class ProductionInformationComponent implements OnInit {
 
   async subscribeToMovie(): Promise<void> {
     try {
-      const results = await this.ProductionInformationService.addKeywordsRSS(
+      const results = await this.ProductionInformationService.addProductionSubscribe(
         this.movieData.props.pageProps.work.work_id,
         this.movieData.props.pageProps.work.products[0]?.image_url,
-        this.movieLink
+        this.movieId
       );
       if (results) {
         this.snackBar.open('Added successfully.', 'Close', { duration: 2000 });

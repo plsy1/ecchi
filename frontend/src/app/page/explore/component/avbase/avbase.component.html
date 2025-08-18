@@ -3,15 +3,15 @@
   <div
     *ngFor="let actress of avbaseIndexData?.newbie_talents"
     class="actress-card"
-    (click)="cardClick(actress.actors[0].name)"
+    (click)="cardClick(actress.primary.name)"
   >
     <img
-      [src]="actress.actors[0].image_url"
-      [alt]="actress.actors[0].name"
+      [src]="actress.primary.image_url"
+      [alt]="actress.primary.name"
       class="avatar-img"
       loading="lazy"
     />
-    <div class="title">{{ actress.actors[0].name }}</div>
+    <div class="title">{{ actress.primary.name }}</div>
   </div>
 </div>
 
@@ -20,15 +20,15 @@
   <div
     *ngFor="let actress of avbaseIndexData?.popular_talents"
     class="actress-card"
-    (click)="cardClick(actress.actors[0].name)"
+    (click)="cardClick(actress.primary.name)"
   >
     <img
-      [src]="actress.actors[0].image_url"
-      [alt]="actress.actors[0].name"
+      [src]="actress.primary.image_url"
+      [alt]="actress.primary.name"
       class="avatar-img"
       loading="lazy"
     />
-    <div class="title">{{ actress.actors[0].name }}</div>
+    <div class="title">{{ actress.primary.name }}</div>
   </div>
 </div>
 
@@ -36,12 +36,12 @@
 <div class="poster-grid">
   <div
     class="poster-card"
-    *ngFor="let work of avbaseIndexData?.works"
-    (click)="posterClick(work.work_id)"
+    *ngFor="let work of avbaseIndexData?.products"
+    (click)="posterClick(work.product_id)"
   >
     <div class="poster-image-wrapper">
       <img
-        [src]="work.products[0].image_url"
+        [src]="work.image_url"
         [alt]="work.title"
         class="poster-image"
         loading="lazy"

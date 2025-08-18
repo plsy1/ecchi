@@ -20,27 +20,37 @@ export class ProductionSubscriptionComponent implements OnInit {
     private ProductionSubscriptionService: ProductionSubscriptionService
   ) {}
 
-  ngOnInit() {
-    this.ProductionSubscriptionService.getKeywordFeeds()
-      .then((data: KeywordFeed[]) => {
+  ngOnInit(): void {
+    this.ProductionSubscriptionService.getKeywordFeeds().subscribe({
+      next: (data: KeywordFeed[]) => {
         this.keywordFeeds = data;
-      })
-      .catch((error) => {
+      },
+      error: (error) => {
         console.error('Error fetching keywords feed list', error);
-      });
+      },
+    });
   }
 
-  async onUnsubscribeClick(event: MouseEvent, movie: any) {
+  onUnsubscribeClick(event: MouseEvent, movie: any): void {
     event.stopPropagation();
-    try {
-      await this.ProductionSubscriptionService.removeKeywordsRSS(movie.keyword);
 
-      const data: KeywordFeed[] =
-        await this.ProductionSubscriptionService.getKeywordFeeds();
-      this.keywordFeeds = data;
-    } catch (error) {
-      console.error('Failed:', error);
-    }
+    this.ProductionSubscriptionService.removeKeywordsRSS(
+      movie.keyword
+    ).subscribe({
+      next: () => {
+        this.ProductionSubscriptionService.getKeywordFeeds().subscribe({
+          next: (data: KeywordFeed[]) => {
+            this.keywordFeeds = data;
+          },
+          error: (error) => {
+            console.error('Error fetching keywords feed list', error);
+          },
+        });
+      },
+      error: (error) => {
+        console.error('Failed to remove RSS feed:', error);
+      },
+    });
   }
 
   async onMovieCardClick(movie: any) {

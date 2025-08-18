@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface performerList {
   name: string;
@@ -31,38 +32,52 @@ export class PerformerCollectionListComponent {
   ActressList: performerList[] = [];
   constructor(
     private PerformerSubscriptionService: PerformerSubscriptionService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.PerformerSubscriptionService.getActressCollect()
-      .then((data: performerList[]) => {
+    this.loadActressCollect();
+  }
+
+  loadActressCollect(): void {
+    this.PerformerSubscriptionService.getActressCollect().subscribe({
+      next: (data: performerList[]) => {
         this.ActressList = data;
-      })
-      .catch((error) => {
+      },
+      error: (error) => {
         console.error('Error fetching actress feeds:', error);
-      });
+        this.snackBar.open('Failed to load actress collection', 'Close', {
+          duration: 2000,
+        });
+      },
+    });
+  }
+
+  onUnsubscribeClick(event: MouseEvent, movie: any): void {
+    event.stopPropagation();
+
+    this.PerformerSubscriptionService.removeActressCollect(
+      movie.avatar_url
+    ).subscribe({
+      next: () => {
+        this.snackBar.open('Unsubscribed successfully', 'Close', {
+          duration: 2000,
+        });
+        this.loadActressCollect(); // 刷新列表
+      },
+      error: (error) => {
+        console.error('Failed to unsubscribe:', error);
+        this.snackBar.open('Failed to unsubscribe', 'Close', {
+          duration: 2000,
+        });
+      },
+    });
   }
 
   async onClick(name: string) {
     try {
       this.router.navigate(['/performer', name]);
-    } catch (error) {
-      console.error('Failed:', error);
-    }
-  }
-
-  async onUnsubscribeClick(event: MouseEvent, movie: any) {
-    event.stopPropagation();
-    try {
-      this.PerformerSubscriptionService.removeActressCollect(movie.avatar_url);
-      this.PerformerSubscriptionService.getActressCollect()
-        .then((data: performerList[]) => {
-          this.ActressList = [...data];
-        })
-        .catch((error) => {
-          console.error('Error fetching actress feeds:', error);
-        });
     } catch (error) {
       console.error('Failed:', error);
     }

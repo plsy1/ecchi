@@ -1,3 +1,4 @@
+import { keywordsSearchResponse } from './models/keywordSearch.interface';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -9,6 +10,8 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { KeywordsSearchService } from './service/keywords-search.service';
 import { ActivatedRoute } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-keywords-search',
@@ -26,7 +29,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './keywords-search.component.css',
 })
 export class KeywordsSearchComponent implements OnInit {
-  discoverResults: any[] = [];
+  discoverResults?: keywordsSearchResponse[];
   isLoading: boolean = false;
   searchKeyWords: string = '';
   page: number = 1;
@@ -54,23 +57,27 @@ export class KeywordsSearchComponent implements OnInit {
   }
 
   loadDiscoverData(filter_value: string, page: number): void {
-    if (this.isLoading == true) return;
+    if (this.isLoading) return;
     this.isLoading = true;
 
     this.keywordsService
       .discoverByKeywords(filter_value, page)
-      .then((data) => {
-        this.discoverResults = data.movies;
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error('Failed to load discover data:', error);
+          this.isLoading = false;
+          return throwError(() => error);
+        })
+      )
+      .subscribe((data) => {
+        this.discoverResults = data;
         this.isLoading = false;
         this.keywordsService.saveState(
-          this.discoverResults,
+          this.discoverResults!,
           this.searchKeyWords,
           this.page,
           this.actressNumberFilter
         );
-      })
-      .catch((error) => {
-        console.error('Failed to load discover data:', error);
       });
   }
 
@@ -79,7 +86,7 @@ export class KeywordsSearchComponent implements OnInit {
   async onMovieClick(movie: any) {
     try {
       this.keywordsService.saveSelectedMovie(movie);
-      this.router.navigate(['production', movie.avbase_link]);
+      this.router.navigate(['production', movie.full_id]);
     } catch (error) {}
   }
 

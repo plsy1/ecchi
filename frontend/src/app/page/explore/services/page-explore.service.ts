@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
 import {
   RankingTypeOfWorks,
   ActressRanking,
@@ -16,7 +19,7 @@ export class PageExploreServiceService {
   private lastFetchedWorkPage: number = 1;
   private workRankingType: RankingTypeOfWorks = RankingTypeOfWorks.Weekly;
 
-  constructor(private common: CommonService) {}
+  constructor(private http: HttpClient, private common: CommonService) {}
 
   setRankingData(data: ActressRanking[], page: number): void {
     this.actressRankingCache = data;
@@ -33,20 +36,6 @@ export class PageExploreServiceService {
 
   getWorkRankingType(): RankingTypeOfWorks {
     return this.workRankingType;
-  }
-
-  async fetchActressRanking(page: number): Promise<ActressRanking[]> {
-    const url = `${this.common.apiUrl}/fanza/monthlyactress?page=${page}`;
-    return fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data: ActressRanking[]) => {
-        return data;
-      });
   }
 
   setWorkRankingData(
@@ -67,42 +56,36 @@ export class PageExploreServiceService {
     return this.lastFetchedWorkPage;
   }
 
-  async fetchWorkRanking(
-    page: number,
-    term: RankingTypeOfWorks
-  ): Promise<RankingItem[]> {
-    const url = `${this.common.apiUrl}/fanza/monthlyworks?page=${page}&term=${term}`;
-    return fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data: RankingItem[]) => {
-        return data;
-      });
+  fetchActressRanking(page: number): Observable<ActressRanking[]> {
+    const url = `${this.common.apiUrl}/fanza/monthlyactress?page=${page}`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
+    });
+
+    return this.http.get<ActressRanking[]>(url, { headers });
   }
 
-  async getAvbaseIndex() {
+  fetchWorkRanking(
+    page: number,
+    term: RankingTypeOfWorks
+  ): Observable<RankingItem[]> {
+    const url = `${this.common.apiUrl}/fanza/monthlyworks?page=${page}&term=${term}`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
+    });
+
+    return this.http.get<RankingItem[]>(url, { headers });
+  }
+
+  getAvbaseIndex(): Observable<any> {
     const url = `${this.common.apiUrl}/avbase/get_index`;
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
+    });
 
-      if (!response.ok) {
-        throw new Error(`Error fetching data: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error get avbase index:', error);
-      throw error;
-    }
+    return this.http.get(url, { headers });
   }
 }

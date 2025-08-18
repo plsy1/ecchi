@@ -41,22 +41,22 @@ export class LoginComponent {
     }
   }
 
-  onSubmit(): void {
-    this.common
-      .login(this.username, this.password)
-      .then((success) => {
-        if (success) {
-          localStorage.setItem('username', this.username);
-          this.router.navigate(['']);
-        } else {
-          this.showErrorSnackbar('Incorrect username or password');
-        }
-      })
-      .catch((error) => {
-        console.error('Login request failed:', error);
+onSubmit(): void {
+  this.common.login(this.username, this.password).subscribe({
+    next: (success) => {
+      if (success) {
+        localStorage.setItem('username', this.username);
+        this.router.navigate(['']);
+      } else {
         this.showErrorSnackbar('Incorrect username or password');
-      });
-  }
+      }
+    },
+    error: (error) => {
+      console.error('Login request failed:', error);
+      this.showErrorSnackbar('Incorrect username or password');
+    }
+  });
+}
 
   private showErrorSnackbar(message: string) {
     this.snackbar.open(message, 'Close', {

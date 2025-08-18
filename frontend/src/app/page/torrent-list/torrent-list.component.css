@@ -1,39 +1,12 @@
 .table-container {
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  overflow-x: auto; /* 防止超出屏幕 */
 }
 
 .mat-table {
-  width: 100%;
-  display: table;
-}
-
-.mat-header-cell,
-.mat-cell {
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.indexer-column {
-  flex: 1;
-}
-
-.title-column {
-  flex: 10;
-}
-
-.size-column {
-  flex: 1;
-}
-
-.seeders-column {
-  flex: 1;
-}
-
-.publishDate-column {
-  flex: 1;
+  flex-direction: column;
+  width: 100%;
 }
 
 .mat-header-row,
@@ -41,22 +14,57 @@
   display: flex;
 }
 
+.mat-header-cell,
+.mat-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 列比例 */
+.indexer-column {
+  flex: 3; /* 10% */
+}
+.title-column {
+  flex: 20; /* 50% */
+}
+.size-column {
+  flex: 3; /* 20% */
+}
+.seeders-column {
+  flex: 1; /* 10% */
+}
+.publishDate-column {
+  flex: 3; /* 10% */
+}
+
+/* 行状态颜色 */
 .loading {
   background-color: #ffeb3b;
 }
-
 .success {
   background-color: #4caf50;
 }
-
 .error {
   background-color: #f44336;
 }
 
-mat-cell.indexer-column:hover {
+mat-cell.indexer-column:hover,
+mat-cell.title-column:hover {
   cursor: pointer;
 }
 
-mat-cell.title-column:hover {
-  cursor: pointer;
+@media (max-width: 768px) {
+
+  .indexer-column {
+    display: none;
+  }
+
+  .seeders-column {
+    max-width: 8ch;
+    white-space: nowrap;
+  }
 }

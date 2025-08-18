@@ -1,89 +1,35 @@
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../../common.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
-  constructor(private common: CommonService) {}
+  private headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+  });
 
-  async getEmbyItemTotalCount() {
+  constructor(private http: HttpClient, private common: CommonService) {}
+
+  getEmbyItemTotalCount(): Observable<any> {
     const url = `${this.common.apiUrl}/emby/get_item_counts`;
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    return this.http.get(url, { headers: this.headers });
   }
 
-  async getEmbyLatestItems() {
+  getEmbyLatestItems(): Observable<any> {
     const url = `${this.common.apiUrl}/emby/get_latest`;
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    return this.http.get(url, { headers: this.headers });
   }
 
-  async getEmbyResumeItems() {
+  getEmbyResumeItems(): Observable<any> {
     const url = `${this.common.apiUrl}/emby/get_resume`;
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    return this.http.get(url, { headers: this.headers });
   }
 
-  async getEmbyViews() {
+  getEmbyViews(): Observable<any> {
     const url = `${this.common.apiUrl}/emby/get_views`;
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    return this.http.get(url, { headers: this.headers });
   }
 }
