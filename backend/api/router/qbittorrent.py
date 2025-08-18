@@ -58,7 +58,7 @@ async def get():
 
 
 @router.post("/delete_torrent")
-async def delete(torrent_hash: str = Body(...), delete_files: bool = Body(False)):
+async def delete(torrent_hash: str = Body(...), delete_files: bool = Body(True)):
     QB_HOST = get_config("QB_HOST")
     QB_PORT = get_config("QB_PORT")
     QB_USERNAME = get_config("QB_USERNAME")
@@ -106,6 +106,10 @@ async def add_torrent_url(
         QB_PORT = get_config("QB_PORT")
         QB_USERNAME = get_config("QB_USERNAME")
         QB_PASSWORD = get_config("QB_PASSWORD")
+        
+        DOWNLOAD_PATH = get_config("DOWNLOAD_PATH", ""),
+        
+        save_path = save_path if save_path else DOWNLOAD_PATH
 
         qb_client = QB(
             host=QB_HOST,
