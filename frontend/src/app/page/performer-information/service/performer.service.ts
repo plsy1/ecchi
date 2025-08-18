@@ -16,6 +16,7 @@ export class PerformerService {
   name: string = '';
   searchKeyWords: string = '';
   page: number = 1;
+  actressNumberFilter: string = '0';
 
   savePerformerInformation(data: any) {
     this.performerInformation = data;
@@ -35,6 +36,10 @@ export class PerformerService {
 
   saveSearchKeyWords(searchKeyWords: string) {
     this.searchKeyWords = searchKeyWords;
+  }
+
+  saveActressNumberFilter(actressNumberFilter: string) {
+    this.actressNumberFilter = actressNumberFilter;
   }
 
   discoverByActress(filter_value: string, page: number): Observable<any> {

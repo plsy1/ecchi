@@ -47,6 +47,7 @@ export class MovieCards implements OnInit {
       if (this.searchKeyWords === this.service.searchKeyWords) {
         this.discoverResults = this.service.productionInformation;
         this.page = this.service.page;
+        this.actressNumberFilter = this.service.actressNumberFilter;
       } else {
         this.service.saveSearchKeyWords(this.searchKeyWords);
         this.loadDiscoverData(this.searchKeyWords, this.page);
@@ -102,5 +103,7 @@ export class MovieCards implements OnInit {
     return true;
   }
 
-  onFilterChange(value: string) {}
+  onFilterChange(value: string) {
+    this.service.saveActressNumberFilter(value);
+  }
 }
