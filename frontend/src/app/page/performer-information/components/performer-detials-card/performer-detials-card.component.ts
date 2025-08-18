@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PerformerService } from '../../service/performer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
-
+import { CommonService } from '../../../../common.service';
 @Component({
   selector: 'app-performer-detials-card',
   standalone: true,
@@ -20,12 +20,14 @@ export class ActressInformationComponent {
   constructor(
     private getRoute: ActivatedRoute,
     private service: PerformerService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private common: CommonService
   ) {}
 
   ngOnInit(): void {
     this.getRoute.paramMap.subscribe((params) => {
       this.name = params.get('name') || '';
+      this.common.currentPerformer = this.name;
       if (this.name === this.service.name) {
         this.performerInformation = this.service.performerInformation;
       } else {

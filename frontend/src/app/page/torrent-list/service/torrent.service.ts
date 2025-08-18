@@ -23,6 +23,7 @@ export class TorrentService {
     movieId: string,
     downloadLink: string,
     savePath: string,
+    performerName: string,
     tags: string = ''
   ): Observable<any> {
     const url = `${this.common.apiUrl}/downloader/add_torrent_url`;
@@ -31,7 +32,9 @@ export class TorrentService {
       .set('keywords', keywords)
       .set('movie_link', movieId)
       .set('download_link', downloadLink)
-      .set('save_path', savePath);
+      .set('save_path', savePath)
+      .set('performerName', performerName);
+      ;
 
     if (tags) {
       params = params.set('tags', tags);

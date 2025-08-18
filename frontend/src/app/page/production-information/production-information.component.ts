@@ -8,7 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
-import { HomeService } from '../home/service/home.service';
+import { CommonService } from '../../common.service';
 
 @Component({
   selector: 'app-production-information',
@@ -33,22 +33,22 @@ export class ProductionInformationComponent implements OnInit {
     private ProductionInformationService: ProductionInformationService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private HomeService: HomeService
+    private common: CommonService
   ) {}
 
-ngOnInit(): void {
-  this.getRoute.paramMap.subscribe((params) => {
-    this.movieId = params.get('id') || '';
-    this.loadMovieData(this.movieId);
-  });
-}
+  ngOnInit(): void {
+    this.getRoute.paramMap.subscribe((params) => {
+      this.movieId = params.get('id') || '';
+      this.loadMovieData(this.movieId);
+    });
+  }
 
-loadMovieData(movieUrl: string): void {
-  this.isLoading = true;
+  loadMovieData(movieUrl: string): void {
+    this.isLoading = true;
 
-  this.ProductionInformationService
-    .getSingleProductionInformation(encodeURIComponent(movieUrl))
-    .subscribe({
+    this.ProductionInformationService.getSingleProductionInformation(
+      encodeURIComponent(movieUrl)
+    ).subscribe({
       next: (data) => {
         this.movieData = data;
         this.isLoading = false;
@@ -58,13 +58,19 @@ loadMovieData(movieUrl: string): void {
         this.isLoading = false;
       },
     });
-}
+  }
 
   async downloadMovie(): Promise<void> {
     try {
+      this.common.isJumpFromProductionPage = true;
       this.router.navigate(
         ['/torrents', this.movieData.props.pageProps.work.work_id],
-        { queryParams: { fullId: this.movieId, Id: this.movieData.props.pageProps.work.work_id } }
+        {
+          queryParams: {
+            fullId: this.movieId,
+            Id: this.movieData.props.pageProps.work.work_id,
+          },
+        }
       );
     } catch (error) {
       console.error('Failed:', error);
@@ -73,11 +79,12 @@ loadMovieData(movieUrl: string): void {
 
   async subscribeToMovie(): Promise<void> {
     try {
-      const results = await this.ProductionInformationService.addProductionSubscribe(
-        this.movieData.props.pageProps.work.work_id,
-        this.movieData.props.pageProps.work.products[0]?.image_url,
-        this.movieId
-      );
+      const results =
+        await this.ProductionInformationService.addProductionSubscribe(
+          this.movieData.props.pageProps.work.work_id,
+          this.movieData.props.pageProps.work.products[0]?.image_url,
+          this.movieId
+        );
       if (results) {
         this.snackBar.open('Added successfully.', 'Close', { duration: 2000 });
       }

@@ -56,6 +56,7 @@ export class SearchOptionComponent {
 
   async searchTorrents(): Promise<void> {
     try {
+      this.common.isJumpFromProductionPage = false;
       this.snackBar.open('Searching......', 'Close', { duration: 2000 });
       this.router.navigate(['/torrents', this.searchVaule]);
       this.setRecentlySearch();

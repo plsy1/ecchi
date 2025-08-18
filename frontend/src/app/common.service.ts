@@ -11,6 +11,9 @@ export class CommonService {
   private isDev = !environment.production;
   apiUrl = this.isDev ? 'http://localhost:8964/api/v1' : '/api/v1';
 
+  public isJumpFromProductionPage: boolean = false;
+  public currentPerformer: string = '';
+  
   constructor(private router: Router, private http: HttpClient) {}
 
   login(username: string, password: string): Observable<boolean> {

@@ -57,52 +57,58 @@ export class DownloadOptionComponent {
     }
   }
 
-async download(): Promise<void> {
-  try {
-    this.snackBar.open('Sending......', 'Close', { duration: 2000 });
+  async download(): Promise<void> {
+    try {
+      this.snackBar.open('Sending......', 'Close', { duration: 2000 });
 
-    const results = await lastValueFrom(
-      this.torrentService.pushTorrent(
-        this.keywords,
-        this.id,
-        this.downloadUrl,
-        this.savePath,
-        ''
-      )
-    );
+        const name = this.common.isJumpFromProductionPage
+        ? this.common.currentPerformer
+        : '';
 
-    if (this.savePath && !this.savePathOptions.includes(this.savePath)) {
-      this.savePathOptions.push(this.savePath);
-      localStorage.setItem(
-        'savePathOptions',
-        JSON.stringify(this.savePathOptions)
+
+      const results = await lastValueFrom(
+        this.torrentService.pushTorrent(
+          this.keywords,
+          this.id,
+          this.downloadUrl,
+          this.savePath,
+          name,
+          ''
+        )
       );
-      this.filteredOptions = [...this.savePathOptions];
+
+      if (this.savePath && !this.savePathOptions.includes(this.savePath)) {
+        this.savePathOptions.push(this.savePath);
+        localStorage.setItem(
+          'savePathOptions',
+          JSON.stringify(this.savePathOptions)
+        );
+        this.filteredOptions = [...this.savePathOptions];
+      }
+
+      this.dialogRef.close({
+        success: true,
+        message: 'Download started successfully!',
+      });
+    } catch (error) {
+      console.error('Send failed:', error);
+
+      this.dialogRef.close({
+        success: false,
+        message: 'Failed. Please try again.',
+      });
+      this.snackBar.open('Failed. Please try again.', 'Close', {
+        duration: 2000,
+      });
     }
-
-    this.dialogRef.close({
-      success: true,
-      message: 'Download started successfully!',
-    });
-  } catch (error) {
-    console.error('Send failed:', error);
-
-    this.dialogRef.close({
-      success: false,
-      message: 'Failed. Please try again.',
-    });
-    this.snackBar.open('Failed. Please try again.', 'Close', {
-      duration: 2000,
-    });
   }
-}
 
   close() {
     this.dialogRef.close();
   }
 
   showErrorNotification(message: string) {
-    this.snackBar.open(message, '关闭', {
+    this.snackBar.open(message, 'Close', {
       duration: 3000,
       panelClass: ['error-snackbar'],
     });

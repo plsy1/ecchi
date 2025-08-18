@@ -10,6 +10,7 @@ from fastapi import (
     BackgroundTasks,
     Body,
 )
+from pathlib import Path
 from io import BytesIO
 from core.config import *
 from core.avbase.avbase import *
@@ -88,6 +89,7 @@ async def add_torrent_url(
     movie_link: str,
     download_link: str,
     save_path: str,
+    performerName: str,
     tags: str = None,
     isValid: str = Depends(tokenInterceptor),
     background_tasks: BackgroundTasks = None,
@@ -101,15 +103,15 @@ async def add_torrent_url(
     :return: 成功与否
     """
     try:
-
         QB_HOST = get_config("QB_HOST")
         QB_PORT = get_config("QB_PORT")
         QB_USERNAME = get_config("QB_USERNAME")
         QB_PASSWORD = get_config("QB_PASSWORD")
-        
-        DOWNLOAD_PATH = get_config("DOWNLOAD_PATH", ""),
-        
-        save_path = save_path if save_path else DOWNLOAD_PATH
+
+        DOWNLOAD_PATH = get_config("DOWNLOAD_PATH", "")
+
+        base_path = Path(save_path) if save_path else Path(DOWNLOAD_PATH)
+        save_path = base_path / performerName
 
         qb_client = QB(
             host=QB_HOST,
