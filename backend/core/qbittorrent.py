@@ -16,6 +16,45 @@ class QB:
         """
         self.qb = Client(host=host, port=port, username=username, password=password)
         self.tags = tags
+        
+        
+    def delete_torrent(self, torrent_hash, delete_files=False):
+        """
+        删除种子（可选是否删除本地文件）
+        
+        :param torrent_hash: 种子的哈希 (str 或 list)
+        :param delete_files: 是否同时删除下载文件
+        """
+        return self.qb.torrents_delete(delete_files=delete_files, torrent_hashes=torrent_hash)
+        
+        
+    def get_downloading_torrents(self):
+        """
+        获取正在下载的种子列表。
+
+        :return: 下载中的种子信息列表，每个为字典
+        """
+        if not self.qb:
+            return []
+
+        try:
+            torrents = self.qb.torrents_info(status_filter='downloading')
+            downloading_list = [
+                {
+                    'name': t.name,
+                    'progress': t.progress,
+                    'size': t.size,
+                    'download_speed': t.dlspeed,
+                    'eta': t.eta,
+                    'tags': t.tags,
+                    'hash': t.hash, 
+                }
+                for t in torrents
+            ]
+            return downloading_list
+        except Exception as e:
+            print("Failed to fetch downloading torrents:", e)
+            return []
 
     def add_torrent_url(self, download_link, save_path, tags=None):
         """

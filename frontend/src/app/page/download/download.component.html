@@ -1,1 +1,36 @@
-<p>download works!</p>
+<div class="download-container">
+  <mat-card class="download-card" *ngFor="let torrent of torrents">
+    <div class="card-header">
+      <h3 class="torrent-title" matTooltip="{{ torrent.name }}">
+        {{ torrent.name }}
+      </h3>
+    </div>
+
+    <p class="torrent-size">
+      <strong>Size: </strong>{{ torrent.size | fileSize }}
+    </p>
+
+    <div class="progress-wrapper">
+      <mat-progress-bar
+        mode="determinate"
+        [value]="torrent.progress * 100"
+        aria-label="Download progress"
+      ></mat-progress-bar>
+      <span class="progress-text">
+        {{ torrent.progress * 100 | number : "1.0-0" }}%
+      </span>
+    </div>
+
+    <p><strong>Speed: </strong>{{ torrent.download_speed | speed }}</p>
+    <p><strong>Finishes In: </strong>{{ torrent.eta | eta }}</p>
+
+    <button
+      class="delete-btn"
+      color="primary"
+      (click)="deleteTorrent(torrent.hash)"
+      aria-label="Delete torrent"
+    >
+      <i class="fas fa-trash"></i>
+    </button>
+  </mat-card>
+</div>

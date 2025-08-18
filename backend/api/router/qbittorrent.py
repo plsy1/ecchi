@@ -8,6 +8,7 @@ from fastapi import (
     APIRouter,
     Depends,
     BackgroundTasks,
+    Body,
 )
 from io import BytesIO
 from core.config import *
@@ -39,6 +40,48 @@ def filter_after_add_by_tag(qb_client, tag, keyword_filter, max_wait=10):
             qb_client.qb.torrents_remove_tags(tags=tag, torrent_hashes=torrent_hash)
 
 
+@router.post("/get_downloading_torrents")
+async def get():
+    QB_HOST = get_config("QB_HOST")
+    QB_PORT = get_config("QB_PORT")
+    QB_USERNAME = get_config("QB_USERNAME")
+    QB_PASSWORD = get_config("QB_PASSWORD")
+
+    qb_client = QB(
+        host=QB_HOST,
+        port=QB_PORT,
+        username=QB_USERNAME,
+        password=QB_PASSWORD,
+    )
+
+    return qb_client.get_downloading_torrents()
+
+
+@router.post("/delete_torrent")
+async def delete(torrent_hash: str = Body(...), delete_files: bool = Body(False)):
+    QB_HOST = get_config("QB_HOST")
+    QB_PORT = get_config("QB_PORT")
+    QB_USERNAME = get_config("QB_USERNAME")
+    QB_PASSWORD = get_config("QB_PASSWORD")
+
+    qb_client = QB(
+        host=QB_HOST,
+        port=QB_PORT,
+        username=QB_USERNAME,
+        password=QB_PASSWORD,
+    )
+
+    try:
+        qb_client.delete_torrent(torrent_hash, delete_files=delete_files)
+        return {
+            "status": "success",
+            "hash": torrent_hash,
+            "deleted_files": delete_files,
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
 @router.post("/add_torrent_url")
 async def add_torrent_url(
     keywords: str,
@@ -58,7 +101,7 @@ async def add_torrent_url(
     :return: 成功与否
     """
     try:
-        
+
         QB_HOST = get_config("QB_HOST")
         QB_PORT = get_config("QB_PORT")
         QB_USERNAME = get_config("QB_USERNAME")
@@ -78,17 +121,20 @@ async def add_torrent_url(
 
         if success:
             QB_KEYWORD_FILTER = [
-    kw.strip() for kw in get_config("QB_KEYWORD_FILTER", "游戏大全,七龍珠").split(",") if kw.strip()
-]
+                kw.strip()
+                for kw in get_config("QB_KEYWORD_FILTER", "游戏大全,七龍珠").split(",")
+                if kw.strip()
+            ]
             background_tasks.add_task(
                 filter_after_add_by_tag, qb_client, random_tag, QB_KEYWORD_FILTER
             )
-            
+
             if keywords != "":
                 movie_info = get_actors_from_work(movie_link)
                 movie_details = DownloadInformation(keywords, movie_info)
                 TelegramBot.Send_Message_With_Image(
-                    str(movie_info.props.pageProps.work.products[0].image_url), movie_details
+                    str(movie_info.props.pageProps.work.products[0].image_url),
+                    movie_details,
                 )
             return {"message": "Torrent added successfully"}
         else:
@@ -115,7 +161,7 @@ async def add_torrent_file(
     """
     try:
         torrent_data = BytesIO(await file.read())
-        
+
         QB_HOST = get_config("QB_HOST")
         QB_PORT = get_config("QB_PORT")
         QB_USERNAME = get_config("QB_USERNAME")

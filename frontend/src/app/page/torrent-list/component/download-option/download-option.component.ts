@@ -10,6 +10,7 @@ import { TorrentService } from '../../service/torrent.service';
 import { CommonService } from '../../../../common.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-download-option',
@@ -56,44 +57,45 @@ export class DownloadOptionComponent {
     }
   }
 
-  async download(): Promise<void> {
-    try {
-      this.snackBar.open('Sending......', 'Close', { duration: 2000 });
-      const results = await this.torrentService.pushTorrent(
+async download(): Promise<void> {
+  try {
+    this.snackBar.open('Sending......', 'Close', { duration: 2000 });
+
+    const results = await lastValueFrom(
+      this.torrentService.pushTorrent(
         this.keywords,
         this.id,
         this.downloadUrl,
         this.savePath,
         ''
+      )
+    );
+
+    if (this.savePath && !this.savePathOptions.includes(this.savePath)) {
+      this.savePathOptions.push(this.savePath);
+      localStorage.setItem(
+        'savePathOptions',
+        JSON.stringify(this.savePathOptions)
       );
-
-      if (this.savePath && !this.savePathOptions.includes(this.savePath)) {
-        this.savePathOptions.push(this.savePath);
-
-        localStorage.setItem(
-          'savePathOptions',
-          JSON.stringify(this.savePathOptions)
-        );
-
-        this.filteredOptions = [...this.savePathOptions];
-      }
-
-      this.dialogRef.close({
-        success: true,
-        message: 'Download started successfully!',
-      });
-    } catch (error) {
-      console.error('Sent failed:', error);
-
-      this.dialogRef.close({
-        success: false,
-        message: 'Failed. Please try again.',
-      });
-      this.snackBar.open('Failed. Please try again.', 'Close', {
-        duration: 2000,
-      });
+      this.filteredOptions = [...this.savePathOptions];
     }
+
+    this.dialogRef.close({
+      success: true,
+      message: 'Download started successfully!',
+    });
+  } catch (error) {
+    console.error('Send failed:', error);
+
+    this.dialogRef.close({
+      success: false,
+      message: 'Failed. Please try again.',
+    });
+    this.snackBar.open('Failed. Please try again.', 'Close', {
+      duration: 2000,
+    });
   }
+}
 
   close() {
     this.dialogRef.close();

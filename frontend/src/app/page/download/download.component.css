@@ -1,0 +1,73 @@
+.download-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.download-card h3 {
+  margin: 0 0 8px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.progress-wrapper mat-progress-bar {
+  flex: 1;
+}
+
+.progress-text {
+  white-space: nowrap;
+}
+
+.download-card h3 {
+  margin: 0 0 8px 0;
+}
+
+.download-card p {
+  margin: 4px 0;
+}
+
+@media (max-width: 480px) {
+  .download-container {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  .download-card h3 {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    word-break: break-word;
+  }
+}
+
+.download-card {
+  position: relative;
+  padding: 16px;
+  box-sizing: border-box;
+  background-color: var(--app-background);
+}
+
+.delete-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 6px;
+  border-radius: 50%;
+}
+
+.delete-btn:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
