@@ -19,7 +19,7 @@ export class DownloadService {
 
   deleteTorrent(
     torrentHash: string,
-    deleteFiles: boolean = false
+    deleteFiles: boolean = true
   ): Observable<any> {
     const url = `${this.common.apiUrl}/downloader/delete_torrent`;
     return this.http.post<any>(url, {

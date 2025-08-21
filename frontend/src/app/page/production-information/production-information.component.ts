@@ -77,20 +77,22 @@ export class ProductionInformationComponent implements OnInit {
     }
   }
 
-  async subscribeToMovie(): Promise<void> {
-    try {
-      const results =
-        await this.ProductionInformationService.addProductionSubscribe(
-          this.movieData.props.pageProps.work.work_id,
-          this.movieData.props.pageProps.work.products[0]?.image_url,
-          this.movieId
-        );
-      if (results) {
+  subscribeToMovie(): void {
+    this.ProductionInformationService.addProductionSubscribe(
+      this.movieData.props.pageProps.work.work_id,
+      this.movieData.props.pageProps.work.products[0]?.image_url,
+      this.movieId
+    ).subscribe({
+      next: (results) => {
         this.snackBar.open('Added successfully.', 'Close', { duration: 2000 });
-      }
-    } catch (error) {
-      console.error('Failed:', error);
-    }
+      },
+      error: (error) => {
+        console.error('Failed:', error);
+        this.snackBar.open('Failed to add subscription.', 'Close', {
+          duration: 2000,
+        });
+      },
+    });
   }
 
   async searchByActressName(name: string) {
