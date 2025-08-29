@@ -63,6 +63,13 @@ export class ProductionInformationComponent implements OnInit {
   async downloadMovie(): Promise<void> {
     try {
       this.common.isJumpFromProductionPage = true;
+      this.common.currentPerformer =
+        this.movieData?.props?.pageProps?.work?.casts
+          ?.map((cast: any) => cast?.actor?.name)
+          ?.filter((name: string) => !!name)
+          ?.slice(0, 3)
+          ?.join(',') || '';
+
       this.router.navigate(
         ['/torrents', this.movieData.props.pageProps.work.work_id],
         {
