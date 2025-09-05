@@ -6,6 +6,7 @@ import {
   RankingTypeOfWorks,
   ActressRanking,
   RankingItem,
+  JavtrailersDailyRelease,
 } from '../models/page-explore';
 import { CommonService } from '../../../common.service';
 @Injectable({
@@ -87,5 +88,17 @@ export class PageExploreServiceService {
     });
 
     return this.http.get(url, { headers });
+  }
+
+  getJavtrailersReleaseByDate(
+    yyyymmdd: string
+  ): Observable<JavtrailersDailyRelease> {
+    const url = `${this.common.apiUrl}/javtrailers/getReleasebyDate?yyyymmdd=${yyyymmdd}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<JavtrailersDailyRelease>(url, { headers });
   }
 }

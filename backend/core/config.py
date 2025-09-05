@@ -19,6 +19,7 @@ SECRET_KEY = get_config("SECRET_KEY", "fuckyou")
 ALGORITHM = get_config("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(get_config("ACCESS_TOKEN_EXPIRE_MINUTES", 10080))
 
+JAVTRAILERS_AUTHENTICATION = ''
 
 def get_environment():
     """

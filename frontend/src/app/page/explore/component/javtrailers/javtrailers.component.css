@@ -1,0 +1,60 @@
+.poster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 16px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.poster-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.poster-image-wrapper {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.poster-image-wrapper:hover .overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  color: #fff;
+  padding: 0.5rem;
+  opacity: 0;
+  transform: translateY(10%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.poster-image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  display: block;
+}
+
+.overlay .title {
+  margin-top: 0.2rem;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.section-title {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 720px) {
+  .poster-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

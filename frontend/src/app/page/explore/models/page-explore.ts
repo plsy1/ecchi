@@ -120,3 +120,28 @@ export interface AvbaseIndexData {
   newbie_talents: Talent[];
   popular_talents: Talent[];
 }
+
+
+export interface JavtrailersVideo {
+  contentId: string;
+  dvdId: string;
+  releaseDate: string;
+  image: string;
+}
+
+export interface JavtrailersStudio {
+  name: string;
+  jpName: string;
+  slug: string;
+  link: string;
+  videos: JavtrailersVideo[];
+}
+
+export interface JavtrailersDailyRelease {
+  date: string;
+  year: number;
+  month: number;
+  day: number;
+  totalVideos: number;
+  studios: JavtrailersStudio[];
+}
