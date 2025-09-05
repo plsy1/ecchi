@@ -67,13 +67,13 @@
             <div class="movie-date">{{ movie.release_date }}</div>
             <div class="movie-tags">
               <span
-                *ngFor="let tag of movie.actors | slice : 0 : 5"
+                *ngFor="let tag of movie.actors?.slice(0, 3)"
                 class="movie-tag"
               >
                 {{ tag }}
               </span>
-              <span *ngIf="movie.actors.length > 5" class="movie-tag">
-                +{{ movie.actors.length - 5 }}
+              <span class="more-tags" *ngIf="movie.actors?.length > 3">
+                +{{ movie.actors.length - 3 }}
               </span>
             </div>
           </div>

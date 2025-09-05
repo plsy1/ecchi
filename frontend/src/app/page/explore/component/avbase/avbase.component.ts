@@ -20,14 +20,20 @@ export class AvbaseComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadAvbaseIndex();
+    const cachedData = this.PageExploreService.getAvbaseIndexData();
+
+    if (cachedData) {
+      this.avbaseIndexData = cachedData;
+    } else {
+      this.loadAvbaseIndex();
+    }
   }
 
   loadAvbaseIndex(): void {
     this.PageExploreService.getAvbaseIndex().subscribe({
       next: (data) => {
         this.avbaseIndexData = data;
-        console.log('Avbase index loaded:', data);
+        this.PageExploreService.setAvbaseIndexData(data);
       },
       error: (err) => {
         console.error('Failed to load Avbase index:', err);

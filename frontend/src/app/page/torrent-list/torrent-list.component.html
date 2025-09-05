@@ -1,10 +1,6 @@
 <div class="table-container">
   <mat-form-field appearance="outline" class="search-box">
-    <input
-      matInput
-      (input)="applyFilter($event)"
-      placeholder="Filter"
-    />
+    <input matInput (input)="applyFilter($event)" placeholder="Filter" />
   </mat-form-field>
 
   <mat-table [dataSource]="dataSource" matSort class="responsive-table">
@@ -55,7 +51,11 @@
     </ng-container>
 
     <ng-container matColumnDef="publishDate">
-      <mat-header-cell *matHeaderCellDef mat-sort-header class="publishDate-column">
+      <mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="publishDate-column"
+      >
         <i class="fas fa-calendar-alt" matTooltip="Date"></i>
       </mat-header-cell>
       <mat-cell *matCellDef="let element" class="publishDate-column">

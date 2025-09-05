@@ -4,53 +4,72 @@ import { JavtrailersDailyRelease } from '../../models/page-explore';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-javtrailers',
   standalone: true,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule, MatIconModule],
   templateUrl: './javtrailers.component.html',
   styleUrls: ['./javtrailers.component.css'],
 })
 export class JavtrailersComponent implements OnInit {
   releaseData: JavtrailersDailyRelease | null = null;
+  currentDate: Date = new Date();
 
   constructor(
     private router: Router,
     private pageExploreService: PageExploreServiceService
   ) {}
 
-  ngOnInit() {
-    const today = new Date();
-    const yyyymmdd =
-      today.getFullYear().toString() +
-      String(today.getMonth() + 1).padStart(2, '0') +
-      String(today.getDate()).padStart(2, '0');
+  ngOnInit(): void {
+    const cachedData = this.pageExploreService.getJavtrailersData();
 
-    this.pageExploreService.getJavtrailersReleaseByDate(yyyymmdd).subscribe({
-      next: (data) => {
-        this.releaseData = data;
-      },
-      error: (err) => {
-        console.error('Error fetching daily release:', err);
-      },
-      complete: () => {
-        console.log('Fetch daily release completed');
-      },
-    });
+    if (cachedData) {
+      this.releaseData = cachedData;
+    } else {
+      this.fetchReleaseData();
+    }
   }
 
-  // async posterClick(contentId: string) {
-  //   try {
-  //     this.router.navigate(['keywords', contentId]);
-  //   } catch (error) {
-  //     console.error('Failed:', error);
-  //   }
-  // }
-  posterClick(contentId: string) {
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree(['keywords', contentId])
+  get yyyymmdd(): string {
+    return (
+      this.currentDate.getFullYear().toString() +
+      String(this.currentDate.getMonth() + 1).padStart(2, '0') +
+      String(this.currentDate.getDate()).padStart(2, '0')
     );
-    window.open(url, '_blank');
+  }
+
+  fetchReleaseData() {
+    this.pageExploreService
+      .getJavtrailersReleaseByDate(this.yyyymmdd)
+      .subscribe({
+        next: (data) => {
+          this.releaseData = data;
+          this.pageExploreService.setJavtrailersData(data);
+        },
+        error: (err) => {
+          console.error('Error fetching daily release:', err);
+        },
+        complete: () => {},
+      });
+  }
+
+  posterClick(contentId: string) {
+    this.router.navigate(['keywords', contentId]);
+  }
+
+  prevDay() {
+    this.currentDate = new Date(this.currentDate);
+    this.currentDate.setDate(this.currentDate.getDate() - 1);
+
+    this.fetchReleaseData();
+  }
+
+  nextDay() {
+    this.currentDate = new Date(this.currentDate);
+    this.currentDate.setDate(this.currentDate.getDate() + 1);
+
+    this.fetchReleaseData();
   }
 }

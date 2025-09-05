@@ -1,3 +1,13 @@
+<h1 class="current-date">Released on {{ currentDate | date : "yyyy-MM-dd" }}</h1>
+<div class="pagination-buttons">
+  <button mat-icon-button class="floating-button" (click)="prevDay()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <button mat-icon-button class="floating-button" (click)="nextDay()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>
+
 <div *ngIf="releaseData">
   <div *ngFor="let studio of releaseData.studios" class="section">
     <h2 class="section-title">{{ studio.name }} ({{ studio.jpName }})</h2>

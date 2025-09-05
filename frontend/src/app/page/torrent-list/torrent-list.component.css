@@ -1,6 +1,6 @@
 .table-container {
   width: 100%;
-  overflow-x: auto; /* 防止超出屏幕 */
+  overflow-x: auto;
 }
 
 .mat-table {
@@ -24,7 +24,6 @@
   text-overflow: ellipsis;
 }
 
-/* 列比例 */
 .indexer-column {
   flex: 3; /* 10% */
 }
@@ -41,7 +40,6 @@
   flex: 3; /* 10% */
 }
 
-/* 行状态颜色 */
 .loading {
   background-color: #ffeb3b;
 }
@@ -58,7 +56,6 @@ mat-cell.title-column:hover {
 }
 
 @media (max-width: 768px) {
-
   .indexer-column {
     display: none;
   }

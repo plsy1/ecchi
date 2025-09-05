@@ -7,6 +7,7 @@ import {
   ActressRanking,
   RankingItem,
   JavtrailersDailyRelease,
+  AvbaseIndexData,
 } from '../models/page-explore';
 import { CommonService } from '../../../common.service';
 @Injectable({
@@ -19,6 +20,26 @@ export class PageExploreServiceService {
   private workRankingCache: RankingItem[] = [];
   private lastFetchedWorkPage: number = 1;
   private workRankingType: RankingTypeOfWorks = RankingTypeOfWorks.Weekly;
+
+  private CalenderData: JavtrailersDailyRelease | null = null;
+
+  private AvbaseIndexData: AvbaseIndexData | null = null;
+
+  getJavtrailersData(): JavtrailersDailyRelease | null {
+    return this.CalenderData;
+  }
+  setJavtrailersData(data: JavtrailersDailyRelease): void {
+    this.CalenderData = data;
+  }
+
+  // ===== Avbase =====
+  getAvbaseIndexData(): AvbaseIndexData | null {
+    return this.AvbaseIndexData;
+  }
+
+  setAvbaseIndexData(data: AvbaseIndexData): void {
+    this.AvbaseIndexData = data;
+  }
 
   constructor(private http: HttpClient, private common: CommonService) {}
 

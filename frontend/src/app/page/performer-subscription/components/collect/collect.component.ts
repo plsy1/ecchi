@@ -64,7 +64,7 @@ export class PerformerCollectionListComponent {
         this.snackBar.open('Unsubscribed successfully', 'Close', {
           duration: 2000,
         });
-        this.loadActressCollect(); // 刷新列表
+        this.loadActressCollect();
       },
       error: (error) => {
         console.error('Failed to unsubscribe:', error);

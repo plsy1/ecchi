@@ -1,33 +1,34 @@
 <h2>Subscription</h2>
 <div class="card-grid">
-<mat-card
-  *ngFor="let actress of ActressList"
-  class="actress-card"
->
-  <div class="card-content" (click)="onClick(actress.title)">
-    <img [src]="actress.url" alt="Actress Avatar" class="avatar-img" />
-    <mat-card-title class="title">{{ actress.title }}</mat-card-title>
-  </div>
+  <mat-card *ngFor="let actress of ActressList" class="actress-card">
+    <div class="card-content" (click)="onClick(actress.title)">
+      <img
+        [src]="actress.url || 'assets/favicon.ico'"
+        alt="Actress Avatar"
+        class="avatar-img"
+      />
+      <mat-card-title class="title">{{ actress.title }}</mat-card-title>
+    </div>
 
-  <button
-    mat-icon-button
-    [matMenuTriggerFor]="menu"
-    class="menu-button"
-    (click)="openMenu($event, actress)"
-  >
-    <mat-icon>more_vert</mat-icon>
-  </button>
-</mat-card>
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      class="menu-button"
+      (click)="openMenu($event, actress)"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </mat-card>
 
-<!-- 公共菜单 -->
-<mat-menu #menu="matMenu">
-<button mat-menu-item (click)="onClick(contextActress.title)">
-  <mat-icon>info</mat-icon>
-  <span>View Details</span>
-</button>
-<button mat-menu-item (click)="onUnsubscribeClick($event, contextActress)">
-  <mat-icon>cancel</mat-icon>
-  <span>Unsubscribe</span>
-</button>
-</mat-menu>
+  <!-- 公共菜单 -->
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onClick(contextActress.title)">
+      <mat-icon>info</mat-icon>
+      <span>View Details</span>
+    </button>
+    <button mat-menu-item (click)="onUnsubscribeClick($event, contextActress)">
+      <mat-icon>cancel</mat-icon>
+      <span>Unsubscribe</span>
+    </button>
+  </mat-menu>
 </div>

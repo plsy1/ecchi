@@ -168,9 +168,18 @@ def get_index():
     products = [p for work in works for p in work.get("products", [])]
     newbie_talents = data.get("newbie_talents")
     popular_talents = data.get("popular_talents")
+    
+    
+    seen_titles = set()
+    unique_products = []
+    for p in products:
+        title = p.get("title")
+        if title and title not in seen_titles:
+            seen_titles.add(title)
+            unique_products.append(p)
 
     return {
-        "products": products,
+        "products": unique_products,
         "newbie_talents": newbie_talents,
         "popular_talents": popular_talents,
     }

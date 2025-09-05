@@ -1,6 +1,6 @@
 .movie-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
   margin: 0 auto;
   width: 100%;
@@ -42,47 +42,46 @@
   left: 0;
   right: 0;
   padding: 8px;
-  background: rgba(0, 0, 0, 0.7);
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  color: #fff;
   z-index: 2;
 }
 
 .movie-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
-  line-height: 1.4;
-  color: #fff;
-  margin-bottom: 8px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.2;
+  max-height: 1.2em;
+  overflow-y: auto;
+  word-break: break-word;
+  margin: 0;
 }
 
 .movie-meta {
+  color: #fff;
+  margin-top: 4px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-  color: #fff;
+  align-items: flex-end;
+  font-size: 14px;
 }
 
 .movie-date {
   font-size: 14px;
-  margin-bottom: 8px;
-  color: #fff;
+  margin-bottom: 0;
+  padding: 0;
 }
 
 .movie-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  color: #fff;
+  gap: 6px;
 }
 
 .movie-tag {
   padding: 2px 4px;
   border-radius: 4px;
   font-size: 10px;
-  color: #fff;
 }
 
 .loading-spinner {
@@ -100,7 +99,7 @@
 .pagination-controls-foot {
   display: flex;
   align-items: center;
-  gap:10px
+  gap: 10px;
 }
 
 .top-bar {
@@ -137,7 +136,6 @@ button[mat-mini-fab] {
   color: var(--md-sys-color-on-primary);
 }
 
-/* 加载动画 */
 .loading-spinner {
   display: flex;
   align-items: center;

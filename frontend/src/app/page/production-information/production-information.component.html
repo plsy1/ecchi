@@ -94,7 +94,7 @@
         </p>
       </div>
 
-   <h2>Performers</h2>
+      <h2>Performers</h2>
       <div class="actors">
         <div
           *ngFor="let cast of movieData?.props?.pageProps?.work?.casts"
@@ -102,7 +102,7 @@
         >
           <img
             loading="lazy"
-            [src]="cast?.actor?.image_url"
+            [src]="cast?.actor?.image_url || 'assets/favicon.ico'"
             alt="{{ cast?.actor?.name }}"
             class="actor-avatar"
             (click)="searchByActressName(cast?.actor?.name)"

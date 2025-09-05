@@ -1,11 +1,20 @@
-<mat-tab-group>
-  <mat-tab label="Release Today By Javtrailers">
-    <app-javtrailers></app-javtrailers>
+<mat-tab-group
+  [(selectedIndex)]="selectedTabIndex"
+  (selectedTabChange)="onTabChange($event)"
+>
+  <mat-tab label="Calendar">
+    <ng-template matTabContent>
+      <app-javtrailers></app-javtrailers>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Rankings">
+    <ng-template matTabContent>
+      <app-fanza></app-fanza>
+    </ng-template>
   </mat-tab>
   <mat-tab label="AvBase">
-    <app-avbase></app-avbase>
-  </mat-tab>
-  <mat-tab label="Fanza Rankings">
-    <app-fanza></app-fanza>
+    <ng-template matTabContent>
+      <app-avbase></app-avbase>
+    </ng-template>
   </mat-tab>
 </mat-tab-group>

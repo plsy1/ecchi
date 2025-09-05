@@ -9,7 +9,7 @@
         >
           <div class="rank-badge">{{ actress.rank }}</div>
           <img
-            [src]="actress.image"
+            [src]="actress.image  || 'assets/favicon.ico'"
             [alt]="actress.name"
             class="avatar-img"
             loading="lazy"
@@ -84,7 +84,7 @@
       <div
         class="poster-card"
         *ngFor="let work of workList"
-        (click)="posterClick(work.number)"
+        (click)="posterClick(work.number || work.title)"
       >
         <div class="poster-image-wrapper">
           <img

@@ -1,6 +1,6 @@
 .poster-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
   margin: 0 auto;
   width: 100%;
@@ -9,7 +9,6 @@
 
 .poster-card {
   position: relative;
-  cursor: pointer;
 }
 
 .poster-image-wrapper {
@@ -57,4 +56,26 @@
   .poster-grid {
     grid-template-columns: repeat(1, 1fr);
   }
+}
+
+.pagination-buttons {
+  margin: 10px;
+  display: flex;
+  gap: 12px;
+  justify-content: left;
+}
+
+.floating-button {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.floating-button:hover {
+  transform: scale(1.1);
 }

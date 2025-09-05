@@ -6,7 +6,7 @@
     (click)="cardClick(actress.primary.name)"
   >
     <img
-      [src]="actress.primary.image_url"
+      [src]="actress.primary.image_url || 'assets/favicon.ico'"
       [alt]="actress.primary.name"
       class="avatar-img"
       loading="lazy"
@@ -23,7 +23,7 @@
     (click)="cardClick(actress.primary.name)"
   >
     <img
-      [src]="actress.primary.image_url"
+      [src]="actress.primary.image_url || 'assets/favicon.ico'"
       [alt]="actress.primary.name"
       class="avatar-img"
       loading="lazy"
@@ -41,13 +41,13 @@
   >
     <div class="poster-image-wrapper">
       <img
-        [src]="work.image_url"
+        [src]="work.image_url || 'assets/favicon.ico'"
         [alt]="work.title"
         class="poster-image"
         loading="lazy"
       />
       <div class="overlay">
-        <div class="title">{{ work.title }}</div>
+        <div class="title">{{ work.product_id }}</div>
       </div>
     </div>
   </div>
