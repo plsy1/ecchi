@@ -6,5 +6,11 @@
     aria-label="Toggle Sidebar"
   ></i>
   <span class="spacer"></span>
+<i
+  class="fas"
+  [ngClass]="themeService.isDarkTheme() ? 'fa-sun' : 'fa-moon'"
+  (click)="themeService.toggleTheme()"
+  aria-label="changeTheme">
+</i>
   <i class="fas fa-search" (click)="OpenSearch()" aria-label="Search"></i>
 </mat-toolbar>

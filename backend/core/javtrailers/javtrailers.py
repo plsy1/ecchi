@@ -34,7 +34,7 @@ def fetch_daily_release(year: int, month: int, day: int) -> DailyRelease:
 
     resp = requests.get(url, params=params, headers=headers)
 
-    if resp.status_code == 401:
+    if resp.status_code != 200:
         new_token = get_javtrailers_fetch_tokens()
         if not new_token:
             resp.raise_for_status()

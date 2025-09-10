@@ -72,8 +72,7 @@ export class DownloadOptionComponent {
           this.id,
           this.downloadUrl,
           this.savePath,
-          name,
-          ''
+          name
         )
       );
 

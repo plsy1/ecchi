@@ -2,13 +2,12 @@ from fastapi import APIRouter, HTTPException, Depends, Form
 from core.auth import *
 from sqlalchemy.orm import Session
 from core.database import KeywordFeeds, RSSFeed, ActressCollect, get_db
-from core.prowlarr import Prowlarr
-from core.config import get_config
 from core.telegram import *
 from core.avbase.avbase import *
 from core.feed import *
 
 router = APIRouter()
+
 
 @router.post("/addKeywords")
 async def add_feed(
@@ -90,7 +89,7 @@ async def add_rss_feed(
 
         actress_info = get_actress_info_by_actress_name(title)
         actress_details = actressInformation(title, actress_info)
-        
+
         TelegramBot.Send_Message_With_Image(actress_info.avatar_url, actress_details)
         return {
             "message": f"Successfully added RSS feed: {title}",
@@ -126,7 +125,7 @@ async def add_actress_collect(
         # actress_details = actressInformation(name, actress_info)
 
         # TelegramBot.Send_Message_With_Image(actress_info["avatar_url"], actress_details)
-        
+
         return {
             "message": f"Successfully added Actress to Collect: {name}",
             "feed_id": new_collect.id,

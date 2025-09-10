@@ -24,7 +24,6 @@ export class TorrentService {
     downloadLink: string,
     savePath: string,
     performerName: string,
-    tags: string = ''
   ): Observable<any> {
     const url = `${this.common.apiUrl}/downloader/add_torrent_url`;
 
@@ -36,9 +35,6 @@ export class TorrentService {
       .set('performerName', performerName);
       ;
 
-    if (tags) {
-      params = params.set('tags', tags);
-    }
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('access_token') || ''}`,

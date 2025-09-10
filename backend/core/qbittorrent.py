@@ -1,10 +1,10 @@
-import requests
+import requests, time
 from qbittorrentapi import Client
 from io import BytesIO
 
 
 class QB:
-    def __init__(self, host, port, username, password, tags=None):
+    def __init__(self, host, port, username, password, tags="Ecchi"):
         """
         初始化 QBittorrent 客户端并配置。
 
@@ -166,3 +166,27 @@ class QB:
 
         except Exception as e:
             print(e)
+
+    def filter_after_add_by_tag(self, random_tag, keyword_filter, max_wait=30):
+        torrent_hash = None
+
+        try:
+            for _ in range(max_wait):
+                torrent_list = self.get_torrents_list()
+                for t in torrent_list:
+                    tags = t.get("tags", "")
+                    if random_tag in tags.split(","):
+                        torrent_hash = t.get("hash")
+                        files = self.get_torrent_file_by_hash(hash=torrent_hash)
+                        if files:
+                            self.file_filter_by_keywords(
+                                QB_KEYWORD_FILTER=keyword_filter
+                            )
+                            return
+                time.sleep(1)
+        finally:
+            if torrent_hash:
+                self.qb.torrents_remove_tags(
+                    tags=random_tag,
+                    torrent_hashes=torrent_hash,
+                )

@@ -55,9 +55,9 @@ mat-form-field {
   gap: 8px;
 }
 
-.search-type-buttons button:hover {
+/* .search-type-buttons button:hover {
   background-color: rgba(0, 0, 0, 0.05);
-}
+} */
 
 .search-type-buttons button.selected {
   border-bottom: 2px solid;
@@ -84,9 +84,9 @@ mat-form-field {
   transition: background-color 0.2s ease;
 }
 
-.recent-item:hover {
+/* .recent-item:hover {
   background-color: rgba(0, 0, 0, 0.05);
-}
+} */
 
 .search-button {
   width: 100%;
@@ -103,9 +103,9 @@ mat-form-field {
   gap: 8px;
 }
 
-.search-button:hover {
+/* .search-button:hover {
   background-color: rgba(0, 0, 0, 0.05);
-}
+} */
 
 .button-content {
   display: flex;

@@ -39,8 +39,8 @@
 }
 
 button[mat-icon-button] {
-  background-color: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
+  /* background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary); */
   transition: transform 0.2s ease, background-color 0.3s ease;
 }
 

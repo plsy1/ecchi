@@ -20,25 +20,50 @@ import uuid, time
 router = APIRouter()
 
 
-def filter_after_add_by_tag(qb_client, tag, keyword_filter, max_wait=10):
-    torrent_hash = None
+# def filter_after_add_by_tag(qb_client, tag, keyword_filter, max_wait=30):
+#     torrent_hash = None
 
-    try:
-        for _ in range(max_wait):
-            torrent_list = qb_client.get_torrents_list()
-            for t in torrent_list:
-                if t.get("tags") == tag:
-                    torrent_hash = t.get("hash")
-                    files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
-                    if files:
-                        qb_client.file_filter_by_keywords(
-                            QB_KEYWORD_FILTER=keyword_filter
-                        )
-                        return
-            time.sleep(1)
-    finally:
-        if torrent_hash:
-            qb_client.qb.torrents_remove_tags(tags=tag, torrent_hashes=torrent_hash)
+#     try:
+#         for _ in range(max_wait):
+#             torrent_list = qb_client.get_torrents_list()
+#             for t in torrent_list:
+#                 if t.get("tags") == tag:
+#                     torrent_hash = t.get("hash")
+#                     files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
+#                     if files:
+#                         qb_client.file_filter_by_keywords(
+#                             QB_KEYWORD_FILTER=keyword_filter
+#                         )
+#                         return
+#             time.sleep(1)
+#     finally:
+#         if torrent_hash:
+#             qb_client.qb.torrents_remove_tags(tags=tag, torrent_hashes=torrent_hash)
+
+
+# def filter_after_add_by_tag(qb_client, random_tag, keyword_filter, max_wait=30):
+#     torrent_hash = None
+
+#     try:
+#         for _ in range(max_wait):
+#             torrent_list = qb_client.get_torrents_list()
+#             for t in torrent_list:
+#                 tags = t.get("tags", "")
+#                 if random_tag in tags.split(","):
+#                     torrent_hash = t.get("hash")
+#                     files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
+#                     if files:
+#                         qb_client.file_filter_by_keywords(
+#                             QB_KEYWORD_FILTER=keyword_filter
+#                         )
+#                         return
+#             time.sleep(1)
+#     finally:
+#         if torrent_hash:
+#             qb_client.qb.torrents_remove_tags(
+#                 tags=random_tag,
+#                 torrent_hashes=torrent_hash,
+#             )
 
 
 @router.post("/get_downloading_torrents")
@@ -90,7 +115,6 @@ async def add_torrent_url(
     download_link: str,
     save_path: str,
     performerName: str,
-    tags: str = None,
     isValid: str = Depends(tokenInterceptor),
     background_tasks: BackgroundTasks = None,
 ):
@@ -118,21 +142,22 @@ async def add_torrent_url(
             port=QB_PORT,
             username=QB_USERNAME,
             password=QB_PASSWORD,
-            tags=tags,
         )
 
         random_tag = str(uuid.uuid4())[:8]
 
-        success = qb_client.add_torrent_url(download_link, save_path, random_tag)
+        tags = f"Ecchi,{random_tag}"
+
+        success = qb_client.add_torrent_url(download_link, save_path, tags)
 
         if success:
             QB_KEYWORD_FILTER = [
                 kw.strip()
-                for kw in get_config("QB_KEYWORD_FILTER", "游戏大全,七龍珠").split(",")
+                for kw in get_config("QB_KEYWORD_FILTER", "").split(",")
                 if kw.strip()
             ]
             background_tasks.add_task(
-                filter_after_add_by_tag, qb_client, random_tag, QB_KEYWORD_FILTER
+                qb_client.filter_after_add_by_tag, random_tag, QB_KEYWORD_FILTER
             )
 
             if keywords != "":
@@ -154,7 +179,6 @@ async def add_torrent_url(
 async def add_torrent_file(
     file: UploadFile = File(...),
     save_path: str = Query(...),
-    tags: str = Query(None, description="Tags for the torrent"),
     isValid: str = Depends(tokenInterceptor),
 ):
     """
@@ -178,11 +202,10 @@ async def add_torrent_file(
             port=QB_PORT,
             username=QB_USERNAME,
             password=QB_PASSWORD,
-            tags=tags,
         )
 
         success = qb_client.add_torrent_file(
-            file.filename, torrent_data, save_path, tags
+            file.filename, torrent_data, save_path
         )
 
         if success:

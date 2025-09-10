@@ -1,5 +1,3 @@
-
-
 import requests
 
 from datetime import datetime
@@ -47,9 +45,10 @@ def get_movies(url: str) -> List[Movie]:
         if img_url:
             img_url = img_url.replace("ps.", "pl.")
 
-        actors = [a.get_text(strip=True) for a in movie.find_all("a", class_="chip chip-sm")]
+        actors = [
+            a.get_text(strip=True) for a in movie.find_all("a", class_="chip chip-sm")
+        ]
 
-        # 构建 Movie 对象，注意 HttpUrl 类型需要有效 URL
         movies.append(
             Movie(
                 id=movie_id,
@@ -100,7 +99,6 @@ def get_platform_from_link(link: str):
         return "RSS"
     else:
         return "Null"
-    
 
 
 def date_trans(date: str) -> str:

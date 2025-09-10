@@ -1,5 +1,5 @@
 .resume-items-card {
-  background-color: var(--app-background);
+  /* background-color: var(--app-background); */
 }
 .items-grid {
   display: grid;

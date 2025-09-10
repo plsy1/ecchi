@@ -9,101 +9,43 @@ import time, uuid
 from core.telegram import *
 from core.avbase.avbase import *
 
-def filter_after_add_by_tag(qb_client, tag, keyword_filter, max_wait=10):
-    torrent_hash = None
 
-    try:
-        for _ in range(max_wait):
-            torrent_list = qb_client.get_torrents_list()
-            for t in torrent_list:
-                if t.get("tags") == tag:
-                    torrent_hash = t.get("hash")
-                    files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
-                    if files:
-                        qb_client.file_filter_by_keywords(
-                            QB_KEYWORD_FILTER=keyword_filter
-                        )
-                        return
-            time.sleep(1)
-    finally:
-        if torrent_hash:
-            qb_client.qb.torrents_remove_tags(tags=tag, torrent_hashes=torrent_hash)
+# def filter_after_add_by_tag(qb_client, tag, keyword_filter, max_wait=10):
+#     torrent_hash = None
 
-# def getLatestMovies(name: str):
-#     url = f"https://www.avbase.net/talents/{name}?q=&page=1"
-
-#     response = requests.get(url)
-
-#     if response.status_code != 200:
-#         return
-
-#     soup = BeautifulSoup(response.text, "html.parser")
-
-#     movies = []
-
-#     movie_elements = soup.find_all(
-#         "div",
-#         class_="bg-base border border-light rounded-lg overflow-hidden h-full",
-#     )
-
-#     for movie in movie_elements:
-#         id_tag = movie.find("span", class_="font-bold text-gray-500")
-#         movie_id = id_tag.get_text(strip=True) if id_tag else ""
-
-#         title_tag = movie.find(
-#             "a", class_="text-md font-bold btn-ghost rounded-lg m-1 line-clamp-5"
-#         )
-#         if not title_tag:
-#             title_tag = movie.find(
-#                 "a", class_="text-md font-bold btn-ghost rounded-lg m-1 line-clamp-3"
-#             )
-
-#         title = title_tag.get_text(strip=True) if title_tag else ""
-#         link = title_tag.get("href", "") if title_tag else ""
-
-#         date_tag = movie.find("a", class_="block font-bold")
-#         date = date_tag.get_text(strip=True) if date_tag else ""
-
-#         img_tag = movie.find("img", loading="lazy")
-#         img_url = img_tag["src"] if img_tag else ""
-#         if img_url != "":
-#             img_url = img_url.replace("ps.", "pl.")
-
-#         actors = []
-#         actor_tags = movie.find_all("a", class_="chip chip-sm")
-#         for actor in actor_tags:
-#             actor_name = actor.get_text(strip=True)
-#             actors.append(actor_name)
-
-#         movie_info = {
-#             "id": movie_id,
-#             "title": title,
-#             "avbase_link": f"https://www.avbase.net{link}",
-#             "release_date": date,
-#             "img_url": img_url,
-#             "actors": actors,
-#         }
-#         movies.append(movie_info)
-
-#     return movies
+#     try:
+#         for _ in range(max_wait):
+#             torrent_list = qb_client.get_torrents_list()
+#             for t in torrent_list:
+#                 if t.get("tags") == tag:
+#                     torrent_hash = t.get("hash")
+#                     files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
+#                     if files:
+#                         qb_client.file_filter_by_keywords(
+#                             QB_KEYWORD_FILTER=keyword_filter
+#                         )
+#                         return
+#             time.sleep(1)
+#     finally:
+#         if torrent_hash:
+#             qb_client.qb.torrents_remove_tags(tags=tag, torrent_hashes=torrent_hash)
 
 
 def refresh_movies_feeds():
     try:
-        
+
         QB_HOST = get_config("QB_HOST")
         QB_PORT = get_config("QB_PORT")
         QB_USERNAME = get_config("QB_USERNAME")
         QB_PASSWORD = get_config("QB_PASSWORD")
-        
+
         qb_client = QB(
             host=QB_HOST,
             port=QB_PORT,
             username=QB_USERNAME,
             password=QB_PASSWORD,
-            tags=None,
         )
-        
+
         PROWLARR_URL = get_config("PROWLARR_URL")
         PROWLARR_KEY = get_config("PROWLARR_KEY")
 
@@ -132,23 +74,24 @@ def refresh_movies_feeds():
                 continue
 
             random_tag = str(uuid.uuid4())[:8]
-            
+
+            tags = f"Ecchi,{random_tag}"
+
             DOWNLOAD_PATH = get_config("DOWNLOAD_PATH")
 
             success = qb_client.add_torrent_url(
-                download_link, f'{DOWNLOAD_PATH}/{feed.actress_name}', random_tag
+                download_link, f"{DOWNLOAD_PATH}/{feed.actress_name}", tags
             )
 
             if success:
-                
+
                 QB_KEYWORD_FILTER = [
-    kw.strip() for kw in get_config("QB_KEYWORD_FILTER", "游戏大全,七龍珠").split(",") if kw.strip()
-]
-                
-                filter_after_add_by_tag(
-                    
-                        qb_client, random_tag, QB_KEYWORD_FILTER
-                    )
+                    kw.strip()
+                    for kw in get_config("QB_KEYWORD_FILTER", "").split(",")
+                    if kw.strip()
+                ]
+
+                qb_client.filter_after_add_by_tag(random_tag, QB_KEYWORD_FILTER)
                 keyword_feed = (
                     db.query(KeywordFeeds)
                     .filter(KeywordFeeds.keyword == keyword)
@@ -161,9 +104,9 @@ def refresh_movies_feeds():
                 movie_info = get_actors_from_work(movie_link)
                 movie_details = DownloadInformation(keyword, movie_info)
                 TelegramBot.Send_Message_With_Image(
-                    str(movie_info.props.pageProps.work.products[0].image_url), movie_details
+                    str(movie_info.props.pageProps.work.products[0].image_url),
+                    movie_details,
                 )
-                
 
             time.sleep(5)
         return
@@ -185,7 +128,6 @@ def refresh_actress_feeds():
         last_link = None
         last_img = None
 
-                
         for feed in feeds:
             name = feed.title
             items = get_movie_info_by_actress_name(name, 1)
@@ -193,16 +135,20 @@ def refresh_actress_feeds():
                 id = item.id
                 release_date_str = item.release_date
                 img = str(item.img_url)
-                link = str(item.full_id) 
+                link = str(item.full_id)
                 actors = len(item.actors)
-                            
+
                 try:
                     release_date = datetime.strptime(release_date_str, "%Y/%m/%d")
                 except ValueError as e:
                     continue
                 if release_date > datetime.today() and actors <= 2:
                     last_feed = KeywordFeeds(
-                        actress_name = name,keyword=id, img=img, link=link, downloaded=False
+                        actress_name=name,
+                        keyword=id,
+                        img=img,
+                        link=link,
+                        downloaded=False,
                     )
                     last_keyword = id
                     last_link = link

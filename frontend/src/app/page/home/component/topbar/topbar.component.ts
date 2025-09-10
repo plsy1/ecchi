@@ -6,16 +6,22 @@ import { Location } from '@angular/common';
 import { HomeService } from '../../service/home.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SearchOptionComponent } from '../search-option/search-option.component';
+import { ThemeService } from '../../../../theme.service';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [MatToolbarModule, MatIconModule, MatSidenavModule],
+  imports: [MatToolbarModule, MatIconModule, MatSidenavModule,CommonModule],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.css',
 })
 export class TopbarComponent {
   dialog: MatDialog = inject(MatDialog);
-  constructor(private location: Location, private homeService: HomeService) {}
+  constructor(
+    private location: Location,
+    private homeService: HomeService,
+    public themeService: ThemeService
+  ) {}
 
   toggleSidebar() {
     this.homeService.setSidebarOpen(!this.homeService.isSidebarOpen);

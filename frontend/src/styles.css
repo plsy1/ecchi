@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-
 html,
 body {
   height: 100%;
@@ -29,6 +28,14 @@ button[mat-icon-button]:hover {
   transform: scale(1.1);
 }
 
-div {
-  background-color: var(--md-sys-color-surface-container);
+/* .dark-theme {
+  --background-color: #121212;
+  --text-color: #e0e0e0;
+  --primary-color: #90caf9;
 }
+
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+} */

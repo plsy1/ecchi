@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException, Depends, Form,Body
+from fastapi import APIRouter, HTTPException, Depends, Form, Body
 from fastapi.security import OAuth2PasswordRequestForm
 from core.auth import *
 from sqlalchemy.orm import Session
 from core.database import get_user_by_username, get_db
 
 router = APIRouter()
+
 
 @router.post("/login")
 def login_for_access_token(
@@ -60,7 +61,7 @@ def change_password_api(
     username: str = Form(...),
     old_password: str = Form(...),
     new_password: str = Form(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     try:
         return change_password(
@@ -71,12 +72,11 @@ def change_password_api(
         )
     except HTTPException as e:
         raise e
-    
-    
+
+
 @router.get("/getEnvironment")
 async def get_app_environment():
     return get_environment()
-
 
 
 @router.post("/updateEnvironment")

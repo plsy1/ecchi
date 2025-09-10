@@ -1,8 +1,7 @@
 .stats-card {
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
   box-sizing: border-box;
-    background-color: var(--app-background);
 }
 
 .stats-card:hover {
@@ -15,7 +14,6 @@
 }
 
 .count-card {
-    background-color: var(--app-background);
   flex: 1 1 120px;
   display: flex;
   align-items: center;
