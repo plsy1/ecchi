@@ -2,7 +2,8 @@ import requests
 import json
 from bs4 import BeautifulSoup
 from fastapi import HTTPException
-
+from typing import List
+from collections import defaultdict
 from .model import *
 from .helper import *
 
@@ -104,3 +105,48 @@ def get_index():
         "newbie_talents": newbie_talents,
         "popular_talents": popular_talents,
     }
+
+
+def get_release_grouped_by_prefix(date_str: str) -> List[AvbaseEverydayReleaseByPrefix]:
+    """
+    获取指定日期的作品列表，并按 prefix 分组
+    date_str: 'YYYY-MM-DD'
+    """
+    url = f"https://www.avbase.net/works/date/{date_str}"
+    response = requests.get(url)
+    if response.status_code != 200:
+        raise HTTPException(status_code=response.status_code, detail="获取页面失败")
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    script_tag = soup.find("script", id="__NEXT_DATA__")
+    if not script_tag:
+        raise HTTPException(status_code=500, detail="页面数据不存在")
+
+    data = json.loads(script_tag.string)
+    works_data = data.get("props", {}).get("pageProps", {}).get("works", [])
+
+    grouped: defaultdict[str, List[Work]] = defaultdict(list)
+
+    for work_dict in works_data:
+        prefix = work_dict.get("prefix") or "无前缀"
+        try:
+            work = Work(**work_dict)
+            grouped[prefix].append(work)
+        except Exception as e:
+            print(f"解析 Work 失败: {e}, 数据: {work_dict}")
+
+    groups_list: List[AvbaseEverydayReleaseByPrefix] = [
+        AvbaseEverydayReleaseByPrefix(prefixName=prefix or "无前缀", works=works)
+        for prefix, works in grouped.items()
+    ]
+
+    normal_groups = [g for g in groups_list if g.prefixName != "无前缀"]
+    no_prefix_group = [g for g in groups_list if g.prefixName == "无前缀"]
+
+    normal_groups_sorted = sorted(
+        normal_groups, key=lambda x: len(x.works), reverse=True
+    )
+
+    result = normal_groups_sorted + no_prefix_group
+
+    return result

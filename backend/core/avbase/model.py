@@ -76,9 +76,15 @@ class Work(BaseModel):
     min_date: Optional[str] = None
     note: Optional[str] = None
     casts: List[Cast] = []
+    actors: List[Actor] = []
     tags: List = []
     genres: List[Genre] = []
     products: List[Product] = []
+    
+    
+class AvbaseEverydayReleaseByPrefix(BaseModel):
+    prefixName: str
+    works:List[Work] = []
 
 
 class PageProps(BaseModel):

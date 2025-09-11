@@ -9,6 +9,7 @@ import {
   JavtrailersDailyRelease,
   AvbaseIndexData,
 } from '../models/page-explore';
+import { AvbaseEverydayReleaseByPrefix } from '../models/avbase-everyday-release';
 import { CommonService } from '../../../common.service';
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,9 @@ export class PageExploreServiceService {
 
   private AvbaseIndexData: AvbaseIndexData | null = null;
 
+  private avbaseEverydayReleaseData: AvbaseEverydayReleaseByPrefix[] | null =
+    null;
+
   getJavtrailersData(): JavtrailersDailyRelease | null {
     return this.CalenderData;
   }
@@ -33,6 +37,15 @@ export class PageExploreServiceService {
   }
 
   // ===== Avbase =====
+
+  getAvbaseEverydayReleaseData(): AvbaseEverydayReleaseByPrefix[] | null {
+    return this.avbaseEverydayReleaseData;
+  }
+
+  setAvbaseEverydayReleaseData(data: AvbaseEverydayReleaseByPrefix[]): void {
+    this.avbaseEverydayReleaseData = data;
+  }
+
   getAvbaseIndexData(): AvbaseIndexData | null {
     return this.AvbaseIndexData;
   }
@@ -105,6 +118,17 @@ export class PageExploreServiceService {
     const url = `${this.common.apiUrl}/avbase/get_index`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
+    });
+
+    return this.http.get(url, { headers });
+  }
+
+  getAvbaseReleaseByDate(yyyymmdd: string): Observable<any> {
+    const url = `${this.common.apiUrl}/avbase/get_release_by_date?yyyymmdd=${yyyymmdd}`;
+
+    const headers = new HttpHeaders({
+      Accept: 'application/json',
       Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
     });
 

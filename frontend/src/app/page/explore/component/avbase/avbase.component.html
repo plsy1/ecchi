@@ -32,7 +32,52 @@
   </div>
 </div>
 
-<h2 class="section-title">Release Today</h2>
+<h2 class="section-title">
+  Released on {{ currentDate | date : "yyyy-MM-dd" }}
+</h2>
+<div class="pagination-buttons">
+  <button mat-icon-button class="floating-button" (click)="prevDay()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <button mat-icon-button class="floating-button" (click)="nextDay()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>
+
+<div *ngFor="let group of releaseData" class="section">
+  <h3 class="section-title">{{ group.prefixName }}</h3>
+
+  <div class="poster-grid">
+    <div
+      class="poster-card"
+      *ngFor="let work of group.works"
+      (click)="posterClick(work.work_id)"
+    >
+      <div class="poster-image-wrapper">
+        <img
+          class="poster-image"
+          [src]="work.products[0].image_url || 'assets/placeholder.jpg'"
+          [alt]="work.work_id"
+          loading="lazy"
+        />
+        <div class="overlay">
+          <div class="title">{{ work.work_id }} - {{ work.title }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pagination-buttons">
+  <button mat-icon-button class="floating-button" (click)="prevDay()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <button mat-icon-button class="floating-button" (click)="nextDay()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>
+
+<!-- <h2 class="section-title">Release Today</h2>
 <div class="poster-grid">
   <div
     class="poster-card"
@@ -51,4 +96,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

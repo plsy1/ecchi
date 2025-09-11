@@ -36,3 +36,15 @@ async def search_movies_by_keywords(
 @router.get("/get_index")
 async def get_index_data(isValid: str = Depends(tokenInterceptor)):
     return get_index()
+
+
+@router.get("/get_release_by_date")
+async def get_relesae(yyyymmdd: str,isValid: str = Depends(tokenInterceptor)):
+    if len(yyyymmdd) != 8 or not yyyymmdd.isdigit():
+        raise HTTPException(status_code=400, detail="日期格式错误，应为 YYYYMMDD")
+
+    date_str = f"{yyyymmdd[:4]}-{yyyymmdd[4:6]}-{yyyymmdd[6:8]}"
+
+    grouped_works = get_release_grouped_by_prefix(date_str)
+
+    return grouped_works

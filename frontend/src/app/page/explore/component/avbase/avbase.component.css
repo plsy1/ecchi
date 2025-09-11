@@ -94,6 +94,13 @@
   text-align: left;
 }
 
+.pagination-buttons {
+  margin: 10px;
+  display: flex;
+  gap: 12px;
+  justify-content: right;
+}
+
 @media (max-width: 1024px) {
   .card-grid2 {
     grid-template-columns: repeat(6, 1fr);
