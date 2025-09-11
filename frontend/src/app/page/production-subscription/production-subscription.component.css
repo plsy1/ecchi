@@ -1,52 +1,11 @@
-.poster-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-}
 
-.poster-card {
-  position: relative;
-}
-
-.poster-image-wrapper {
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-
-  &:hover .overlay {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 .overlay {
   display: flex;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  color: #fff;
-}
-
-.poster-image {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  display: block;
-}
-
-.title {
-  margin: 10px;
-  line-height: 1.2;
-  text-align: left;
 }
 
 .unsubscribe-btn {
-  margin-right: 10px;
+  margin-right: 16px;
   background: none;
   border: none;
   color: white;
@@ -58,10 +17,6 @@
 
 .unsubscribe-btn:hover {
   transform: scale(1.1);
-}
-
-.unsubscribe-btn mat-icon {
-  font-size: 24px;
 }
 
 .spacer {

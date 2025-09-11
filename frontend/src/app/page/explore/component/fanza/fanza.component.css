@@ -7,37 +7,6 @@
   box-sizing: border-box;
 }
 
-.actress-card {
-  position: relative;
-  padding: 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 16px;
-  transition: transform 0.15s ease;
-}
-
-.actress-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.avatar-img {
-  width: 80%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 6px;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-.title {
-  text-align: center;
-  line-height: 1.2;
-  word-break: break-word;
-}
-
 .rank-badge {
   position: absolute;
   top: 4px;
@@ -47,61 +16,7 @@
   line-height: 1;
 }
 
-.section-title {
-  margin-bottom: 12px;
-  text-align: left;
-  margin-bottom: 1rem;
-}
 
-.poster-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.poster-card {
-  position: relative;
-}
-
-.poster-image-wrapper {
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-
-  &:hover .overlay {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.overlay {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  color: #fff;
-  padding: 0.5rem;
-  opacity: 0;
-  transform: translateY(10%);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.poster-image {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  display: block;
-}
-
-.overlay .title {
-  margin-top: 0.2rem;
-  line-height: 1.2;
-  text-align: left;
-}
 
 @media (max-width: 720px) {
   .poster-grid {
@@ -110,10 +25,4 @@
   .card-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-}
-
-.floating-button {
-  float: right;
-  margin-left: 5px;
-  margin-top: 10px;
 }

@@ -1,5 +1,5 @@
-<h2 class="section-title">Newbie</h2>
-<div class="card-grid2">
+<h2>Newbie</h2>
+<div class="card-grid">
   <div
     *ngFor="let actress of avbaseIndexData?.newbie_talents"
     class="actress-card"
@@ -11,12 +11,12 @@
       class="avatar-img"
       loading="lazy"
     />
-    <div class="title">{{ actress.primary.name }}</div>
+    <div>{{ actress.primary.name }}</div>
   </div>
 </div>
 
-<h2 class="section-title">Popular</h2>
-<div class="card-grid2">
+<h2>Popular</h2>
+<div class="card-grid">
   <div
     *ngFor="let actress of avbaseIndexData?.popular_talents"
     class="actress-card"
@@ -28,13 +28,11 @@
       class="avatar-img"
       loading="lazy"
     />
-    <div class="title">{{ actress.primary.name }}</div>
+    <div>{{ actress.primary.name }}</div>
   </div>
 </div>
 
-<h2 class="section-title">
-  Released on {{ currentDate | date : "yyyy-MM-dd" }}
-</h2>
+<h2>Released on {{ currentDate | date : "yyyy-MM-dd" }}</h2>
 <div class="pagination-buttons">
   <button mat-icon-button class="floating-button" (click)="prevDay()">
     <mat-icon>chevron_left</mat-icon>
@@ -44,8 +42,8 @@
   </button>
 </div>
 
-<div *ngFor="let group of releaseData" class="section">
-  <h3 class="section-title">{{ group.prefixName }}</h3>
+<div *ngFor="let group of releaseData">
+  <h3>{{ group.prefixName }}</h3>
 
   <div class="poster-grid">
     <div
@@ -61,7 +59,7 @@
           loading="lazy"
         />
         <div class="overlay">
-          <div class="title">{{ work.work_id }} - {{ work.title }}</div>
+          <div>{{ work.work_id }} - {{ work.title }}</div>
         </div>
       </div>
     </div>
@@ -77,7 +75,7 @@
   </button>
 </div>
 
-<!-- <h2 class="section-title">Release Today</h2>
+<!-- <h2>Release Today</h2>
 <div class="poster-grid">
   <div
     class="poster-card"
@@ -92,7 +90,7 @@
         loading="lazy"
       />
       <div class="overlay">
-        <div class="title">{{ work.product_id }}</div>
+        <div >{{ work.product_id }}</div>
       </div>
     </div>
   </div>

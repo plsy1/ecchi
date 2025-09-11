@@ -1,19 +1,26 @@
-.actress-card {
+.performer-card {
   display: flex;
   flex-direction: column;
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 16px;
   width: 100%;
-  /* background-color: var(--app-background); */
+  background-color: var(--app-background);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.actress-content-wrapper {
+.performer-content-wrapper {
   display: flex;
   gap: 32px;
   align-items: flex-start;
   flex-wrap: wrap;
+}
+
+.performer-info-section {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
 }
 
 .avatar-section {
@@ -31,12 +38,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.info-section {
-  flex: 1;
-  min-width: 200px;
-  display: flex;
-  flex-direction: column;
-}
 
 .actress-name {
   margin: 0 0 12px;
