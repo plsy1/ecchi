@@ -58,8 +58,22 @@
           [alt]="work.work_id"
           loading="lazy"
         />
-        <div class="overlay">
-          <div>{{ work.work_id }} - {{ work.title }}</div>
+
+        <div class="movie-info">
+          <h3 class="movie-title">{{ work.work_id }} - {{ work.title }}</h3>
+          <div class="movie-meta">
+            <div class="movie-tags">
+              <span
+                *ngFor="let actor of work.actors.slice(0, 3)"
+                class="movie-tag"
+              >
+                {{ actor.name }}
+              </span>
+              <span class="more-tags" *ngIf="(work.actors?.length || 0) > 3">
+                +{{ work.actors!.length - 3 }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
