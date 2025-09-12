@@ -61,7 +61,7 @@
           (error)="onImageError($event)"
         />
         <div class="movie-info">
-          <h3 class="movie-title">{{ movie.id }} - {{ movie.title }}</h3>
+          <h3 class="movie-title" matTooltip="{{ movie.id }} - {{ movie.title }}">{{ movie.id }} - {{ movie.title }}</h3>
           <div class="movie-meta">
             <p class="movie-date">{{ movie.release_date }}</p>
             <div class="movie-tags">

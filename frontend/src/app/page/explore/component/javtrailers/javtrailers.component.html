@@ -1,4 +1,6 @@
-<h1 class="current-date">Released on {{ currentDate | date : "yyyy-MM-dd" }}</h1>
+<h1 class="current-date">
+  Released on {{ currentDate | date : "yyyy-MM-dd" }}
+</h1>
 <div class="pagination-buttons">
   <button mat-icon-button class="floating-button" (click)="prevDay()">
     <mat-icon>chevron_left</mat-icon>
@@ -24,8 +26,8 @@
             [alt]="video.contentId"
             loading="lazy"
           />
-          <div class="overlay">
-            <div class="title">{{ video.dvdId }}</div>
+          <div class="movie-info">
+            <div class="movie-title" matTooltip="{{ video.dvdId }}">{{ video.dvdId }}</div>
           </div>
         </div>
       </div>

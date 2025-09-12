@@ -1,16 +1,16 @@
 <mat-toolbar color="primary" class="toolbar">
-  <i class="fas fa-arrow-left" (click)="goBack()" aria-label="Back"></i>
+  <i class="fas fa-arrow-left icon" (click)="goBack()" aria-label="Back"></i>
   <i
-    class="fas fa-bars toolbar-icon"
+    class="fas fa-bars toolbar-icon icon"
     (click)="toggleSidebar()"
     aria-label="Toggle Sidebar"
   ></i>
   <span class="spacer"></span>
 <i
   class="fas"
-  [ngClass]="themeService.isDarkTheme() ? 'fa-sun' : 'fa-moon'"
+  [ngClass]="themeService.isDarkTheme() ? 'fa-sun icon' : 'fa-moon icon'"
   (click)="themeService.toggleTheme()"
   aria-label="changeTheme">
 </i>
-  <i class="fas fa-search" (click)="OpenSearch()" aria-label="Search"></i>
+  <i class="fas fa-search icon" (click)="OpenSearch()" aria-label="Search"></i>
 </mat-toolbar>

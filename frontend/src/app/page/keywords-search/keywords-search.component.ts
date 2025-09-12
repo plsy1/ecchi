@@ -12,6 +12,7 @@ import { KeywordsSearchService } from './service/keywords-search.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-keywords-search',
@@ -23,7 +24,7 @@ import { catchError, throwError } from 'rxjs';
     MatFormFieldModule,
     FormsModule,
     MatOptionModule,
-    MatSelectModule,
+    MatSelectModule,MatTooltipModule
   ],
   templateUrl: './keywords-search.component.html',
   styleUrl: './keywords-search.component.css',

@@ -1,5 +1,6 @@
 .latest-items-card {
-  /* background-color: var(--app-background); */
+  background-color: var(--app-background);
+    border: 1px solid var(--border-color);
 }
 .items-grid {
   display: grid;

@@ -1,18 +1,24 @@
-
-
-.overlay {
+.overlayy {
   display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
+  color: white;
+  padding-left: 0.5rem;
+  transform: translateY(10%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  line-height: 1.2;
+  text-align: left;
 }
 
 .unsubscribe-btn {
-  margin-right: 16px;
   background: none;
   border: none;
   color: white;
-  font-size: 24px;
   cursor: pointer;
-  padding: 0;
   transition: transform 0.3s ease;
+  padding-right: 0.5rem;
 }
 
 .unsubscribe-btn:hover {

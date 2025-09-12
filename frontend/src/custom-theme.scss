@@ -16,5 +16,6 @@ $test-theme: mat.define-theme((
 :root {
   @include mat.all-component-themes($test-theme);
   --app-background: #faf9fd;
-
+  --text-color: black;
+  --border-color: #ccc;
 }

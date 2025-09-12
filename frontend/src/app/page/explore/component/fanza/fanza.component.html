@@ -63,12 +63,21 @@
   </mat-select>
 </mat-form-field>
 
-
 <div class="pagination-buttons">
-  <button mat-icon-button class="floating-button" (click)="prevWorkPage()"       [disabled]="currentWorkPage === 1">
+  <button
+    mat-icon-button
+    class="floating-button"
+    (click)="prevWorkPage()"
+    [disabled]="currentWorkPage === 1"
+  >
     <mat-icon>chevron_left</mat-icon>
   </button>
-  <button mat-icon-button class="floating-button" (click)="nextWorkPage()"       [disabled]="workList.length < 10">
+  <button
+    mat-icon-button
+    class="floating-button"
+    (click)="nextWorkPage()"
+    [disabled]="workList.length < 10"
+  >
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
@@ -86,18 +95,43 @@
         class="poster-image"
         loading="lazy"
       />
-      <div class="overlay">
-        <div>{{ work.rank }}.{{ work.title }}</div>
+      <div class="movie-info">
+        <div class="movie-title" matTooltip="{{ work.rank }}.{{ work.title }}">
+          {{ work.rank }}.{{ work.title }}
+        </div>
+        <div class="movie-meta">
+          <div class="movie-tags">
+            <span
+              *ngFor="let actor of work.actresses.slice(0, 3)"
+              class="movie-tag"
+            >
+              {{ actor }}
+            </span>
+            <span class="more-tags" *ngIf="(work.actresses?.length || 0) > 3">
+              +{{ work.actresses!.length - 3 }}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="pagination-buttons">
-  <button mat-icon-button class="floating-button" (click)="prevWorkPage()"       [disabled]="currentWorkPage === 1">
+  <button
+    mat-icon-button
+    class="floating-button"
+    (click)="prevWorkPage()"
+    [disabled]="currentWorkPage === 1"
+  >
     <mat-icon>chevron_left</mat-icon>
   </button>
-  <button mat-icon-button class="floating-button" (click)="nextWorkPage()"       [disabled]="workList.length < 10">
+  <button
+    mat-icon-button
+    class="floating-button"
+    (click)="nextWorkPage()"
+    [disabled]="workList.length < 10"
+  >
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>

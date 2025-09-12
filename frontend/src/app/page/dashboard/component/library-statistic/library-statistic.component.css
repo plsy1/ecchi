@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  background-color: var(--app-background);
+  border: 1px solid var(--border-color);
 }
 
 .stats-card:hover {
@@ -21,6 +23,8 @@
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  background-color: var(--app-background);
+  border: 1px solid var(--border-color);
 }
 
 .count-card:hover {

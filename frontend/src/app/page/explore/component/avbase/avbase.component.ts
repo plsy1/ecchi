@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { AvbaseIndexData } from '../../models/page-explore';
 import { MatIconModule } from '@angular/material/icon';
 import { AvbaseEverydayReleaseByPrefix } from '../../models/avbase-everyday-release';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-avbase',
   standalone: true,
-  imports: [MatTabsModule, CommonModule, MatIconModule],
+  imports: [MatTabsModule, CommonModule, MatIconModule,MatTooltipModule],
   templateUrl: './avbase.component.html',
   styleUrl: './avbase.component.css',
 })

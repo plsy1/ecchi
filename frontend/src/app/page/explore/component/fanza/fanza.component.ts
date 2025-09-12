@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   RankingTypeOfWorks,
   ActressRanking,
@@ -22,7 +23,7 @@ import {
     MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
-    FormsModule,
+    FormsModule,MatTooltipModule
   ],
   templateUrl: './fanza.component.html',
   styleUrl: './fanza.component.css',

@@ -11,6 +11,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 
 import { ActivatedRoute } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-production-cards',
@@ -24,7 +25,7 @@ import { ActivatedRoute } from '@angular/router';
     MatFormFieldModule,
     FormsModule,
     MatOptionModule,
-    MatSelectModule,
+    MatSelectModule,MatTooltipModule
   ],
 })
 export class MovieCards implements OnInit {
