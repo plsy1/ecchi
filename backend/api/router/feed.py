@@ -156,7 +156,6 @@ async def remove_rss_feed(url: str = Form(...), db: Session = Depends(get_db)):
 
 @router.delete("/delActressCollect")
 async def remove_actress_collect(url: str = Form(...), db: Session = Depends(get_db)):
-    print(url)
     existing_feed = (
         db.query(ActressCollect).filter(ActressCollect.avatar_url == url).first()
     )
