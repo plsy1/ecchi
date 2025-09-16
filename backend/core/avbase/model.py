@@ -143,5 +143,5 @@ class Movie(BaseModel):
     title: str
     full_id: str
     release_date: str
-    img_url: HttpUrl
+    img_url: str
     actors: List[str]
