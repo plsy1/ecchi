@@ -1,6 +1,7 @@
 import requests
 from core.javtrailers.model import *
 from core.config import set_config, get_config
+from core.logs import LOG_ERROR
 
 
 def get_javtrailers_fetch_tokens() -> str:
@@ -19,13 +20,21 @@ def get_javtrailers_fetch_tokens() -> str:
     }
 
     url = "https://javtrailers.com"
-    resp = requests.get(url, timeout=10, headers=headers)
-    resp.raise_for_status()
-    html = resp.text
-    import re
+    try:
+        resp = requests.get(url, timeout=10, headers=headers)
 
-    auth_match = re.search(r'AUTH_TOKEN:\s*"([^"]+)"', html)
-    return auth_match.group(1) if auth_match else None
+        if resp.status_code == 403:
+            return None
+
+        resp.raise_for_status()
+        html = resp.text
+        import re
+
+        auth_match = re.search(r'AUTH_TOKEN:\s*"([^"]+)"', html)
+        return auth_match.group(1) if auth_match else None
+    except Exception as e:
+        LOG_ERROR(e)
+        return None
 
 
 def fetch_daily_release(year: int, month: int, day: int) -> DailyRelease:
@@ -44,37 +53,42 @@ def fetch_daily_release(year: int, month: int, day: int) -> DailyRelease:
         "user-agent": "Mozilla/5.0",
     }
 
-    resp = requests.get(url, params=params, headers=headers)
+    try:
 
-    if resp.status_code != 200:
-        new_token = get_javtrailers_fetch_tokens()
-        if not new_token:
-            resp.raise_for_status()
-
-        set_config({"JAVTRAILERS_AUTHENTICATION": new_token})
-
-        headers["authorization"] = new_token
         resp = requests.get(url, params=params, headers=headers)
 
-    resp.raise_for_status()
-    data = resp.json()
+        if resp.status_code != 200:
+            new_token = get_javtrailers_fetch_tokens()
+            if not new_token:
+                resp.raise_for_status()
 
-    studios = [
-        Studio(
-            name=s["name"],
-            jpName=s["jpName"],
-            slug=s["slug"],
-            link=s["link"],
-            videos=[Video(**v) for v in s.get("videos", [])],
+            set_config({"JAVTRAILERS_AUTHENTICATION": new_token})
+
+            headers["authorization"] = new_token
+            resp = requests.get(url, params=params, headers=headers)
+
+        resp.raise_for_status()
+        data = resp.json()
+
+        studios = [
+            Studio(
+                name=s["name"],
+                jpName=s["jpName"],
+                slug=s["slug"],
+                link=s["link"],
+                videos=[Video(**v) for v in s.get("videos", [])],
+            )
+            for s in data.get("studios", [])
+        ]
+
+        return DailyRelease(
+            date=data["date"],
+            year=data["year"],
+            month=data["month"],
+            day=data["day"],
+            totalVideos=data["totalVideos"],
+            studios=studios,
         )
-        for s in data.get("studios", [])
-    ]
-
-    return DailyRelease(
-        date=data["date"],
-        year=data["year"],
-        month=data["month"],
-        day=data["day"],
-        totalVideos=data["totalVideos"],
-        studios=studios,
-    )
+    except Exception as e:
+        LOG_ERROR(e)
+        return None

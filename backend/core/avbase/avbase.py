@@ -7,7 +7,6 @@ from collections import defaultdict
 from .model import *
 from .helper import *
 
-
 def get_actress_info_by_actress_name(name: str) -> Actress:
     actress = Actress(name=name)
 
@@ -133,7 +132,7 @@ def get_release_grouped_by_prefix(date_str: str) -> List[AvbaseEverydayReleaseBy
             work = Work(**work_dict)
             grouped[prefix].append(work)
         except Exception as e:
-            print(f"解析 Work 失败: {e}, 数据: {work_dict}")
+            continue
 
     groups_list: List[AvbaseEverydayReleaseByPrefix] = [
         AvbaseEverydayReleaseByPrefix(prefixName=prefix or "无前缀", works=works)
