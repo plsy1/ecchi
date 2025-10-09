@@ -23,6 +23,7 @@ RUN mkdir -p /app/data
 
 COPY requirements.txt /app/requirements.txt
 
+RUN python3 -m pip install --upgrade pip setuptools wheel
 RUN pip install --break-system-packages -r requirements.txt
 
 COPY start.sh /app/start.sh
