@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, Form
+from fastapi import APIRouter, HTTPException, Depends, Form,BackgroundTasks
 from core.auth import *
 from sqlalchemy.orm import Session
 from core.database import RSSItem, RSSFeed, ActressCollect, get_db
@@ -213,10 +213,9 @@ async def get_collect_list(db: Session = Depends(get_db)):
 
 
 @router.post("/refreshKeywordsFeeds")
-async def refresh_keywords(isValid: str = Depends(tokenInterceptor)):
+async def refresh_keywords(isValid: str = Depends(tokenInterceptor), background_tasks: BackgroundTasks=None):
     try:
-        refresh_movies_feeds()
-
+        background_tasks.add_task(refresh_movies_feeds)
         return {"message": "Feeds refreshed and torrents added successfully"}
 
     except Exception as e:
@@ -224,9 +223,9 @@ async def refresh_keywords(isValid: str = Depends(tokenInterceptor)):
 
 
 @router.post("/refreshActressFeeds")
-async def refresh_actress(isValid: str = Depends(tokenInterceptor)):
+async def refresh_actress(isValid: str = Depends(tokenInterceptor), background_tasks: BackgroundTasks=None):
     try:
-        refresh_actress_feeds()
+        background_tasks.add_task(refresh_actress_feeds)
         return {"message": "Actress Feeds refreshed successfully"}
 
     except Exception as e:

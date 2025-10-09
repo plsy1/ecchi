@@ -1,0 +1,10 @@
+<div class="refresh-container">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="refreshFeeds()"
+    [disabled]="isRefreshing"
+  >
+    {{ isRefreshing ? "Refreshing..." : "Refresh Feeds" }}
+  </button>
+</div>

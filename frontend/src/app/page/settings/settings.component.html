@@ -1,4 +1,16 @@
-<div class="settings-container">
-  <app-environment-variable></app-environment-variable>
-  <app-change-password></app-change-password>
-</div>
+<mat-tab-group
+  [(selectedIndex)]="selectedTabIndex"
+  (selectedTabChange)="onTabChange($event)"
+>
+  <mat-tab label="Environments & Password">
+    <ng-template matTabContent>
+      <app-environment-variable></app-environment-variable>
+      <app-change-password></app-change-password>
+    </ng-template>
+  </mat-tab>
+    <mat-tab label="Background Tasks">
+    <ng-template matTabContent>
+      <app-background-tasks></app-background-tasks>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

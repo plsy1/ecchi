@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { EnvironmentConfig } from '../models/settings.interface';
 import { CommonService } from '../../../common.service';
-
+import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
@@ -48,6 +48,21 @@ export class SettingsService {
       catchError((error) => {
         console.error('Failed to change password:', error);
         return of(false);
+      })
+    );
+  }
+
+  refreshKeywordsFeeds(): Observable<{ message: string }> {
+    const accessToken = localStorage.getItem('access_token') ?? '';
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
+    const url = `${this.common.apiUrl}/feed/refreshKeywordsFeeds`;
+    return this.http.post<{ message: string }>(url, {}, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error refreshing keyword feeds:', error);
+        return throwError(() => error);
       })
     );
   }
