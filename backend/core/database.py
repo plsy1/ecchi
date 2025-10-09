@@ -28,8 +28,18 @@ class RSSFeed(Base):
     title = Column(String, index=True)
     description = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.now)
+
+class RSSItem(Base):
+    __tablename__ = 'rss_items'
     
-    items = relationship("RSSItem", back_populates="feed")
+    id = Column(Integer, primary_key=True, index=True)
+    actors = Column(String) 
+    keyword = Column(String, unique=True, index=True) 
+    created_at = Column(DateTime, default=datetime.now)
+    img = Column(String)
+    link = Column(String)
+    downloaded = Column(Boolean)
+    
 
 class ActressCollect(Base):
     __tablename__ = 'actress_collect'
@@ -38,32 +48,6 @@ class ActressCollect(Base):
     avatar_url = Column(String, unique=True, index=True)
     name = Column(String, index=True)
     created_at = Column(DateTime, default=datetime.now)
-    
-
-
-class RSSItem(Base):
-    __tablename__ = 'rss_items'
-    
-    id = Column(Integer, primary_key=True, index=True)
-    feed_id = Column(Integer, ForeignKey('rss_feeds.id')) 
-    title = Column(String, index=True)
-    link = Column(String, unique=True)  
-    published = Column(DateTime, default=datetime.now)
-    is_subscribed = Column(Boolean, default=False)  
-    created_at = Column(DateTime, default=datetime.now)
-    
-    feed = relationship("RSSFeed", back_populates="items")
-    
-class KeywordFeeds(Base):
-    __tablename__ = 'keyword_feeds'
-    
-    id = Column(Integer, primary_key=True, index=True)
-    actress_name = Column(String) 
-    keyword = Column(String, unique=True, index=True) 
-    created_at = Column(DateTime, default=datetime.now)
-    img = Column(String)
-    link = Column(String)
-    downloaded = Column(Boolean)
     
 
 def initDatabase():

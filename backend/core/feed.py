@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from core.database import get_db, KeywordFeeds, RSSFeed
+from core.database import get_db, RSSItem, RSSFeed
 from core.prowlarr import Prowlarr
 from core.qbittorrent import QB
 from datetime import datetime
@@ -52,7 +52,7 @@ def refresh_movies_feeds():
         prowlarr = Prowlarr(PROWLARR_URL, PROWLARR_KEY)
 
         db = next(get_db())
-        feeds = db.query(KeywordFeeds).filter(KeywordFeeds.downloaded == False).all()
+        feeds = db.query(RSSItem).filter(RSSItem.downloaded == False).all()
 
         if not feeds:
             return
@@ -93,8 +93,8 @@ def refresh_movies_feeds():
 
                 qb_client.filter_after_add_by_tag(random_tag, QB_KEYWORD_FILTER)
                 keyword_feed = (
-                    db.query(KeywordFeeds)
-                    .filter(KeywordFeeds.keyword == keyword)
+                    db.query(RSSItem)
+                    .filter(RSSItem.keyword == keyword)
                     .first()
                 )
                 if keyword_feed:
@@ -143,8 +143,8 @@ def refresh_actress_feeds():
                 except ValueError as e:
                     continue
                 if release_date > datetime.today() and actors <= 2:
-                    last_feed = KeywordFeeds(
-                        actress_name=name,
+                    last_feed = RSSItem(
+                        actors=','.join(item.actors),
                         keyword=id,
                         img=img,
                         link=link,
@@ -156,7 +156,7 @@ def refresh_actress_feeds():
             if last_feed:
                 try:
                     existing_feed = (
-                        db.query(KeywordFeeds).filter_by(keyword=last_keyword).first()
+                        db.query(RSSItem).filter_by(keyword=last_keyword).first()
                     )
                     if existing_feed:
                         existing_feed.img = last_feed.img

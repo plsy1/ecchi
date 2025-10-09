@@ -7,6 +7,7 @@ from collections import defaultdict
 from .model import *
 from .helper import *
 
+
 def get_actress_info_by_actress_name(name: str) -> Actress:
     actress = Actress(name=name)
 
@@ -127,7 +128,16 @@ def get_release_grouped_by_prefix(date_str: str) -> List[AvbaseEverydayReleaseBy
     grouped: defaultdict[str, List[Work]] = defaultdict(list)
 
     for work_dict in works_data:
-        prefix = work_dict.get("prefix") or "无前缀"
+        products = work_dict.get("products", [])
+        prefix = next(
+            (
+                p.get("maker", {}).get("name")
+                for p in products
+                if p.get("maker", {}).get("name")
+            ),
+            "Unknown",
+        )
+
         try:
             work = Work(**work_dict)
             grouped[prefix].append(work)
@@ -135,12 +145,12 @@ def get_release_grouped_by_prefix(date_str: str) -> List[AvbaseEverydayReleaseBy
             continue
 
     groups_list: List[AvbaseEverydayReleaseByPrefix] = [
-        AvbaseEverydayReleaseByPrefix(prefixName=prefix or "无前缀", works=works)
+        AvbaseEverydayReleaseByPrefix(prefixName=prefix or "Unknown", works=works)
         for prefix, works in grouped.items()
     ]
 
-    normal_groups = [g for g in groups_list if g.prefixName != "无前缀"]
-    no_prefix_group = [g for g in groups_list if g.prefixName == "无前缀"]
+    normal_groups = [g for g in groups_list if g.prefixName != "Unknown"]
+    no_prefix_group = [g for g in groups_list if g.prefixName == "Unknown"]
 
     normal_groups_sorted = sorted(
         normal_groups, key=lambda x: len(x.works), reverse=True

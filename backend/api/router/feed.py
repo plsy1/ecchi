@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, Form
 from core.auth import *
 from sqlalchemy.orm import Session
-from core.database import KeywordFeeds, RSSFeed, ActressCollect, get_db
+from core.database import RSSItem, RSSFeed, ActressCollect, get_db
 from core.telegram import *
 from core.avbase.avbase import *
 from core.feed import *
@@ -11,13 +11,14 @@ router = APIRouter()
 
 @router.post("/addKeywords")
 async def add_feed(
+    actors: str = Form(...),
     keyword: str = Form(...),
     img: str = Form(None),
     link: str = Form(None),
     db: Session = Depends(get_db),
 ):
     existing_keyword = (
-        db.query(KeywordFeeds).filter(KeywordFeeds.keyword == keyword).first()
+        db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
     )
     if existing_keyword:
         try:
@@ -36,7 +37,7 @@ async def add_feed(
                 status_code=500, detail=f"Error updating feed: {str(e)}"
             )
     else:
-        new_feed = KeywordFeeds(keyword=keyword, img=img, link=link, downloaded=False)
+        new_feed = RSSItem(actors=actors, keyword=keyword, img=img, link=link, downloaded=False)
         try:
             db.add(new_feed)
             db.commit()
@@ -53,7 +54,7 @@ async def add_feed(
 @router.delete("/delKeywords")
 async def remove_feed(keyword: str = Form(...), db: Session = Depends(get_db)):
     existing_keyword = (
-        db.query(KeywordFeeds).filter(KeywordFeeds.keyword == keyword).first()
+        db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
     )
 
     if not existing_keyword:
@@ -179,7 +180,15 @@ async def remove_actress_collect(url: str = Form(...), db: Session = Depends(get
 @router.get("/getKeywordsFeedList")
 async def get_keywords_feed_list(db: Session = Depends(get_db)):
     try:
-        feeds = db.query(KeywordFeeds).filter(KeywordFeeds.downloaded == False).all()
+        feeds = db.query(RSSItem).filter(RSSItem.downloaded == False).all()
+        return feeds
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
+    
+@router.get("/getDownloadedKeywordsFeedList")
+async def get_downloaded_keywords_feed_list(db: Session = Depends(get_db)):
+    try:
+        feeds = db.query(RSSItem).filter(RSSItem.downloaded == True).all()
         return feeds
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")

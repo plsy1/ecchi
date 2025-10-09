@@ -31,12 +31,14 @@ export class ProductionInformationService {
   }
 
   addProductionSubscribe(
+    actors: string,
     keyword: string,
     img: string,
     link: string
   ): Observable<any> {
     const url = `${this.common.apiUrl}/feed/addKeywords`;
     const body = new URLSearchParams({
+      actors,
       keyword,
       img,
       link,

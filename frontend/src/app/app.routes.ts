@@ -12,6 +12,7 @@ import { DownloadComponent } from './page/download/download.component';
 import { KeywordsSearchComponent } from './page/keywords-search/keywords-search.component';
 import { PerformerInformationComponent } from './page/performer-information/performer-information.component';
 import { ProductionInformationComponent } from './page/production-information/production-information.component';
+
 export const routes: Routes = [
   {
     path: '',

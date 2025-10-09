@@ -85,7 +85,10 @@ export class ProductionInformationComponent implements OnInit {
   }
 
   subscribeToMovie(): void {
+    const work = this.movieData.props.pageProps.work;
+    const actorNames = work.casts.map((c: { actor: { name: string } }) => c.actor.name).join(', ');
     this.ProductionInformationService.addProductionSubscribe(
+      actorNames,
       this.movieData.props.pageProps.work.work_id,
       this.movieData.props.pageProps.work.products[0]?.image_url,
       this.movieId

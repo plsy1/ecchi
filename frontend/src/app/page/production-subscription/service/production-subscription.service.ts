@@ -21,6 +21,16 @@ export class ProductionSubscriptionService {
     );
   }
 
+  getDownloadedKeywordsFeedListGet(): Observable<KeywordFeed[]> {
+    const url = `${this.common.apiUrl}/feed/getDownloadedKeywordsFeedList`;
+    return this.http.get<KeywordFeed[]>(url).pipe(
+      catchError((error) => {
+        console.error('Error fetching keyword feeds:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   removeKeywordsRSS(keyword: string): Observable<any> {
     const url = `${this.common.apiUrl}/feed/delKeywords`;
     const body = new HttpParams().set('keyword', keyword);
