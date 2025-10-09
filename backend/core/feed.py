@@ -1,34 +1,11 @@
-from bs4 import BeautifulSoup
 from core.database import get_db, RSSItem, RSSFeed
 from core.prowlarr import Prowlarr
 from core.qbittorrent import QB
 from datetime import datetime
 from core.config import *
-import requests
 import time, uuid
 from core.telegram import *
 from core.avbase.avbase import *
-
-
-# def filter_after_add_by_tag(qb_client, tag, keyword_filter, max_wait=10):
-#     torrent_hash = None
-
-#     try:
-#         for _ in range(max_wait):
-#             torrent_list = qb_client.get_torrents_list()
-#             for t in torrent_list:
-#                 if t.get("tags") == tag:
-#                     torrent_hash = t.get("hash")
-#                     files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
-#                     if files:
-#                         qb_client.file_filter_by_keywords(
-#                             QB_KEYWORD_FILTER=keyword_filter
-#                         )
-#                         return
-#             time.sleep(1)
-#     finally:
-#         if torrent_hash:
-#             qb_client.qb.torrents_remove_tags(tags=tag, torrent_hashes=torrent_hash)
 
 
 def refresh_movies_feeds():
@@ -70,6 +47,7 @@ def refresh_movies_feeds():
             best_seed = search_data[0]
 
             download_link = best_seed.get("downloadUrl")
+
             if not download_link:
                 continue
 
@@ -80,7 +58,7 @@ def refresh_movies_feeds():
             DOWNLOAD_PATH = get_config("DOWNLOAD_PATH")
 
             success = qb_client.add_torrent_url(
-                download_link, f"{DOWNLOAD_PATH}/{feed.actress_name}", tags
+                download_link, f"{DOWNLOAD_PATH}/{feed.actors}", tags
             )
 
             if success:
@@ -93,9 +71,7 @@ def refresh_movies_feeds():
 
                 qb_client.filter_after_add_by_tag(random_tag, QB_KEYWORD_FILTER)
                 keyword_feed = (
-                    db.query(RSSItem)
-                    .filter(RSSItem.keyword == keyword)
-                    .first()
+                    db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
                 )
                 if keyword_feed:
                     keyword_feed.downloaded = True
@@ -112,6 +88,7 @@ def refresh_movies_feeds():
         return
 
     except Exception as e:
+        print(e)
         return
 
 
@@ -144,7 +121,7 @@ def refresh_actress_feeds():
                     continue
                 if release_date > datetime.today() and actors <= 2:
                     last_feed = RSSItem(
-                        actors=','.join(item.actors),
+                        actors=",".join(item.actors),
                         keyword=id,
                         img=img,
                         link=link,
