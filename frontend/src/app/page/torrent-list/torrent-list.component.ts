@@ -13,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { FileSizePipe } from '../../pipe/file-size.pipe';
 import { DateFormatPipe } from '../../pipe/date-format.pipe';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   Component,
   OnInit,
@@ -61,7 +62,8 @@ export class TorrentListComponent implements OnInit, AfterViewInit {
   constructor(
     private common: CommonService,
     private getRoute: ActivatedRoute,
-    private TorrentService: TorrentService
+    private TorrentService: TorrentService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -98,6 +100,9 @@ export class TorrentListComponent implements OnInit, AfterViewInit {
         this.searchResults = results;
         this.dataSource.data = this.searchResults;
         this.TorrentService.saveState(this.searchResults, keywords);
+        this.snackBar.open('Torrents search completed', 'Close', {
+          duration: 2000,
+        });
       },
       error: (error) => {
         console.error('Failed to load discover data:', error);

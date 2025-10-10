@@ -10,7 +10,10 @@ from .model import SocialMedia, Movie
 
 
 def get_movies(url: str) -> List[Movie]:
-    response = requests.get(url)
+    try:
+        response = requests.get(url, timeout=(3, 10))
+    except Exception as e:
+        return
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail="获取页面失败")
 

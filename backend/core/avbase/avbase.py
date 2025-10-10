@@ -12,7 +12,10 @@ def get_actress_info_by_actress_name(name: str) -> Actress:
     actress = Actress(name=name)
 
     url = f"https://www.avbase.net/talents/{name}"
-    response = requests.get(url)
+    try:
+        response = requests.get(url, timeout=(3, 10))
+    except Exception as e:
+            return
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail="获取页面失败")
 
@@ -51,7 +54,10 @@ def get_movie_info_by_keywords(keywords: str, page: int) -> List[Movie]:
 
 def get_actors_from_work(canonical_id: str) -> MovieInformation:
     url = f"https://www.avbase.net/works/{canonical_id}"
-    response = requests.get(url)
+    try:
+        response = requests.get(url, timeout=(3, 10))
+    except Exception as e:
+        return
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail="获取页面失败")
 
@@ -75,7 +81,10 @@ def get_actors_from_work(canonical_id: str) -> MovieInformation:
 
 def get_index():
     url = f"https://www.avbase.net"
-    response = requests.get(url)
+    try:
+        response = requests.get(url, timeout=(3, 10))
+    except Exception as e:
+        return
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail="获取页面失败")
 
@@ -113,7 +122,10 @@ def get_release_grouped_by_prefix(date_str: str) -> List[AvbaseEverydayReleaseBy
     date_str: 'YYYY-MM-DD'
     """
     url = f"https://www.avbase.net/works/date/{date_str}"
-    response = requests.get(url)
+    try:
+        response = requests.get(url, timeout=(3, 10))
+    except Exception as e:
+        return
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail="获取页面失败")
 
