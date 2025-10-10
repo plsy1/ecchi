@@ -180,7 +180,7 @@ async def remove_actress_collect(url: str = Form(...), db: Session = Depends(get
 @router.get("/getKeywordsFeedList")
 async def get_keywords_feed_list(db: Session = Depends(get_db)):
     try:
-        feeds = db.query(RSSItem).filter(RSSItem.downloaded == False).all()
+        feeds = db.query(RSSItem).filter(RSSItem.downloaded == False).order_by(RSSItem.id.desc()).all()
         return feeds
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
@@ -188,7 +188,7 @@ async def get_keywords_feed_list(db: Session = Depends(get_db)):
 @router.get("/getDownloadedKeywordsFeedList")
 async def get_downloaded_keywords_feed_list(db: Session = Depends(get_db)):
     try:
-        feeds = db.query(RSSItem).filter(RSSItem.downloaded == True).all()
+        feeds = db.query(RSSItem).filter(RSSItem.downloaded == True).order_by(RSSItem.id.desc()).all()
         return feeds
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")

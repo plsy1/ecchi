@@ -4,31 +4,34 @@ import { CommonModule } from '@angular/common';
 import { KeywordFeed } from '../../models/production-subscription.interface';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 @Component({
   selector: 'app-download-history',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule
-  ],
+  imports: [CommonModule, MatIconModule, MatTooltip],
   templateUrl: './download-history.component.html',
   styleUrl: './download-history.component.css',
 })
 export class DownloadHistoryComponent {
   keywordFeeds: KeywordFeed[] = [];
-  constructor(private ProductionSubscriptionService: ProductionSubscriptionService, private router: Router) {}
+  constructor(
+    private ProductionSubscriptionService: ProductionSubscriptionService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.ProductionSubscriptionService.getDownloadedKeywordsFeedListGet().subscribe({
-      next: (data: KeywordFeed[]) => {
-        this.keywordFeeds = data;
-      },
-      error: (error) => {
-        console.error('Error fetching keywords feed list', error);
-      },
-    });
+    this.ProductionSubscriptionService.getDownloadedKeywordsFeedListGet().subscribe(
+      {
+        next: (data: KeywordFeed[]) => {
+          this.keywordFeeds = data;
+        },
+        error: (error) => {
+          console.error('Error fetching keywords feed list', error);
+        },
+      }
+    );
   }
-    async onMovieCardClick(movie: any) {
+  async onMovieCardClick(movie: KeywordFeed): Promise<void> {
     try {
       this.router.navigate(['production', movie.link]);
     } catch (error) {
@@ -36,21 +39,23 @@ export class DownloadHistoryComponent {
     }
   }
 
-    onUnsubscribeClick(event: MouseEvent, movie: any): void {
+  onUnsubscribeClick(event: MouseEvent, movie: KeywordFeed): void {
     event.stopPropagation();
 
     this.ProductionSubscriptionService.removeKeywordsRSS(
       movie.keyword
     ).subscribe({
       next: () => {
-        this.ProductionSubscriptionService.getDownloadedKeywordsFeedListGet().subscribe({
-          next: (data: KeywordFeed[]) => {
-            this.keywordFeeds = data;
-          },
-          error: (error) => {
-            console.error('Error fetching keywords feed list', error);
-          },
-        });
+        this.ProductionSubscriptionService.getDownloadedKeywordsFeedListGet().subscribe(
+          {
+            next: (data: KeywordFeed[]) => {
+              this.keywordFeeds = data;
+            },
+            error: (error) => {
+              console.error('Error fetching keywords feed list', error);
+            },
+          }
+        );
       },
       error: (error) => {
         console.error('Failed to remove RSS feed:', error);

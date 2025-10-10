@@ -1,5 +1,3 @@
-from core.qbittorrent import QB
-from core.auth import tokenInterceptor
 from fastapi import (
     HTTPException,
     Query,
@@ -10,60 +8,19 @@ from fastapi import (
     BackgroundTasks,
     Body,
 )
+
 from pathlib import Path
 from io import BytesIO
+from core.qbittorrent import QB
+from core.auth import tokenInterceptor
 from core.config import *
 from core.avbase.avbase import *
 from core.telegram import *
-import uuid, time
+from core.database import RSSItem, get_db
+from sqlalchemy.orm import Session
+
 
 router = APIRouter()
-
-
-# def filter_after_add_by_tag(qb_client, tag, keyword_filter, max_wait=30):
-#     torrent_hash = None
-
-#     try:
-#         for _ in range(max_wait):
-#             torrent_list = qb_client.get_torrents_list()
-#             for t in torrent_list:
-#                 if t.get("tags") == tag:
-#                     torrent_hash = t.get("hash")
-#                     files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
-#                     if files:
-#                         qb_client.file_filter_by_keywords(
-#                             QB_KEYWORD_FILTER=keyword_filter
-#                         )
-#                         return
-#             time.sleep(1)
-#     finally:
-#         if torrent_hash:
-#             qb_client.qb.torrents_remove_tags(tags=tag, torrent_hashes=torrent_hash)
-
-
-# def filter_after_add_by_tag(qb_client, random_tag, keyword_filter, max_wait=30):
-#     torrent_hash = None
-
-#     try:
-#         for _ in range(max_wait):
-#             torrent_list = qb_client.get_torrents_list()
-#             for t in torrent_list:
-#                 tags = t.get("tags", "")
-#                 if random_tag in tags.split(","):
-#                     torrent_hash = t.get("hash")
-#                     files = qb_client.get_torrent_file_by_hash(hash=torrent_hash)
-#                     if files:
-#                         qb_client.file_filter_by_keywords(
-#                             QB_KEYWORD_FILTER=keyword_filter
-#                         )
-#                         return
-#             time.sleep(1)
-#     finally:
-#         if torrent_hash:
-#             qb_client.qb.torrents_remove_tags(
-#                 tags=random_tag,
-#                 torrent_hashes=torrent_hash,
-#             )
 
 
 @router.post("/get_downloading_torrents")
@@ -117,6 +74,7 @@ async def add_torrent_url(
     performerName: str,
     isValid: str = Depends(tokenInterceptor),
     background_tasks: BackgroundTasks = None,
+    db: Session = Depends(get_db),
 ):
     """
     通过 URL 添加种子到 qbittorrent。
@@ -143,6 +101,7 @@ async def add_torrent_url(
             username=QB_USERNAME,
             password=QB_PASSWORD,
         )
+        import uuid
 
         random_tag = str(uuid.uuid4())[:8]
 
@@ -163,10 +122,29 @@ async def add_torrent_url(
             if keywords != "":
                 movie_info = get_actors_from_work(movie_link)
                 movie_details = DownloadInformation(keywords, movie_info)
+                imgURL = str(movie_info.props.pageProps.work.products[0].image_url)
                 TelegramBot.Send_Message_With_Image(
-                    str(movie_info.props.pageProps.work.products[0].image_url),
+                    imgURL,
                     movie_details,
                 )
+
+                new_feed = RSSItem(
+                    actors=performerName,
+                    keyword=keywords,
+                    img=imgURL,
+                    link=movie_link,
+                    downloaded=True,
+                )
+                try:
+                    db.add(new_feed)
+                    db.commit()
+                    db.refresh(new_feed)
+                except Exception as e:
+                    db.rollback()
+                    raise HTTPException(
+                        status_code=500, detail=f"Error adding feed: {str(e)}"
+                    )
+
             return {"message": "Torrent added successfully"}
         else:
             raise HTTPException(status_code=400, detail="Failed to add torrent")
@@ -204,9 +182,7 @@ async def add_torrent_file(
             password=QB_PASSWORD,
         )
 
-        success = qb_client.add_torrent_file(
-            file.filename, torrent_data, save_path
-        )
+        success = qb_client.add_torrent_file(file.filename, torrent_data, save_path)
 
         if success:
             return {"message": "Torrent added successfully"}

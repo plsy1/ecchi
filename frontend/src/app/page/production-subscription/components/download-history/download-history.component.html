@@ -12,7 +12,12 @@
         loading="lazy"
       />
       <div class="overlayy">
-        <div class="movie-title">{{ movie.keyword }}</div>
+        <div
+          class="movie-title"
+          matTooltip="{{ movie.keyword }} - {{ movie.actors }}"
+        >
+          {{ movie.keyword }} - {{ movie.actors }}
+        </div>
         <span class="spacer"></span>
         <button
           class="unsubscribe-btn"

@@ -38,7 +38,7 @@ class QB:
             return []
 
         try:
-            torrents = self.qb.torrents_info(status_filter="downloading")
+            torrents = self.qb.torrents_info(status_filter="downloading",tag=self.tags)
             downloading_list = [
                 {
                     "name": t.name,

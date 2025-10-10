@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { KeywordFeed } from '../../models/production-subscription.interface';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-production-subscription-list',
   standalone: true,
-  imports: [MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule, MatTooltip],
   templateUrl: './subscription.component.html',
   styleUrl: './subscription.component.css',
 })
@@ -31,7 +32,7 @@ export class ProductionSubscriptionListComponent implements OnInit {
     });
   }
 
-  onUnsubscribeClick(event: MouseEvent, movie: any): void {
+  onUnsubscribeClick(event: MouseEvent, movie: KeywordFeed): void {
     event.stopPropagation();
 
     this.ProductionSubscriptionService.removeKeywordsRSS(
@@ -53,12 +54,11 @@ export class ProductionSubscriptionListComponent implements OnInit {
     });
   }
 
-  async onMovieCardClick(movie: any) {
+  async onMovieCardClick(movie: KeywordFeed): Promise<void> {
     try {
       this.router.navigate(['production', movie.link]);
     } catch (error) {
       console.error('Failed:', error);
     }
   }
-
 }
