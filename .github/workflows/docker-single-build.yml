@@ -1,9 +1,7 @@
-name: ci
+name: CI Docker Single Job
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   docker:
