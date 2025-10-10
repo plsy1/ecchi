@@ -61,15 +61,28 @@
           (error)="onImageError($event)"
         />
         <div class="movie-info">
-          <h3 class="movie-title" matTooltip="{{ movie.id }} - {{ movie.title }}">{{ movie.id }} - {{ movie.title }}</h3>
+          <h3
+            class="movie-title"
+            matTooltip="{{ movie.id }} - {{ movie.title }}"
+          >
+            {{ movie.id }} - {{ movie.title }}
+          </h3>
           <div class="movie-meta">
             <p class="movie-date">{{ movie.release_date }}</p>
             <div class="movie-tags">
-              <span *ngFor="let tag of movie.actors?.slice(0, 3)" class="movie-tag">
+              <span
+                *ngFor="let tag of movie.actors.slice(0, 3)"
+                class="movie-tag"
+              >
                 {{ tag }}
               </span>
+
               <span class="more-tags" *ngIf="(movie.actors?.length || 0) > 3">
-                +{{ movie.actors!.length - 3 }}
+                {{
+                  movie.actors!.length - 3 === 7
+                    ? "+N"
+                    : "+" + (movie.actors!.length - 3)
+                }}
               </span>
             </div>
           </div>
