@@ -1,6 +1,11 @@
+FROM node:22 AS frontend
+COPY frontend /app/frontend
+WORKDIR /app/frontend
+RUN npm install && npx ng build --configuration production
+
 FROM python:3.11-slim
 
-COPY  bin/frontend /app/frontend
+COPY --from=frontend /app/frontend/dist/frontend/browser /app/frontend
 
 WORKDIR /app
 
