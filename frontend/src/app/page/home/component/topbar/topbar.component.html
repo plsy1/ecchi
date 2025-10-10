@@ -6,11 +6,12 @@
     aria-label="Toggle Sidebar"
   ></i>
   <span class="spacer"></span>
-<i
-  class="fas"
-  [ngClass]="themeService.getThemeIcon() + ' icon'"
-  (click)="themeService.toggleTheme()"
-  aria-label="changeTheme">
-</i>
+  <i
+    class="fas"
+    [ngClass]="themeService.getThemeIcon() + ' icon'"
+    (click)="themeService.toggleTheme()"
+    aria-label="changeTheme"
+  >
+  </i>
   <i class="fas fa-search icon" (click)="OpenSearch()" aria-label="Search"></i>
 </mat-toolbar>
