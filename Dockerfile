@@ -26,4 +26,4 @@ COPY supervisord.conf /app/supervisord.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
-CMD ["bash", "start.sh"]
+ENTRYPOINT ["bash", "/app/start.sh"]

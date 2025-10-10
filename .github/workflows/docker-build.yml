@@ -11,7 +11,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
+
+      - name: Get timestamp
+        id: timestamp
+        run: echo "ts=$(date +%Y%m%d%H%M%S)" >> $GITHUB_OUTPUT
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -31,7 +35,7 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-           plsy1/ecchi:${{ github.sha }}
-           plsy1/ecchi:latest
+            plsy1/ecchi:${{ steps.timestamp.outputs.ts }}
+            plsy1/ecchi:latest
           cache-from: type=registry,ref=plsy1/ecchi:buildcache
           cache-to: type=registry,ref=plsy1/ecchi:buildcache,mode=max
