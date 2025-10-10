@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+
 @include mat.core();
 
 $light-theme: mat.define-theme((
@@ -31,4 +32,13 @@ $dark-theme: mat.define-theme((
   --app-background: #1e1e1e;
   --text-color: white;
   --border-color: #444;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-theme):not(.dark-theme) {
+    @include mat.all-component-colors($dark-theme);
+    --app-background: #1e1e1e;
+    --text-color: white;
+    --border-color: #444;
+  }
 }

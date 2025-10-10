@@ -1,31 +1,48 @@
 // src/app/theme.service.ts
 import { Injectable } from '@angular/core';
 
+export type ThemeMode = 'light' | 'dark' | 'system';
+
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-  private darkClass = 'dark-theme';
+  private currentTheme: ThemeMode;
 
   constructor() {
-    // 初始化：读取 localStorage 保存的主题
-    const isDark = localStorage.getItem('isDarkTheme') === 'true';
-    this.setDarkTheme(isDark);
+    const saved = localStorage.getItem('themeMode') as ThemeMode | null;
+    this.currentTheme = saved || 'system';
+    this.applyTheme(this.currentTheme);
   }
 
   isDarkTheme(): boolean {
-    return document.body.classList.contains(this.darkClass);
-  }
-
-  toggleTheme(): void {
-    const isDark = this.isDarkTheme();
-    this.setDarkTheme(!isDark);
-  }
-
-  setDarkTheme(isDark: boolean): void {
-    if (isDark) {
-      document.body.classList.add(this.darkClass);
-    } else {
-      document.body.classList.remove(this.darkClass);
+    if (this.currentTheme === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
-    localStorage.setItem('isDarkTheme', isDark.toString());
+    return this.currentTheme === 'dark';
+  }
+
+  getThemeIcon(): string {
+    switch (this.currentTheme) {
+      case 'light': return 'fa-sun';
+      case 'dark': return 'fa-moon';
+      case 'system': return 'fa-desktop';
+    }
+  }
+
+  toggleTheme() {
+    switch (this.currentTheme) {
+      case 'light': this.currentTheme = 'dark'; break;
+      case 'dark': this.currentTheme = 'system'; break;
+      case 'system': this.currentTheme = 'light'; break;
+    }
+    localStorage.setItem('themeMode', this.currentTheme);
+    this.applyTheme(this.currentTheme);
+  }
+
+  private applyTheme(mode: ThemeMode) {
+    const body = document.body;
+    body.classList.remove('light-theme', 'dark-theme');
+    if (mode === 'light') body.classList.add('light-theme');
+    if (mode === 'dark') body.classList.add('dark-theme');
+    // system 模式不加任何类，让 CSS media query 生效
   }
 }
