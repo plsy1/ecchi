@@ -6,7 +6,7 @@
 FROM python:3.11-slim
 
 # COPY --from=frontend /app/frontend/dist/frontend/browser /app/frontend
-COPY --from=frontend bin/frontend /app/frontend
+COPY bin/frontend /app/frontend
 WORKDIR /app
 
 COPY requirements.txt .
