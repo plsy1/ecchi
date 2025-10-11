@@ -25,8 +25,8 @@ ngOnInit(): void {
   });
 }
 
-  onImageError(event: Event, view: any) {
-    const img = event.target as HTMLImageElement;
-    img.src = view.primary;
-  }
+
+  onImageError(event: Event, item: any) {
+  item.hideImage = true;
+}
 }

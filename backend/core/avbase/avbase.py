@@ -28,7 +28,7 @@ def get_actress_info_by_actress_name(name: str) -> Actress:
         talent = page_props.get("talent", {})
 
         primary = talent.get("primary", {})
-        actress.avatar_url = f"{SYSTEM_IMAGE_PREFIX}{primary.get("image_url")}"
+        actress.avatar_url = f'{SYSTEM_IMAGE_PREFIX}{primary.get("image_url")}'
 
         fanza = (primary.get("meta") or {}).get("fanza") or {}
         for k, v in fanza.items():
