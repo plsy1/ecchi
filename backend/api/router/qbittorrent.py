@@ -120,7 +120,7 @@ async def add_torrent_url(
             )
 
             if keywords != "":
-                movie_info = get_actors_from_work(movie_link)
+                movie_info = await get_actors_from_work(movie_link)
                 movie_details = DownloadInformation(keywords, movie_info)
                 imgURL = str(movie_info.props.pageProps.work.products[0].image_url)
                 TelegramBot.Send_Message_With_Image(

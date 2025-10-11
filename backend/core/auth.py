@@ -111,7 +111,7 @@ def change_password(db: Session, username: str, old_password: str, new_password:
     return {"message": "Password updated successfully"}
 
 
-def initAuth():
+def initUser():
     db = SessionLocal()
     try:
         create_root_user_if_not_exists(db)

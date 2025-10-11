@@ -1,5 +1,5 @@
 
-from pydantic import BaseModel, HttpUrl, Field, field_validator
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional, Union
 
 class Talent(BaseModel):
@@ -11,7 +11,7 @@ class Actor(BaseModel):
     id: int = 0
     name: str = ""
     order: Optional[int] = None
-    image_url: Optional[HttpUrl] = None
+    image_url: str = ""
     talent: Optional[Talent] = None
     ruby: Optional[str] = None
     note: Optional[str] = None
@@ -42,11 +42,11 @@ class ProductItemInfo(BaseModel):
 class Product(BaseModel):
     id: int = 0
     product_id: str = ""
-    url: HttpUrl = "http://example.com"
-    image_url: Optional[HttpUrl] = None
+    url: str = ""
+    image_url: str = ""
     title: str = ""
     source: Optional[str] = None
-    thumbnail_url: Optional[HttpUrl] = None
+    thumbnail_url: str = ""
     date: Optional[str] = None
     maker: Optional[MakerLabelSeries] = MakerLabelSeries()
     label: Optional[MakerLabelSeries] = MakerLabelSeries()
@@ -118,7 +118,7 @@ class MovieInformation(BaseModel):
 class SocialMedia(BaseModel):
     platform: str = ""
     username: str = ""
-    link: HttpUrl | None = None
+    link: str = ""
 
 
 class Actress(BaseModel):
@@ -133,7 +133,7 @@ class Actress(BaseModel):
     prefectures: str = ""
     blood_type: str = ""
     aliases: List[str] = Field(default_factory=list)
-    avatar_url: HttpUrl | None = None
+    avatar_url: str = ""
     social_media: List[SocialMedia] = Field(default_factory=list)
     
     

@@ -1,7 +1,5 @@
-import requests
 import json
 from bs4 import BeautifulSoup
-from fastapi import HTTPException
 from typing import List
 from collections import defaultdict
 from .model import *
@@ -9,18 +7,14 @@ from .helper import *
 from core.config import SYSTEM_IMAGE_PREFIX
 from core.system import replace_domain_in_value
 
-def get_actress_info_by_actress_name(name: str) -> Actress:
+
+async def get_actress_info_by_actress_name(name: str) -> Actress:
     actress = Actress(name=name)
 
     url = f"https://www.avbase.net/talents/{name}"
-    try:
-        response = requests.get(url, timeout=(3, 10))
-    except Exception as e:
-        return
-    if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail="获取页面失败")
+    content = await get_raw_html(url)
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    soup = BeautifulSoup(content, "html.parser")
     script_tag = soup.find("script", id="__NEXT_DATA__")
     if script_tag:
         data = json.loads(script_tag.string)
@@ -40,35 +34,22 @@ def get_actress_info_by_actress_name(name: str) -> Actress:
 
     actress.social_media = get_social_media_links(soup)
 
-
     return actress
 
 
-def get_movie_info_by_actress_name(name: str, page: int) -> List[Movie]:
+async def get_movie_info_by_actress_name(name: str, page: int) -> List[Movie]:
     url = f"https://www.avbase.net/talents/{name}?q=&page={page}"
-    return get_movies(url)
+    return await get_movies(url)
 
 
-def get_movie_info_by_keywords(keywords: str, page: int) -> List[Movie]:
+async def get_movie_info_by_keywords(keywords: str, page: int) -> List[Movie]:
     url = f"https://www.avbase.net/works?q={keywords}&page={page}"
-    return get_movies(url)
+    return await get_movies(url)
 
 
-def get_actors_from_work(canonical_id: str) -> MovieInformation:
+async def get_actors_from_work(canonical_id: str) -> MovieInformation:
     url = f"https://www.avbase.net/works/{canonical_id}"
-    try:
-        response = requests.get(url, timeout=(3, 10))
-    except Exception as e:
-        return
-    if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail="获取页面失败")
-
-    soup = BeautifulSoup(response.text, "html.parser")
-    script_tag = soup.find("script", id="__NEXT_DATA__")
-    if not script_tag:
-        raise HTTPException(status_code=500, detail="页面数据不存在")
-
-    data = json.loads(script_tag.string)
+    data = await get_next_data(url)
 
     work = data.get("props", {}).get("pageProps", {}).get("work", {})
     min_date_str = work.get("min_date", "")
@@ -83,23 +64,10 @@ def get_actors_from_work(canonical_id: str) -> MovieInformation:
     return movie_info
 
 
-def get_index():
+async def get_index():
     url = f"https://www.avbase.net"
-    try:
-        response = requests.get(url, timeout=(3, 10))
-    except Exception as e:
-        return
-    if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail="获取页面失败")
-
-    soup = BeautifulSoup(response.text, "html.parser")
-    script_tag = soup.find("script", id="__NEXT_DATA__")
-    if not script_tag:
-        raise HTTPException(status_code=500, detail="页面数据不存在")
-
-    data = json.loads(script_tag.string)
+    data = await get_next_data(url)
     data = data.get("props").get("pageProps")
-
     works = data.get("works")
     products = [p for work in works for p in work.get("products", [])]
     newbie_talents = data.get("newbie_talents")
@@ -126,25 +94,16 @@ def get_index():
     }
 
 
-def get_release_grouped_by_prefix(date_str: str) -> List[AvbaseEverydayReleaseByPrefix]:
+async def get_release_grouped_by_prefix(
+    date_str: str,
+) -> List[AvbaseEverydayReleaseByPrefix]:
     """
     获取指定日期的作品列表，并按 prefix 分组
     date_str: 'YYYY-MM-DD'
     """
     url = f"https://www.avbase.net/works/date/{date_str}"
-    try:
-        response = requests.get(url, timeout=(3, 10))
-    except Exception as e:
-        return
-    if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail="获取页面失败")
+    data = await get_next_data(url)
 
-    soup = BeautifulSoup(response.text, "html.parser")
-    script_tag = soup.find("script", id="__NEXT_DATA__")
-    if not script_tag:
-        raise HTTPException(status_code=500, detail="页面数据不存在")
-
-    data = json.loads(script_tag.string)
     works_data = data.get("props", {}).get("pageProps", {}).get("works", [])
 
     works_data = replace_domain_in_value(works_data, SYSTEM_IMAGE_PREFIX)

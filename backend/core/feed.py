@@ -8,7 +8,7 @@ from core.telegram import *
 from core.avbase.avbase import *
 
 
-def refresh_movies_feeds():
+async def refresh_movies_feeds():
     try:
 
         QB_HOST = get_config("QB_HOST")
@@ -77,7 +77,7 @@ def refresh_movies_feeds():
                     keyword_feed.downloaded = True
                     db.commit()
 
-                movie_info = get_actors_from_work(movie_link)
+                movie_info = await get_actors_from_work(movie_link)
                 movie_details = DownloadInformation(keyword, movie_info)
                 TelegramBot.Send_Message_With_Image(
                     str(movie_info.props.pageProps.work.products[0].image_url),
@@ -92,7 +92,7 @@ def refresh_movies_feeds():
         return
 
 
-def refresh_actress_feeds():
+async def refresh_actress_feeds():
     try:
         db = next(get_db())
         feeds = db.query(RSSFeed).all()
@@ -144,7 +144,7 @@ def refresh_actress_feeds():
                     db.commit()
                     db.refresh(last_feed)
 
-                    movie_info = get_actors_from_work(last_link)
+                    movie_info = await get_actors_from_work(last_link)
                     movie_details = movieInformation(last_keyword, movie_info)
                     TelegramBot.Send_Message_With_Image(last_img, movie_details)
 

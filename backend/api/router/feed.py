@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, Form,BackgroundTasks
+from fastapi import APIRouter, HTTPException, Depends, Form, BackgroundTasks
 from core.auth import *
 from sqlalchemy.orm import Session
 from core.database import RSSItem, RSSFeed, ActressCollect, get_db
@@ -7,6 +7,7 @@ from core.avbase.avbase import *
 from core.feed import *
 from core.config import SYSTEM_IMAGE_PREFIX
 from core.system import replace_domain_in_value
+
 router = APIRouter()
 
 
@@ -18,15 +19,13 @@ async def add_feed(
     link: str = Form(None),
     db: Session = Depends(get_db),
 ):
-    existing_keyword = (
-        db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
-    )
+    existing_keyword = db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
     if existing_keyword:
         try:
             existing_keyword.downloaded = False
             db.commit()
             db.refresh(existing_keyword)
-            movie_info = get_actors_from_work(link)
+            movie_info = await get_actors_from_work(link)
             movie_details = movieInformation(keyword, movie_info)
             TelegramBot.Send_Message_With_Image(img, movie_details)
             return {
@@ -38,12 +37,14 @@ async def add_feed(
                 status_code=500, detail=f"Error updating feed: {str(e)}"
             )
     else:
-        new_feed = RSSItem(actors=actors, keyword=keyword, img=img, link=link, downloaded=False)
+        new_feed = RSSItem(
+            actors=actors, keyword=keyword, img=img, link=link, downloaded=False
+        )
         try:
             db.add(new_feed)
             db.commit()
             db.refresh(new_feed)
-            movie_info = get_actors_from_work(link)
+            movie_info = await get_actors_from_work(link)
             movie_details = movieInformation(keyword, movie_info)
             TelegramBot.Send_Message_With_Image(img, movie_details)
             return {"message": f"Successfully added keyword: {keyword}"}
@@ -54,9 +55,7 @@ async def add_feed(
 
 @router.delete("/delKeywords")
 async def remove_feed(keyword: str = Form(...), db: Session = Depends(get_db)):
-    existing_keyword = (
-        db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
-    )
+    existing_keyword = db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
 
     if not existing_keyword:
         raise HTTPException(status_code=404, detail="Keyword not found.")
@@ -181,18 +180,35 @@ async def remove_actress_collect(url: str = Form(...), db: Session = Depends(get
 @router.get("/getKeywordsFeedList")
 async def get_keywords_feed_list(db: Session = Depends(get_db)):
     try:
-        feeds = db.query(RSSItem).filter(RSSItem.downloaded == False).order_by(RSSItem.id.desc()).all()
-        feeds_dicts = [{k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"} for feed in feeds]
+        feeds = (
+            db.query(RSSItem)
+            .filter(RSSItem.downloaded == False)
+            .order_by(RSSItem.id.desc())
+            .all()
+        )
+        feeds_dicts = [
+            {k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"}
+            for feed in feeds
+        ]
         feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
         return feeds_dicts
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
-    
+
+
 @router.get("/getDownloadedKeywordsFeedList")
 async def get_downloaded_keywords_feed_list(db: Session = Depends(get_db)):
     try:
-        feeds = db.query(RSSItem).filter(RSSItem.downloaded == True).order_by(RSSItem.id.desc()).all()
-        feeds_dicts = [{k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"} for feed in feeds]
+        feeds = (
+            db.query(RSSItem)
+            .filter(RSSItem.downloaded == True)
+            .order_by(RSSItem.id.desc())
+            .all()
+        )
+        feeds_dicts = [
+            {k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"}
+            for feed in feeds
+        ]
         feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
         return feeds_dicts
     except Exception as e:
@@ -203,7 +219,10 @@ async def get_downloaded_keywords_feed_list(db: Session = Depends(get_db)):
 async def get_feed_list(db: Session = Depends(get_db)):
     try:
         feeds = db.query(RSSFeed).all()
-        feeds_dicts = [{k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"} for feed in feeds]
+        feeds_dicts = [
+            {k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"}
+            for feed in feeds
+        ]
         feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
         return feeds_dicts
     except Exception as e:
@@ -215,7 +234,10 @@ async def get_collect_list(db: Session = Depends(get_db)):
     try:
         feeds = db.query(ActressCollect).all()
 
-        feeds_dicts = [{k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"} for feed in feeds]
+        feeds_dicts = [
+            {k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"}
+            for feed in feeds
+        ]
         feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
         return feeds_dicts
     except Exception as e:
@@ -223,7 +245,9 @@ async def get_collect_list(db: Session = Depends(get_db)):
 
 
 @router.post("/refreshKeywordsFeeds")
-async def refresh_keywords(isValid: str = Depends(tokenInterceptor), background_tasks: BackgroundTasks=None):
+async def refresh_keywords(
+    isValid: str = Depends(tokenInterceptor), background_tasks: BackgroundTasks = None
+):
     try:
         background_tasks.add_task(refresh_movies_feeds)
         return {"message": "Feeds refreshed and torrents added successfully"}
@@ -233,7 +257,9 @@ async def refresh_keywords(isValid: str = Depends(tokenInterceptor), background_
 
 
 @router.post("/refreshActressFeeds")
-async def refresh_actress(isValid: str = Depends(tokenInterceptor), background_tasks: BackgroundTasks=None):
+async def refresh_actress(
+    isValid: str = Depends(tokenInterceptor), background_tasks: BackgroundTasks = None
+):
     try:
         background_tasks.add_task(refresh_actress_feeds)
         return {"message": "Actress Feeds refreshed successfully"}

@@ -6,18 +6,13 @@ from bs4 import BeautifulSoup
 from fastapi import HTTPException
 from .model import SocialMedia, Movie
 from core.config import SYSTEM_IMAGE_PREFIX
+import json
 
 
+async def get_movies(url: str) -> List[Movie]:
+    content = await get_raw_html(url)
 
-def get_movies(url: str) -> List[Movie]:
-    try:
-        response = requests.get(url, timeout=(3, 10))
-    except Exception as e:
-        return
-    if response.status_code != 200:
-        raise HTTPException(status_code=response.status_code, detail="获取页面失败")
-
-    soup = BeautifulSoup(response.text, "html.parser")
+    soup = BeautifulSoup(content, "html.parser")
     movie_elements = soup.find_all(
         "div",
         class_="bg-base border border-light rounded-lg overflow-hidden h-full",
@@ -111,3 +106,47 @@ def date_trans(date: str) -> str:
         return dt.strftime("%Y/%m/%d")
     except Exception:
         return date
+
+
+async def get_next_data(url: str):
+    from main import playwright_service
+
+    context = await playwright_service.get_context()
+    page = await context.new_page()
+    try:
+        response = await page.goto(url, timeout=5000)
+        status = response.status
+        if status == 403:
+            raise HTTPException(status_code=status, detail="403")
+        content = await page.content()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"页面请求失败: {str(e)}")
+    finally:
+        await page.close()
+
+    soup = BeautifulSoup(content, "html.parser")
+    script_tag = soup.find("script", id="__NEXT_DATA__")
+    if not script_tag:
+        raise HTTPException(status_code=500, detail="没有找到 __NEXT_DATA__")
+
+    data = json.loads(script_tag.string)
+    return data
+
+
+async def get_raw_html(url: str):
+    from main import playwright_service
+
+    context = await playwright_service.get_context()
+    page = await context.new_page()
+    try:
+        response = await page.goto(url, timeout=5000)
+        status = response.status
+        if status == 403:
+            raise HTTPException(status_code=status, detail="403")
+        content = await page.content()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"页面请求失败: {str(e)}")
+    finally:
+        await page.close()
+
+    return content
