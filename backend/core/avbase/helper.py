@@ -4,9 +4,9 @@ from datetime import datetime
 from typing import List
 from bs4 import BeautifulSoup
 from fastapi import HTTPException
-
-
 from .model import SocialMedia, Movie
+from core.config import SYSTEM_IMAGE_PREFIX
+
 
 
 def get_movies(url: str) -> List[Movie]:
@@ -47,6 +47,7 @@ def get_movies(url: str) -> List[Movie]:
         img_url = img_tag.get("src", "") if img_tag else ""
         if img_url:
             img_url = img_url.replace("ps.", "pl.")
+            img_url = f"{SYSTEM_IMAGE_PREFIX}{img_url}"
 
         actors = [
             a.get_text(strip=True) for a in movie.find_all("a", class_="chip chip-sm")

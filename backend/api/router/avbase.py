@@ -39,7 +39,7 @@ async def get_index_data(isValid: str = Depends(tokenInterceptor)):
 
 
 @router.get("/get_release_by_date")
-async def get_relesae(yyyymmdd: str,isValid: str = Depends(tokenInterceptor)):
+async def get_relesae(yyyymmdd: str, isValid: str = Depends(tokenInterceptor)):
     if len(yyyymmdd) != 8 or not yyyymmdd.isdigit():
         raise HTTPException(status_code=400, detail="日期格式错误，应为 YYYYMMDD")
 

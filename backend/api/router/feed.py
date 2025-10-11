@@ -5,7 +5,8 @@ from core.database import RSSItem, RSSFeed, ActressCollect, get_db
 from core.telegram import *
 from core.avbase.avbase import *
 from core.feed import *
-
+from core.config import SYSTEM_IMAGE_PREFIX
+from core.system import replace_domain_in_value
 router = APIRouter()
 
 
@@ -181,7 +182,9 @@ async def remove_actress_collect(url: str = Form(...), db: Session = Depends(get
 async def get_keywords_feed_list(db: Session = Depends(get_db)):
     try:
         feeds = db.query(RSSItem).filter(RSSItem.downloaded == False).order_by(RSSItem.id.desc()).all()
-        return feeds
+        feeds_dicts = [{k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"} for feed in feeds]
+        feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
+        return feeds_dicts
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
     
@@ -189,7 +192,9 @@ async def get_keywords_feed_list(db: Session = Depends(get_db)):
 async def get_downloaded_keywords_feed_list(db: Session = Depends(get_db)):
     try:
         feeds = db.query(RSSItem).filter(RSSItem.downloaded == True).order_by(RSSItem.id.desc()).all()
-        return feeds
+        feeds_dicts = [{k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"} for feed in feeds]
+        feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
+        return feeds_dicts
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
 
@@ -198,7 +203,9 @@ async def get_downloaded_keywords_feed_list(db: Session = Depends(get_db)):
 async def get_feed_list(db: Session = Depends(get_db)):
     try:
         feeds = db.query(RSSFeed).all()
-        return feeds
+        feeds_dicts = [{k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"} for feed in feeds]
+        feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
+        return feeds_dicts
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
 
@@ -207,7 +214,10 @@ async def get_feed_list(db: Session = Depends(get_db)):
 async def get_collect_list(db: Session = Depends(get_db)):
     try:
         feeds = db.query(ActressCollect).all()
-        return feeds
+
+        feeds_dicts = [{k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"} for feed in feeds]
+        feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
+        return feeds_dicts
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
 

@@ -2,8 +2,8 @@ import requests
 from core.javtrailers.model import *
 from core.config import set_config, get_config
 from core.logs import LOG_ERROR
-
-
+from core.system import replace_domain_in_value
+from core.config import SYSTEM_IMAGE_PREFIX
 def get_javtrailers_fetch_tokens() -> str:
     """
     从网页 HTML 提取 AUTH_TOKEN
@@ -76,7 +76,7 @@ def fetch_daily_release(year: int, month: int, day: int) -> DailyRelease:
                 jpName=s["jpName"],
                 slug=s["slug"],
                 link=s["link"],
-                videos=[Video(**v) for v in s.get("videos", [])],
+                videos=[Video(**replace_domain_in_value(v, SYSTEM_IMAGE_PREFIX)) for v in s.get("videos", [])],
             )
             for s in data.get("studios", [])
         ]

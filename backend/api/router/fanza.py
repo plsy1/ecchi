@@ -3,7 +3,8 @@ from enum import Enum
 from bs4 import BeautifulSoup
 import httpx
 import re
-
+from core.config import SYSTEM_IMAGE_PREFIX
+from core.system import replace_domain_in_value
 class RankingType(Enum):
     daily = 'daily'
     weekly = 'weekly'
@@ -72,6 +73,8 @@ async def fetch_actress_ranking(page: int = 1):
                 "work_count": work_count,
             })
 
+        actresses = replace_domain_in_value(actresses, SYSTEM_IMAGE_PREFIX)
+
         return actresses
     
 @router.get("/monthlyworks")
@@ -136,5 +139,7 @@ async def fetch_dvd_ranking(page: int = 1, term: RankingType = RankingType.month
                 "maker": maker,
                 "actresses": actresses
             })
+
+        results = replace_domain_in_value(results, SYSTEM_IMAGE_PREFIX)
 
         return results

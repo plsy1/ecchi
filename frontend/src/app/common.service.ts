@@ -8,12 +8,12 @@ import { catchError, map, throwError, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class CommonService {
-  private isDev = !environment.production;
-  apiUrl = this.isDev ? 'http://localhost:8964/api/v1' : '/api/v1';
-
+  // private isDev = !environment.production;
+  // apiUrl = this.isDev ? 'http://localhost:8964/api/v1' : '/api/v1';
+  apiUrl = '/api/v1';
   public isJumpFromProductionPage: boolean = false;
   public currentPerformer: string = '';
-  
+
   constructor(private router: Router, private http: HttpClient) {}
 
   login(username: string, password: string): Observable<boolean> {
@@ -26,20 +26,22 @@ export class CommonService {
       'Content-Type': 'application/x-www-form-urlencoded',
     });
 
-    return this.http.post<{ access_token?: string }>(url, body.toString(), { headers }).pipe(
-      map((data) => {
-        if (data.access_token) {
-          localStorage.setItem('access_token', data.access_token);
-          localStorage.setItem('loggedIn', 'true');
-          return true;
-        }
-        return false;
-      }),
-      catchError((error) => {
-        console.error('Login request failed', error);
-        return throwError(() => new Error('Request Failed'));
-      })
-    );
+    return this.http
+      .post<{ access_token?: string }>(url, body.toString(), { headers })
+      .pipe(
+        map((data) => {
+          if (data.access_token) {
+            localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('loggedIn', 'true');
+            return true;
+          }
+          return false;
+        }),
+        catchError((error) => {
+          console.error('Login request failed', error);
+          return throwError(() => new Error('Request Failed'));
+        })
+      );
   }
 
   logout(): void {

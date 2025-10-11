@@ -16,7 +16,7 @@
       <img
         loading="lazy"
         class="item-image"
-        [src]="item.primary_local || item.primary"
+        [src]="item.primary"
         alt="{{ item.name }}"
         (error)="onImageError($event, item)"
       />

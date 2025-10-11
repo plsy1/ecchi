@@ -6,7 +6,8 @@ from typing import List
 from collections import defaultdict
 from .model import *
 from .helper import *
-
+from core.config import SYSTEM_IMAGE_PREFIX
+from core.system import replace_domain_in_value
 
 def get_actress_info_by_actress_name(name: str) -> Actress:
     actress = Actress(name=name)
@@ -15,7 +16,7 @@ def get_actress_info_by_actress_name(name: str) -> Actress:
     try:
         response = requests.get(url, timeout=(3, 10))
     except Exception as e:
-            return
+        return
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail="获取页面失败")
 
@@ -27,7 +28,7 @@ def get_actress_info_by_actress_name(name: str) -> Actress:
         talent = page_props.get("talent", {})
 
         primary = talent.get("primary", {})
-        actress.avatar_url = primary.get("image_url")
+        actress.avatar_url = f"{SYSTEM_IMAGE_PREFIX}{primary.get("image_url")}"
 
         fanza = (primary.get("meta") or {}).get("fanza") or {}
         for k, v in fanza.items():
@@ -38,6 +39,7 @@ def get_actress_info_by_actress_name(name: str) -> Actress:
         actress.aliases = [actor.get("name") for actor in actors if actor.get("name")]
 
     actress.social_media = get_social_media_links(soup)
+
 
     return actress
 
@@ -74,6 +76,8 @@ def get_actors_from_work(canonical_id: str) -> MovieInformation:
         work["min_date"] = date_trans(min_date_str)
         data["props"]["pageProps"]["work"]["min_date"] = work["min_date"]
 
+    data = replace_domain_in_value(data, SYSTEM_IMAGE_PREFIX)
+
     movie_info = MovieInformation(**data)
 
     return movie_info
@@ -101,13 +105,19 @@ def get_index():
     newbie_talents = data.get("newbie_talents")
     popular_talents = data.get("popular_talents")
 
+    newbie_talents = replace_domain_in_value(newbie_talents, SYSTEM_IMAGE_PREFIX)
+    popular_talents = replace_domain_in_value(popular_talents, SYSTEM_IMAGE_PREFIX)
+
     seen_titles = set()
     unique_products = []
     for p in products:
         title = p.get("title")
-        if title and title not in seen_titles:
-            seen_titles.add(title)
-            unique_products.append(p)
+        if not title or title in seen_titles:
+            continue
+        seen_titles.add(title)
+
+        p = replace_domain_in_value(p, SYSTEM_IMAGE_PREFIX)
+        unique_products.append(p)
 
     return {
         "products": unique_products,
@@ -136,6 +146,8 @@ def get_release_grouped_by_prefix(date_str: str) -> List[AvbaseEverydayReleaseBy
 
     data = json.loads(script_tag.string)
     works_data = data.get("props", {}).get("pageProps", {}).get("works", [])
+
+    works_data = replace_domain_in_value(works_data, SYSTEM_IMAGE_PREFIX)
 
     grouped: defaultdict[str, List[Work]] = defaultdict(list)
 

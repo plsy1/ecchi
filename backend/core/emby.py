@@ -2,6 +2,7 @@ import requests
 import json
 from typing import List, Dict
 from core.config import get_config
+from core.config import SYSTEM_IMAGE_PREFIX
 
 
 def emby_request(path: str, params=None, method="GET", use_header=True) -> List[Dict]:
@@ -51,7 +52,7 @@ def emby_get_item_counts() -> Dict:
 
 
 def emby_get_latest_items() -> List[Dict]:
-    
+
     params = {
         "Recursive": "true",
         "Fields": "BasicSyncInfo,CanDelete,CanDownload,PrimaryImageAspectRatio,ProductionYear",
@@ -64,19 +65,19 @@ def emby_get_latest_items() -> List[Dict]:
         EMBY_URL = get_config("EMBY_URL")
         result = []
         userId = emby_get_userId_of_administrator()
-        info = emby_request(f"/Users/{userId}/Items/Latest", use_header=True, params=params)
+        info = emby_request(
+            f"/Users/{userId}/Items/Latest", use_header=True, params=params
+        )
         for item in info:
             name = item.get("Name")
             id = item.get("Id")
-            primary = f"/api/v1/emby/get_image?url={EMBY_URL}/Items/{id}/Images/Primary"
-            primary_local = f"{EMBY_URL}/Items/{id}/Images/Primary"
+            primary = f"{SYSTEM_IMAGE_PREFIX}{EMBY_URL}/Items/{id}/Images/Primary"
             serverId = item.get("ServerId")
             indexLink = f"{EMBY_URL}/web/index.html#!/item?id={id}&context=home&serverId={serverId}"
             result.append(
                 {
                     "name": name,
                     "primary": primary,
-                    "primary_local": primary_local,
                     "serverId": serverId,
                     "indexLink": indexLink,
                 }
@@ -106,8 +107,7 @@ def emby_get_resume_items() -> List[Dict]:
             name = item.get("Name")
             id = item.get("Id")
             serverId = item.get("ServerId")
-            primary = f"/api/v1/emby/get_image?url={EMBY_URL}/Items/{id}/Images/Primary"
-            primary_local = f"{EMBY_URL}/Items/{id}/Images/Primary"
+            primary = f"{SYSTEM_IMAGE_PREFIX}{EMBY_URL}/Items/{id}/Images/Primary"
             indexLink = f"{EMBY_URL}/web/index.html#!/item?id={id}&context=home&serverId={serverId}"
             PlayedPercentage = item.get("UserData").get("PlayedPercentage")
             ProductionYear = item.get("ProductionYear")
@@ -115,7 +115,6 @@ def emby_get_resume_items() -> List[Dict]:
                 {
                     "name": name,
                     "primary": primary,
-                    "primary_local": primary_local,
                     "serverId": serverId,
                     "indexLink": indexLink,
                     "PlayedPercentage": PlayedPercentage,
@@ -138,8 +137,7 @@ def emby_get_views() -> List[Dict]:
             name = item.get("Name")
             Id = item.get("Id")
             ServerId = item.get("ServerId")
-            primary = f"/api/v1/emby/get_image?url={EMBY_URL}/Items/{Id}/Images/Primary"
-            primary_local = f"{EMBY_URL}/Items/{Id}/Images/Primary"
+            primary = f"{SYSTEM_IMAGE_PREFIX}{EMBY_URL}/Items/{Id}/Images/Primary"
             indexLink = (
                 f"{EMBY_URL}/web/index.html#!/videos?serverId={ServerId}&parentId={Id}"
             )
@@ -147,7 +145,6 @@ def emby_get_views() -> List[Dict]:
                 {
                     "name": name,
                     "primary": primary,
-                    "primary_local": primary_local,
                     "serverId": ServerId,
                     "indexLink": indexLink,
                 }
