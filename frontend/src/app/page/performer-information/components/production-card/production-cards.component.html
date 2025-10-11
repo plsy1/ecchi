@@ -61,6 +61,10 @@
           class="movie-img"
           (error)="onImageError($event)"
         />
+<div class="library-icon" *ngIf="inLibrary(movie.id)">
+  <i class="fas fa-check-circle"></i>
+</div>
+
         <div class="movie-info">
           <h3
             class="movie-title"

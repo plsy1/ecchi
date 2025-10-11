@@ -107,7 +107,7 @@ async def refresh_actress_feeds():
 
         for feed in feeds:
             name = feed.title
-            items = get_movie_info_by_actress_name(name, 1)
+            items = await get_movie_info_by_actress_name(name, 1)
             for item in items:
                 id = item.id
                 release_date_str = item.release_date

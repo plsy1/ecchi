@@ -57,7 +57,14 @@
           [src]="work.products[0].image_url || 'assets/placeholder.jpg'"
           [alt]="work.work_id"
           loading="lazy"
+          (load)="onImageLoad(work.title)"
         />
+
+
+
+        <div class="library-icon" *ngIf="libraryCache[work.title]">
+  <i class="fas fa-check-circle"></i>
+</div>
 
         <div class="movie-info">
           <h3 class="movie-title" matTooltip="{{ work.title }}">

@@ -164,6 +164,7 @@ button[mat-icon-button]:hover {
   position: relative;
   width: 100%;
   padding-top: 66.67%;
+  position: relative;
 }
 
 .movie-card:hover {
@@ -190,4 +191,26 @@ i {
 button {
   color: var(--text-color);
   background-color: var(--app-background);
+}
+
+.library-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  color: #4caf50;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border: 2px solid #4caf50; /* 绿色边框 */
+}
+
+.library-icon i {
+  color: #4caf50;
+  font-size: 1.5rem;
+  line-height: 1; /* 让图标本身高度紧凑，不受字体盒子影响 */
 }

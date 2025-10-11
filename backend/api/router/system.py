@@ -30,3 +30,8 @@ async def update_environment(
         return {"success": True, "message": "Environment updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/update_emby_movies_database")
+async def update(isValid: str = Depends(tokenInterceptor)):
+    update_emby_movies_in_db()
+

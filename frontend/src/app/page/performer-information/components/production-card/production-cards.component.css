@@ -16,6 +16,12 @@
   box-sizing: border-box;
 }
 
+
+
+.poster-image-wrapper {
+  position: relative;
+}
+
 .pagination-controls {
   display: flex;
   align-items: center;
@@ -43,7 +49,6 @@ button[mat-icon-button]:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-
 
 @media (max-width: 480px) {
   .top-bar,

@@ -7,11 +7,11 @@ import { AvbaseIndexData } from '../../models/page-explore';
 import { MatIconModule } from '@angular/material/icon';
 import { AvbaseEverydayReleaseByPrefix } from '../../models/avbase-everyday-release';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-avbase',
   standalone: true,
-  imports: [MatTabsModule, CommonModule, MatIconModule,MatTooltipModule],
+  imports: [MatTabsModule, CommonModule, MatIconModule, MatTooltipModule],
   templateUrl: './avbase.component.html',
   styleUrl: './avbase.component.css',
 })
@@ -19,6 +19,7 @@ export class AvbaseComponent implements OnInit {
   currentDate: Date = new Date();
   avbaseIndexData?: AvbaseIndexData;
   releaseData: AvbaseEverydayReleaseByPrefix[] = [];
+  libraryCache: { [title: string]: boolean | null } = {};
 
   constructor(
     private PageExploreService: PageExploreServiceService,
@@ -102,4 +103,13 @@ export class AvbaseComponent implements OnInit {
 
     this.loadEverydayReleaseData();
   }
+
+
+onImageLoad(title: string) {
+  if (this.libraryCache[title] != null) return; // 已请求过
+  this.libraryCache[title] = false; // 默认 false
+  this.PageExploreService.checkMovieExists(title).subscribe(exists => {
+    this.libraryCache[title] = exists;
+  });
+}
 }

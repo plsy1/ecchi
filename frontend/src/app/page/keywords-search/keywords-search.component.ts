@@ -24,7 +24,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatFormFieldModule,
     FormsModule,
     MatOptionModule,
-    MatSelectModule,MatTooltipModule
+    MatSelectModule,
+    MatTooltipModule,
   ],
   templateUrl: './keywords-search.component.html',
   styleUrl: './keywords-search.component.css',
@@ -36,6 +37,8 @@ export class KeywordsSearchComponent implements OnInit {
   page: number = 1;
 
   actressNumberFilter: string = '0';
+
+  libraryStatus: { [title: string]: boolean } = {};
 
   constructor(
     private keywordsService: KeywordsSearchService,
@@ -51,9 +54,18 @@ export class KeywordsSearchComponent implements OnInit {
         this.searchKeyWords === ''
       ) {
         this.discoverResults = this.keywordsService.discoverResults;
+        this.loadLibraryStatus();
       } else {
         this.loadDiscoverData(this.searchKeyWords, this.page);
       }
+    });
+  }
+
+  loadLibraryStatus() {
+    this.discoverResults?.forEach((movie) => {
+      this.keywordsService.checkMovieExists(movie.id).subscribe((exists) => {
+        this.libraryStatus[movie.id] = exists;
+      });
     });
   }
 
@@ -72,6 +84,7 @@ export class KeywordsSearchComponent implements OnInit {
       )
       .subscribe((data) => {
         this.discoverResults = data;
+        this.loadLibraryStatus();
         this.isLoading = false;
         this.keywordsService.saveState(
           this.discoverResults!,
@@ -115,5 +128,9 @@ export class KeywordsSearchComponent implements OnInit {
 
   onFilterChange(value: string) {
     this.keywordsService.actressNumberFilter = value;
+  }
+
+  inLibrary(id: string): boolean {
+    return !!this.libraryStatus[id]; // 同步返回缓存
   }
 }

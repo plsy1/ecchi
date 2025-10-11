@@ -1,6 +1,6 @@
 import { CommonService } from '../../../common.service';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams,HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -128,4 +128,27 @@ export class PerformerService {
       })
     );
   }
+
+    checkMovieExists(title: string): Observable<boolean> {
+      const url = `${this.common.apiUrl}/emby/exists?title=${encodeURIComponent(
+        title
+      )}`;
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
+      });
+  
+      return this.http.get<boolean>(url, { headers }).pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.common.logout();
+          }
+          console.error('Request Failed', error);
+          return throwError(() => new Error('Request Failed'));
+        })
+      );
+    }
+
+  
+
 }

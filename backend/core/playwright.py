@@ -33,6 +33,20 @@ class PlaywrightService:
                     extra_http_headers=extra_http_headers or self.default_headers,
                 )
 
+    async def stop(self):
+        async with self.lock:
+            if self.context:
+                await self.context.close()
+                self.context = None
+
+            if self.browser:
+                await self.browser.close()
+                self.browser = None
+
+            if self.playwright:
+                await self.playwright.stop()
+                self.playwright = None
+
     async def get_context(self, user_agent=None, extra_http_headers=None):
         if user_agent or extra_http_headers:
             return await self.browser.new_context(

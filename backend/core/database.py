@@ -52,6 +52,17 @@ class ActressCollect(Base):
     created_at = Column(DateTime, default=datetime.now)
 
 
+class EmbyMovie(Base):
+    __tablename__ = "emby_movies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    primary = Column(String)   
+    serverId = Column(String)
+    indexLink = Column(String) 
+    ProductionYear = Column(Integer)
+
+
 def initDatabase():
     """创建数据库表（如果不存在的话）"""
     Base.metadata.create_all(bind=engine)

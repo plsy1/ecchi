@@ -3,6 +3,16 @@ import json
 from typing import List, Dict
 from core.config import get_config
 from core.config import SYSTEM_IMAGE_PREFIX
+from core.database import get_db, EmbyMovie
+
+
+def is_movie_in_db_partial(title: str) -> bool:
+    db = next(get_db())
+    try:
+        exists = db.query(EmbyMovie).filter(EmbyMovie.name.ilike(f"%{title}%")).first()
+        return bool(exists)
+    finally:
+        db.close()
 
 
 def emby_request(path: str, params=None, method="GET", use_header=True) -> List[Dict]:
@@ -153,3 +163,46 @@ def emby_get_views() -> List[Dict]:
         return result
     except Exception as e:
         return
+
+
+def emby_get_all_movies() -> List[Dict]:
+    params = {
+        "Recursive": "true",
+        "IncludeItemTypes": "Movie",
+        "Fields": "BasicSyncInfo,CanDelete,CanDownload,PrimaryImageAspectRatio,ProductionYear",
+        "ImageTypeLimit": 1,
+        "EnableImageTypes": "Primary,Backdrop,Thumb",
+        "Limit": 500,
+        "SortBy": "DateCreated,SortName",
+        "SortOrder": "Descending",
+    }
+    try:
+        EMBY_URL = get_config("EMBY_URL")
+        userId = emby_get_userId_of_administrator()
+
+        info = emby_request(f"/Users/{userId}/Items", use_header=True, params=params)
+
+        result = []
+        for item in info.get("Items", []):
+            name = item.get("Name")
+            id = item.get("Id")
+            serverId = item.get("ServerId")
+            primary = f"{SYSTEM_IMAGE_PREFIX}{EMBY_URL}/Items/{id}/Images/Primary"
+            indexLink = f"{EMBY_URL}/web/index.html#!/item?id={id}&context=home&serverId={serverId}"
+            ProductionYear = item.get("ProductionYear")
+
+            result.append(
+                {
+                    "name": name,
+                    "primary": primary,
+                    "serverId": serverId,
+                    "indexLink": indexLink,
+                    "ProductionYear": ProductionYear,
+                }
+            )
+
+        return result
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return []
