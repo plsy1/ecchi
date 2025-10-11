@@ -27,7 +27,7 @@ jobs:
 
       - uses: docker/build-push-action@v6
         with:
-          file: ./Dockerfile
+          file: ./docker/Dockerfile
           push: true
           platforms: linux/amd64
           tags: |
@@ -58,7 +58,7 @@ jobs:
 
       - uses: docker/build-push-action@v6
         with:
-          file: ./Dockerfile
+          file: ./docker/Dockerfile
           push: true
           platforms: linux/arm64
           tags: |

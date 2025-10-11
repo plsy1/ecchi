@@ -27,10 +27,10 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends nginx supervisor && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY start.sh /app/start.sh
+COPY docker/start.sh /app/start.sh
 RUN chmod +x /app/start.sh
-COPY supervisord.conf /app/supervisord.conf
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY docker/supervisord.conf /app/supervisord.conf
+COPY docker/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 ENTRYPOINT ["bash", "/app/start.sh"]

@@ -2,7 +2,7 @@
 
 ### **Quick Start**
 
-1. Download the docker-compose.yml from [here](https://github.com/plsy1/ecchi/blob/main/compose.yml) to your server.
+1. Download the docker-compose.yml from [here](https://github.com/plsy1/ecchi/blob/main/docker/compose.yml) to your server.
 2. Run the following command to start all services:
 
 ```
