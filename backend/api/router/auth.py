@@ -30,30 +30,27 @@ def login_for_access_token(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.post("/refresh")
-async def refresh_token(refresh_token: str):
-    """
-    刷新access_token，如果refresh_token有效，则返回新的access_token。
-    """
-    user_data = tokenInterceptor(refresh_token)
+# @router.post("/refresh")
+# async def refresh_token(refresh_token: str):
+#     """
+#     刷新access_token，如果refresh_token有效，则返回新的access_token。
+#     """
+#     user_data = tokenInterceptor(refresh_token)
 
-    if not user_data:
-        raise HTTPException(status_code=401, detail="Invalid refresh token")
+#     if not user_data:
+#         raise HTTPException(status_code=401, detail="Invalid refresh token")
 
-    new_access_token = create_access_token(
-        data=user_data, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    )
+#     new_access_token = create_access_token(
+#         data=user_data, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+#     )
 
-    return {"access_token": new_access_token, "token_type": "bearer"}
+#     return {"access_token": new_access_token, "token_type": "bearer"}
 
 
 @router.post("/verify")
 async def verify(access_token: str = Form(...)):
 
-    user_data = tokenInterceptor(access_token)
-    if not user_data:
-        raise HTTPException(status_code=401, detail="Invalid access token")
-    return {"valid": "true"}
+    return is_token_expiration(access_token)
 
 
 @router.post("/changepassword")
@@ -72,17 +69,3 @@ def change_password_api(
         )
     except HTTPException as e:
         raise e
-
-
-@router.get("/getEnvironment")
-async def get_app_environment():
-    return get_environment()
-
-
-@router.post("/updateEnvironment")
-async def update_environment(env: dict = Body(...)):
-    try:
-        set_config(env)
-        return {"success": True, "message": "Environment updated successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))

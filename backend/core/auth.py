@@ -25,6 +25,28 @@ def verify_password(plain_password, hashed_password):
     )
 
 
+def change_password(db: Session, username: str, old_password: str, new_password: str):
+
+    user = get_user_by_username(db, username)
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+
+    if not verify_password(old_password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect old password",
+        )
+
+    user.password = hash_password(new_password)
+
+    db.commit()
+
+    return {"message": "Password updated successfully"}
+
 def get_user(db, username: str):
     if username in db:
         return db[username]
@@ -88,32 +110,25 @@ def create_root_user_if_not_exists(db: Session):
         LOG_INFO(f"root 用户已创建，密码为: {rawPass}")
 
 
-def change_password(db: Session, username: str, old_password: str, new_password: str):
-
-    user = get_user_by_username(db, username)
-
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found",
-        )
-
-    if not verify_password(old_password, user.password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect old password",
-        )
-
-    user.password = hash_password(new_password)
-
-    db.commit()
-
-    return {"message": "Password updated successfully"}
-
-
 def initUser():
     db = SessionLocal()
     try:
         create_root_user_if_not_exists(db)
     finally:
         db.close()
+
+
+def is_token_expiration(token: str) -> bool:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        exp = payload.get("exp")
+        if exp is None:
+            return False
+
+        if datetime.now(timezone.utc) > datetime.fromtimestamp(exp, tz=timezone.utc):
+            return False
+
+        return True
+
+    except JWTError:
+        return False

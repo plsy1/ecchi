@@ -66,15 +66,18 @@ export class PerformerService {
     const addFeedsUrl = `${this.common.apiUrl}/feed/addActressCollect`;
     const body = new HttpParams().set('avatar_url', url).set('name', title);
 
+    const accessToken = localStorage.getItem('access_token') ?? '';
+
     return this.http
       .post<any>(addFeedsUrl, body.toString(), {
         headers: new HttpHeaders().set(
           'Content-Type',
           'application/x-www-form-urlencoded'
-        ),
+        ).set('Authorization', `Bearer ${accessToken}`),
       })
       .pipe(
         catchError((err) => {
+          if (err.status === 401) this.common.logout();
           console.error('Error occurred while adding actress collect:', err);
           return throwError(() => err);
         })
@@ -92,15 +95,16 @@ export class PerformerService {
       .set('title', title)
       .set('description', description);
 
+    const accessToken = localStorage.getItem('access_token') ?? '';
     return this.http
       .post<any>(addFeedsUrl, body.toString(), {
-        headers: new HttpHeaders().set(
-          'Content-Type',
-          'application/x-www-form-urlencoded'
-        ),
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('Authorization', `Bearer ${accessToken}`),
       })
       .pipe(
         catchError((err) => {
+          if (err.status === 401) this.common.logout();
           console.error('Error occurred while adding RSS feed:', err);
           return throwError(() => err);
         })

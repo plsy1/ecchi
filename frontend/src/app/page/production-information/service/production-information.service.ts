@@ -44,12 +44,18 @@ export class ProductionInformationService {
       link,
     }).toString();
 
+    const accessToken = localStorage.getItem('access_token') ?? '';
+
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Bearer ${accessToken}`,
     });
 
     return this.http.post<any>(url, body, { headers }).pipe(
       catchError((error) => {
+        if (error.status === 401) {
+          this.common.logout();
+        }
         console.error('Error occurred while adding RSS feed:', error);
         const message =
           error.error?.detail || 'Error occurred while adding RSS feed';

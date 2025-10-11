@@ -40,15 +40,10 @@
   flex: 3; /* 10% */
 }
 
-.loading {
-  background-color: #ffeb3b;
-}
 .success {
   background-color: #4caf50;
 }
-.error {
-  background-color: #f44336;
-}
+
 
 mat-cell.indexer-column:hover,
 mat-cell.title-column:hover {

@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, map, throwError, Observable } from 'rxjs';
-
+import { of } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class CommonService {
-  // private isDev = !environment.production;
-  // apiUrl = this.isDev ? 'http://localhost:8964/api/v1' : '/api/v1';
   apiUrl = '/api/v1';
   public isJumpFromProductionPage: boolean = false;
   public currentPerformer: string = '';
@@ -49,4 +46,19 @@ export class CommonService {
     localStorage.removeItem('access_token');
     this.router.navigate(['/login']);
   }
+
+verifyTokenExpiration(): Observable<boolean> {
+  const url = `${this.apiUrl}/auth/verify`;
+  const accessToken = localStorage.getItem('access_token') ?? '';
+
+  const formData = new FormData();
+  formData.append('access_token', accessToken);
+
+  return this.http.post<boolean>(url, formData).pipe(
+    catchError(error => {
+      console.error('Token verification failed', error);
+      return of(false); // 出错时返回 false
+    })
+  );
+}
 }

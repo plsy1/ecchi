@@ -1,9 +1,9 @@
 <div class="table-container">
-  <mat-form-field appearance="outline" class="search-box">
+  <mat-form-field appearance="outline">
     <input matInput (input)="applyFilter($event)" placeholder="Filter" />
   </mat-form-field>
 
-  <mat-table [dataSource]="dataSource" matSort class="responsive-table">
+  <mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="indexer">
       <mat-header-cell *matHeaderCellDef mat-sort-header class="indexer-column">
         <i class="fas fa-database" matTooltip="Source"></i>
@@ -67,9 +67,7 @@
     <mat-row
       *matRowDef="let row; columns: displayedColumns"
       [ngClass]="{
-        loading: row.loading,
         success: row.success,
-        error: row.error
       }"
     ></mat-row>
   </mat-table>

@@ -23,8 +23,10 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 
-@router.post("/get_downloading_torrents")
-async def get():
+@router.post(
+    "/get_downloading_torrents",
+)
+async def get(isValid: str = Depends(tokenInterceptor)):
     QB_HOST = get_config("QB_HOST")
     QB_PORT = get_config("QB_PORT")
     QB_USERNAME = get_config("QB_USERNAME")
@@ -41,7 +43,11 @@ async def get():
 
 
 @router.post("/delete_torrent")
-async def delete(torrent_hash: str = Body(...), delete_files: bool = Body(True)):
+async def delete(
+    torrent_hash: str = Body(...),
+    delete_files: bool = Body(True),
+    isValid: str = Depends(tokenInterceptor),
+):
     QB_HOST = get_config("QB_HOST")
     QB_PORT = get_config("QB_PORT")
     QB_USERNAME = get_config("QB_USERNAME")
@@ -120,7 +126,7 @@ async def add_torrent_url(
             )
 
             if keywords != "":
-                movie_info = await get_actors_from_work(movie_link)
+                movie_info = await get_actors_from_work(movie_link,changeImagePrefix=False)
                 movie_details = DownloadInformation(keywords, movie_info)
                 imgURL = str(movie_info.props.pageProps.work.products[0].image_url)
                 TelegramBot.Send_Message_With_Image(

@@ -18,6 +18,7 @@ async def add_feed(
     img: str = Form(None),
     link: str = Form(None),
     db: Session = Depends(get_db),
+    isValid: str = Depends(tokenInterceptor),
 ):
     existing_keyword = db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
     if existing_keyword:
@@ -54,7 +55,11 @@ async def add_feed(
 
 
 @router.delete("/delKeywords")
-async def remove_feed(keyword: str = Form(...), db: Session = Depends(get_db)):
+async def remove_feed(
+    keyword: str = Form(...),
+    db: Session = Depends(get_db),
+    isValid: str = Depends(tokenInterceptor),
+):
     existing_keyword = db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
 
     if not existing_keyword:
@@ -75,6 +80,7 @@ async def add_rss_feed(
     title: str = Form(...),
     description: str = Form(None),
     db: Session = Depends(get_db),
+    isValid: str = Depends(tokenInterceptor),
 ):
 
     existing_feed = db.query(RSSFeed).filter(RSSFeed.url == url).first()
@@ -107,6 +113,7 @@ async def add_actress_collect(
     avatar_url: str = Form(...),
     name: str = Form(...),
     db: Session = Depends(get_db),
+    isValid: str = Depends(tokenInterceptor),
 ):
 
     existing_feed = (
@@ -138,7 +145,11 @@ async def add_actress_collect(
 
 
 @router.delete("/delFeeds")
-async def remove_rss_feed(url: str = Form(...), db: Session = Depends(get_db)):
+async def remove_rss_feed(
+    url: str = Form(...),
+    db: Session = Depends(get_db),
+    isValid: str = Depends(tokenInterceptor),
+):
     existing_feed = db.query(RSSFeed).filter(RSSFeed.url == url).first()
 
     if not existing_feed:
@@ -156,7 +167,11 @@ async def remove_rss_feed(url: str = Form(...), db: Session = Depends(get_db)):
 
 
 @router.delete("/delActressCollect")
-async def remove_actress_collect(url: str = Form(...), db: Session = Depends(get_db)):
+async def remove_actress_collect(
+    url: str = Form(...),
+    db: Session = Depends(get_db),
+    isValid: str = Depends(tokenInterceptor),
+):
     existing_feed = (
         db.query(ActressCollect).filter(ActressCollect.avatar_url == url).first()
     )
@@ -178,7 +193,9 @@ async def remove_actress_collect(url: str = Form(...), db: Session = Depends(get
 
 
 @router.get("/getKeywordsFeedList")
-async def get_keywords_feed_list(db: Session = Depends(get_db)):
+async def get_keywords_feed_list(
+    db: Session = Depends(get_db), isValid: str = Depends(tokenInterceptor)
+):
     try:
         feeds = (
             db.query(RSSItem)
@@ -197,7 +214,9 @@ async def get_keywords_feed_list(db: Session = Depends(get_db)):
 
 
 @router.get("/getDownloadedKeywordsFeedList")
-async def get_downloaded_keywords_feed_list(db: Session = Depends(get_db)):
+async def get_downloaded_keywords_feed_list(
+    db: Session = Depends(get_db), isValid: str = Depends(tokenInterceptor)
+):
     try:
         feeds = (
             db.query(RSSItem)
@@ -216,7 +235,9 @@ async def get_downloaded_keywords_feed_list(db: Session = Depends(get_db)):
 
 
 @router.get("/getFeedsList")
-async def get_feed_list(db: Session = Depends(get_db)):
+async def get_feed_list(
+    db: Session = Depends(get_db), isValid: str = Depends(tokenInterceptor)
+):
     try:
         feeds = db.query(RSSFeed).all()
         feeds_dicts = [
@@ -230,7 +251,10 @@ async def get_feed_list(db: Session = Depends(get_db)):
 
 
 @router.get("/getCollectList")
-async def get_collect_list(db: Session = Depends(get_db)):
+async def get_collect_list(
+    db: Session = Depends(get_db),
+    isValid: str = Depends(tokenInterceptor),
+):
     try:
         feeds = db.query(ActressCollect).all()
 

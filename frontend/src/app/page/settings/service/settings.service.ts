@@ -12,21 +12,38 @@ export class SettingsService {
   constructor(private common: CommonService, private http: HttpClient) {}
 
   updateEnvironment(env: EnvironmentConfig): Observable<boolean> {
-    const url = `${this.common.apiUrl}/auth/updateEnvironment`;
-    return this.http.post<{ success?: boolean }>(url, env).pipe(
+    const url = `${this.common.apiUrl}/system/updateEnvironment`;
+    const accessToken = localStorage.getItem('access_token') ?? '';
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
+    return this.http.post<{ success?: boolean }>(url, env, { headers }).pipe(
       map((data) => data.success ?? true),
       catchError((error) => {
         console.error('Error updating environment:', error);
+        if (error.status === 401) {
+          this.common.logout();
+        }
         return of(false);
       })
     );
   }
 
   getEnvironment(): Observable<EnvironmentConfig> {
-    const url = `${this.common.apiUrl}/auth/getEnvironment`;
-    return this.http.get<EnvironmentConfig>(url).pipe(
+    const url = `${this.common.apiUrl}/system/getEnvironment`;
+
+    const accessToken = localStorage.getItem('access_token') ?? '';
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${accessToken}`,
+    });
+    return this.http.get<EnvironmentConfig>(url, { headers }).pipe(
       catchError((error) => {
         console.error('Error fetching environment:', error);
+        if (error.status === 401) {
+          this.common.logout();
+        }
         throw error;
       })
     );
@@ -61,6 +78,9 @@ export class SettingsService {
     const url = `${this.common.apiUrl}/feed/refreshKeywordsFeeds`;
     return this.http.post<{ message: string }>(url, {}, { headers }).pipe(
       catchError((error) => {
+        if (error.status === 401) {
+          this.common.logout();
+        }
         console.error('Error refreshing keyword feeds:', error);
         return throwError(() => error);
       })

@@ -13,18 +13,38 @@ export class ProductionSubscriptionService {
 
   getKeywordFeeds(): Observable<KeywordFeed[]> {
     const url = `${this.common.apiUrl}/feed/getKeywordsFeedList`;
-    return this.http.get<KeywordFeed[]>(url).pipe(
-      catchError((error) => {
-        console.error('Error fetching keyword feeds:', error);
-        return throwError(() => error);
+    const accessToken = localStorage.getItem('access_token') ?? '';
+
+    return this.http
+      .get<KeywordFeed[]>(url, {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${accessToken}`,
+        }),
       })
-    );
+      .pipe(
+        catchError((error) => {
+          if (error.status === 401) {
+            this.common.logout();
+          }
+          console.error('Error fetching keyword feeds:', error);
+          return throwError(() => error);
+        })
+      );
   }
 
   getDownloadedKeywordsFeedListGet(): Observable<KeywordFeed[]> {
     const url = `${this.common.apiUrl}/feed/getDownloadedKeywordsFeedList`;
-    return this.http.get<KeywordFeed[]>(url).pipe(
+    const accessToken = localStorage.getItem('access_token') ?? '';
+    
+    return this.http.get<KeywordFeed[]>(url, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${accessToken}`,
+      }),
+    }).pipe(
       catchError((error) => {
+        if (error.status === 401) {
+          this.common.logout();
+        }
         console.error('Error fetching keyword feeds:', error);
         return throwError(() => error);
       })
@@ -35,19 +55,24 @@ export class ProductionSubscriptionService {
     const url = `${this.common.apiUrl}/feed/delKeywords`;
     const body = new HttpParams().set('keyword', keyword);
 
+    const accessToken = localStorage.getItem('access_token') ?? '';
+
     return this.http
       .delete(url, {
         body,
         headers: new HttpHeaders({
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/x-www-form-urlencoded',
         }),
       })
       .pipe(
         catchError((error) => {
           console.error('Error removing RSS feed:', error);
+          if (error.status === 401) {
+            this.common.logout();
+          }
           return throwError(() => error);
         })
       );
   }
-
 }

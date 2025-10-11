@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CommonService } from '../../../common.service';
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { DownloadingTorrent } from '../models/torrent.interface';
-
-
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +17,22 @@ export class DownloadService {
 
   getDownloadingTorrents(): Observable<DownloadingTorrent[]> {
     const url = `${this.common.apiUrl}/downloader/get_downloading_torrents`;
-    return this.http.post<DownloadingTorrent[]>(url, {});
+    const accessToken = localStorage.getItem('access_token') ?? '';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    });
+
+    return this.http.post<DownloadingTorrent[]>(url, {}, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.common.logout();
+        }
+        console.error('Request Failed', error);
+        return throwError(() => new Error('Request Failed'));
+      })
+    );
   }
 
   deleteTorrent(
@@ -22,9 +40,31 @@ export class DownloadService {
     deleteFiles: boolean = true
   ): Observable<any> {
     const url = `${this.common.apiUrl}/downloader/delete_torrent`;
-    return this.http.post<any>(url, {
-      torrent_hash: torrentHash,
-      delete_files: deleteFiles,
+
+    const accessToken = localStorage.getItem('access_token') ?? '';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
     });
+
+    return this.http
+      .post<any>(
+        url,
+        {
+          torrent_hash: torrentHash,
+          delete_files: deleteFiles,
+        },
+        { headers }
+      )
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.common.logout();
+          }
+          console.error('Request Failed', error);
+          return throwError(() => new Error('Request Failed'));
+        })
+      );
   }
 }

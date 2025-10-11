@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from core.auth import tokenInterceptor
 from enum import Enum
 from bs4 import BeautifulSoup
 import httpx
@@ -13,7 +14,7 @@ class RankingType(Enum):
 router = APIRouter()
 
 @router.get("/monthlyactress")
-async def fetch_actress_ranking(page: int = 1):
+async def fetch_actress_ranking(page: int = 1,isValid: str = Depends(tokenInterceptor)):
     headers = {
         "User-Agent": "Mozilla/5.0",
         "Referer": "https://www.dmm.co.jp/digital/videoa/-/ranking/=/type=actress/",
@@ -78,7 +79,7 @@ async def fetch_actress_ranking(page: int = 1):
         return actresses
     
 @router.get("/monthlyworks")
-async def fetch_dvd_ranking(page: int = 1, term: RankingType = RankingType.monthly):
+async def fetch_dvd_ranking(page: int = 1, term: RankingType = RankingType.monthly, isValid: str = Depends(tokenInterceptor)):
     
     base_url = "https://www.dmm.co.jp/digital/videoa/-/ranking/=/"
 

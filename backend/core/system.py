@@ -1,10 +1,15 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from io import BytesIO
 from datetime import datetime, timedelta
 import os
 import httpx
 from urllib.parse import urlparse, quote
 from typing import Any, List
+from core.database import get_user_by_username
+from sqlalchemy.orm import Session
+import bcrypt
+from core.config import *
+
 
 CACHE_EXPIRE_HOURS = 24
 CACHE_DIR = "data/cache_images"
@@ -49,7 +54,7 @@ def get_cache_path(url: str) -> str:
 
 def fetch_and_cache_image(url: str) -> tuple[BytesIO, dict]:
     """
-    核心逻辑：检查缓存、下载、返回 BytesIO 和 headers
+    检查缓存、下载、返回 BytesIO 和 headers
     """
     cache_path = get_cache_path(url)
 

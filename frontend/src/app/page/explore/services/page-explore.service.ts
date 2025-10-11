@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { catchError, throwError } from 'rxjs';
 import {
   RankingTypeOfWorks,
   ActressRanking,
@@ -98,7 +102,15 @@ export class PageExploreServiceService {
       Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
     });
 
-    return this.http.get<ActressRanking[]>(url, { headers });
+    return this.http.get<ActressRanking[]>(url, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.common.logout();
+        }
+        console.error('Request Failed', error);
+        return throwError(() => new Error('Request Failed'));
+      })
+    );
   }
 
   fetchWorkRanking(
@@ -111,7 +123,15 @@ export class PageExploreServiceService {
       Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
     });
 
-    return this.http.get<RankingItem[]>(url, { headers });
+    return this.http.get<RankingItem[]>(url, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.common.logout();
+        }
+        console.error('Request Failed', error);
+        return throwError(() => new Error('Request Failed'));
+      })
+    );
   }
 
   getAvbaseIndex(): Observable<any> {
@@ -121,7 +141,15 @@ export class PageExploreServiceService {
       Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
     });
 
-    return this.http.get(url, { headers });
+    return this.http.get(url, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.common.logout();
+        }
+        console.error('Request Failed', error);
+        return throwError(() => new Error('Request Failed'));
+      })
+    );
   }
 
   getAvbaseReleaseByDate(yyyymmdd: string): Observable<any> {
@@ -132,7 +160,15 @@ export class PageExploreServiceService {
       Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
     });
 
-    return this.http.get(url, { headers });
+    return this.http.get(url, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.common.logout();
+        }
+        console.error('Request Failed', error);
+        return throwError(() => new Error('Request Failed'));
+      })
+    );
   }
 
   getJavtrailersReleaseByDate(
@@ -140,10 +176,21 @@ export class PageExploreServiceService {
   ): Observable<JavtrailersDailyRelease> {
     const url = `${this.common.apiUrl}/javtrailers/getReleasebyDate?yyyymmdd=${yyyymmdd}`;
 
+    const accessToken = localStorage.getItem('access_token') ?? '';
+
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
     });
 
-    return this.http.get<JavtrailersDailyRelease>(url, { headers });
+    return this.http.get<JavtrailersDailyRelease>(url, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.common.logout();
+        }
+        console.error('Request Failed', error);
+        return throwError(() => new Error('Request Failed'));
+      })
+    );
   }
 }

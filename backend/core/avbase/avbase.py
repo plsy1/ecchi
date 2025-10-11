@@ -47,7 +47,9 @@ async def get_movie_info_by_keywords(keywords: str, page: int) -> List[Movie]:
     return await get_movies(url)
 
 
-async def get_actors_from_work(canonical_id: str) -> MovieInformation:
+async def get_actors_from_work(
+    canonical_id: str, changeImagePrefix: bool = True
+) -> MovieInformation:
     url = f"https://www.avbase.net/works/{canonical_id}"
     data = await get_next_data(url)
 
@@ -57,7 +59,8 @@ async def get_actors_from_work(canonical_id: str) -> MovieInformation:
         work["min_date"] = date_trans(min_date_str)
         data["props"]["pageProps"]["work"]["min_date"] = work["min_date"]
 
-    data = replace_domain_in_value(data, SYSTEM_IMAGE_PREFIX)
+    if changeImagePrefix:
+        data = replace_domain_in_value(data, SYSTEM_IMAGE_PREFIX)
 
     movie_info = MovieInformation(**data)
 
