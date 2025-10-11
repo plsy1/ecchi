@@ -57,20 +57,37 @@ export class ThemeService implements OnDestroy {
     this.applyTheme(this.currentTheme);
   }
 
+  private setMetaThemeColor(color: string) {
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'theme-color');
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', color);
+  }
+
   private applyTheme(mode: ThemeMode) {
     const body = document.body;
     body.classList.remove('light-theme', 'dark-theme');
 
+    let themeColor = '#faf9fd';
     if (mode === 'light') {
       body.classList.add('light-theme');
+      themeColor = '#faf9fd';
     } else if (mode === 'dark') {
       body.classList.add('dark-theme');
+      themeColor = '#1e1e1e';
     } else {
       if (this.mediaQueryList.matches) {
         body.classList.add('dark-theme');
+        themeColor = '#1e1e1e';
       } else {
         body.classList.add('light-theme');
+        themeColor = '#faf9fd';
       }
     }
+
+    this.setMetaThemeColor(themeColor);
   }
 }
