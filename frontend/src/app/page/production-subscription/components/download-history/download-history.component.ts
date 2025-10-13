@@ -48,7 +48,7 @@ export class DownloadHistoryComponent {
   }
 
   onUnsubscribeClick(): void {
-    this.ProductionSubscriptionService.getKeywordFeeds().subscribe({
+    this.ProductionSubscriptionService.getDownloadedKeywordsFeedListGet().subscribe({
       next: (data: KeywordFeed[]) => {
         this.keywordFeeds = data;
       },
