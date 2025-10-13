@@ -59,6 +59,9 @@
   flex-wrap: wrap;
   margin-bottom: 16px;
 }
+.social-icons a {
+  text-decoration: none;
+}
 
 .actress-info {
   display: flex;

@@ -6,6 +6,7 @@ import { PerformerService } from '../../service/performer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonService } from '../../../../common.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-performer-detials-card',
   standalone: true,
@@ -21,7 +22,8 @@ export class ActressInformationComponent {
     private getRoute: ActivatedRoute,
     private service: PerformerService,
     private snackBar: MatSnackBar,
-    private common: CommonService
+    private common: CommonService,
+        private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +71,10 @@ export class ActressInformationComponent {
         this.snackBar.open('Failed to add', 'Close', { duration: 2000 });
       },
     });
+  }
+
+  searchByName(): void {
+          this.router.navigate(['/torrents', this.name]);
   }
 
   getFaIcon(platform: string): string {

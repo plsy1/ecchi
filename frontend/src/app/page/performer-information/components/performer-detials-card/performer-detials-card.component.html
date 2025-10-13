@@ -3,7 +3,7 @@
     <!-- 左侧头像 -->
     <div class="avatar-section">
       <img
-        [src]="performerInformation?.avatar_url  || 'assets/favicon.ico'"
+        [src]="performerInformation?.avatar_url || 'assets/favicon.ico'"
         alt="Actress Avatar"
         class="actress-avatar-img"
       />
@@ -22,6 +22,13 @@
           matTooltip="Add to Collection"
         >
           <i class="fas fa-heart"></i>
+        </button>
+        <button
+          mat-icon-button
+          (click)="searchByName()"
+          matTooltip="Search Torrents"
+        >
+          <i class="fas fa-search"></i>
         </button>
       </div>
     </div>
