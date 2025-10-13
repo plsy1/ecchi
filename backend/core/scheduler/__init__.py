@@ -3,7 +3,11 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 from core.logs import logging
-from core.system.background_task import refresh_movies_feeds, update_emby_movies_in_db
+from services.background_task import (
+    refresh_feeds,
+    update_emby_movies_in_db,
+    clean_cache_dir,
+)
 
 
 class AppScheduler:
@@ -49,19 +53,27 @@ def init_app_scheduler() -> AppScheduler:
     app_scheduler.init()
 
     app_scheduler.add_job(
-        refresh_movies_feeds,
-        trigger=IntervalTrigger,
-        job_id="Feed",
-        name="Check Feed",
-        hours=7,
-    )
-
-    app_scheduler.add_job(
         update_emby_movies_in_db,
         trigger=IntervalTrigger,
         job_id="Emby",
         name="Update Emby Movies",
         hours=1,
+    )
+
+    app_scheduler.add_job(
+        clean_cache_dir,
+        trigger=IntervalTrigger,
+        job_id="Cache",
+        name="Clean Image Cache",
+        hours=3,
+    )
+
+    app_scheduler.add_job(
+        refresh_feeds,
+        trigger=IntervalTrigger,
+        job_id="Feed",
+        name="Check Feed",
+        hours=7,
     )
 
     logging.info("AppScheduler initialized with default jobs")

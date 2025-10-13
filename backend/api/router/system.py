@@ -4,7 +4,7 @@ from core.auth import tokenInterceptor
 from fastapi.responses import StreamingResponse
 from fastapi import Query
 import asyncio
-from core.system.background_task import *
+from services.background_task import *
 from core.system import *
 
 router = APIRouter()

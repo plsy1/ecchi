@@ -23,6 +23,8 @@ class ConfigManager:
         else:
             self.config = {}
 
+        self.config["CACHE_DIR"] = "data/cache_images"
+        self.config["CACHE_EXPIRE_HOURS"] = 24
         self.config["SECRET_KEY"] = "fuckyou"
         self.config["ALGORITHM"] = "HS256"
         self.config["ACCESS_TOKEN_EXPIRE_MINUTES"] = int(1440)

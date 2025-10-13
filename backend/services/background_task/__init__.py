@@ -2,13 +2,13 @@ import uuid, asyncio
 from core.database import get_db, RSSItem, RSSFeed
 from modules.metadata.prowlarr import Prowlarr
 from modules.downloader.qbittorrent import QB
-from datetime import datetime
 from core.config import _config
 from modules.notification.telegram.text import *
 from modules.metadata.avbase import *
 from core.database import get_db, EmbyMovie
 from modules.mediaServer.emby import emby_get_all_movies
 from core.logs import LOG_ERROR
+from datetime import datetime, timedelta
 
 
 async def refresh_movies_feeds():
@@ -194,3 +194,15 @@ def update_emby_movies_in_db():
         LOG_ERROR(f"Error updating Emby movies: {e}")
     finally:
         db.close()
+
+
+def clean_cache_dir(max_age_hours=48):
+    from pathlib import Path
+
+    CACHE_DIR = _config.get("CACHE_DIR")
+    now = datetime.now()
+    for f in Path(CACHE_DIR).glob("*"):
+        if now - datetime.fromtimestamp(f.stat().st_mtime) > timedelta(
+            hours=max_age_hours
+        ):
+            f.unlink()
