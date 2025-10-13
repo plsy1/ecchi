@@ -9,14 +9,6 @@
   box-sizing: border-box;
   overflow: hidden;
 }
-.movie-left,
-.movie-right {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  box-sizing: border-box;
-  overflow: hidden;
-}
 
 .movie-left {
   flex: 1 1 100%;
@@ -28,11 +20,7 @@
   max-width: 38%;
 }
 
-.movie-cover {
-  width: 100%;
-  overflow: hidden;
-  border-radius: 10px;
-}
+
 
 .movie-cover-img {
   width: 100%;
@@ -64,7 +52,6 @@
 
 .other-info {
   display: grid;
-  gap: 8px 20px;
   margin: 0;
   padding: 10px;
   border: 1px solid #ccc;
@@ -139,13 +126,8 @@
 
 .actor-name {
   margin-top: 4px;
-  cursor: pointer;
   font-size: 12px;
   line-height: 1.2;
-  text-align: center;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  width: 100%;
 }
 
 .sample-images {
@@ -161,26 +143,9 @@
   gap: 10px;
   height: 100%;
   align-items: center;
-  padding: 0;
-  margin: 0;
-  scrollbar-width: thin;
 }
 
-.sample-image-list::-webkit-scrollbar {
-  height: 6px;
-}
 
-.sample-image-list::-webkit-scrollbar-thumb {
-  border-radius: 3px;
-}
-
-.sample-image {
-  height: 100%;
-  width: auto;
-  object-fit: contain;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
 
 @media (max-width: 480px) {
   .movie-actions {
