@@ -5,6 +5,7 @@ import os
 import httpx
 from urllib.parse import urlparse, quote
 from typing import Any, List
+
 CACHE_EXPIRE_HOURS = 24
 CACHE_DIR = "data/cache_images"
 os.makedirs(CACHE_DIR, exist_ok=True)
@@ -80,3 +81,14 @@ def fetch_and_cache_image(url: str) -> tuple[BytesIO, dict]:
         "ETag": etag,
     }
     return BytesIO(resp.content), headers
+
+
+def clean_cache_dir(max_age_hours=48):
+    from pathlib import Path
+
+    now = datetime.now()
+    for f in Path(CACHE_DIR).glob("*"):
+        if now - datetime.fromtimestamp(f.stat().st_mtime) > timedelta(
+            hours=max_age_hours
+        ):
+            f.unlink()

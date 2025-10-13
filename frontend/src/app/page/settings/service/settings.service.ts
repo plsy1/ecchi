@@ -45,7 +45,7 @@ export class SettingsService {
   refreshKeywordsFeeds(): Observable<{ message: string }> {
     return this.common.request<{ message: string }>(
       'POST',
-      'feed/refreshKeywordsFeeds',
+      'system/refreshKeywordsFeeds',
       {
         body: {},
       }

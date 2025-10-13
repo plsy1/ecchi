@@ -6,12 +6,14 @@ router = APIRouter()
 import re
 def extract_jav_code(title: str) -> str:
     """
-    提取 JAV 番号，例如 "EKDV-795"、"ABP-123" 等。
-    返回找到的第一个番号，没找到返回原始 title
+    提取 JAV 番号，例如 "EKDV-795"、"ABP-123"、或不带横杠的 "EKDV795"。
+    返回找到的第一个番号，没找到返回原始 title。
     """
-    match = re.search(r'[A-Z]{2,5}-\d{1,4}', title, re.IGNORECASE)
+    # 匹配带横杠或不带横杠的番号
+    match = re.search(r'([A-Z]{2,5})-?(\d{1,4})', title, re.IGNORECASE)
     if match:
-        return match.group(0).upper()
+        code = match.group(1).upper() + '-' + match.group(2)
+        return code
     return title.upper()
 
 
@@ -40,4 +42,4 @@ async def get_latest(isValid: str = Depends(tokenInterceptor)):
 async def exists(title: str, isValid: str = Depends(tokenInterceptor)):
     jav_code = extract_jav_code(title)
     exists_flag, index_link = is_movie_in_db_partial(jav_code)
-    return {"exists": exists_flag, "indexLink": index_link}
+    return {"exists": exists_flag, "indexLink": index_link,"code": jav_code}

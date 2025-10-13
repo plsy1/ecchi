@@ -8,6 +8,7 @@ from core.database import initDatabase
 from core.auth import initUser
 from core.scheduler import init_scheduler_service
 from core.playwright import init_playwright_service
+from modules.notification.telegram import init_telegram_bot
 
 
 def Init():
@@ -20,11 +21,15 @@ async def lifespan(app: FastAPI):
     Init()
     scheduler = init_scheduler_service()
     playwright = await init_playwright_service()
+    tgbot = await init_telegram_bot(
+        _config.get("TELEGRAM_TOKEN", ""), _config.get("TELEGRAM_CHAT_ID", "")
+    )
     initRouter()
 
     try:
         yield
     finally:
+        await tgbot.shutdown()
         await playwright.stop()
         scheduler.shutdown()
 

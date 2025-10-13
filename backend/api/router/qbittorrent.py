@@ -132,7 +132,8 @@ async def add_torrent_url(
                 )
                 movie_details = DownloadInformation(keywords, movie_info)
                 imgURL = str(movie_info.props.pageProps.work.products[0].image_url)
-                TelegramBot.Send_Message_With_Image(
+                from modules.notification.telegram import _telegram_bot
+                await _telegram_bot.send_message_with_image(
                     imgURL,
                     movie_details,
                 )

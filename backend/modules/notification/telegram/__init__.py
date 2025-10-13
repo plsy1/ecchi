@@ -1,101 +1,61 @@
 import telebot
-from core.config import _config
-from modules.metadata.avbase.model import Actress, MovieInformation
+from typing import Optional
+import threading
 
 
 class TelegramBot:
-    @staticmethod
-    def get_bot():
-        token = _config.get("TELEGRAM_TOKEN", "")
-        return telebot.TeleBot(token=token) if token else None
+    def __init__(self, token: str, chat_id: str):
+        self.token = token
+        self.chat_id = chat_id
+        self.bot: Optional[telebot.TeleBot] = None
+        self._polling_thread: Optional[threading.Thread] = None
 
-    @staticmethod
-    def Send_Message_With_Image(img, message):
-        bot = TelegramBot.get_bot()
-        if not bot:
+    async def start(self):
+        if self.token:
+            self.bot = telebot.TeleBot(self.token)
+
+    async def shutdown(self):
+        self.bot = None
+
+    def start_handle_message(self):
+        self.bot.message_handler(func=lambda message: True)(self._handle_text_message)
+        self._polling_thread = threading.Thread(
+            target=self.bot.polling, kwargs={"none_stop": True}
+        )
+        self._polling_thread.daemon = True
+        self._polling_thread.start()
+
+    def _handle_text_message(self, message):
+        text = message.text
+        chat_id = message.chat.id
+        print(f"Received: {text} from {chat_id}")
+        if self.bot:
+            self.bot.send_message(chat_id, f"You said: {text}", parse_mode="Markdown")
+
+    async def send_message(self, message: str):
+        if not self.bot:
             return
-        chat_id = _config.get("TELEGRAM_CHAT_ID", "")
-        bot.send_photo(chat_id, img, caption=message, parse_mode='Markdown')
+        self.bot.send_message(self.chat_id, message, parse_mode="Markdown")
 
-    @staticmethod
-    def Send_Message(message):
-        bot = TelegramBot.get_bot()
-        if not bot:
+    async def send_message_with_image(self, img, message: str):
+        if not self.bot:
             return
-        chat_id = _config.get("TELEGRAM_CHAT_ID", "")
-        bot.send_message(chat_id, message, parse_mode='Markdown')
-
-def actressInformation(name, actress_info: Actress):
-    actress_details = f"*【添加订阅】*: {name}\n"
-    
-    if actress_info.birthday:
-        actress_details += f"**出生日期**: {actress_info.birthday}\n"
-    if actress_info.prefectures:
-        actress_details += f"**出生地**: {actress_info.prefectures}\n"
-    if actress_info.height:
-        actress_details += f"**身高**: {actress_info.height}\n"
-    if actress_info.hobby:
-        actress_details += f"**兴趣爱好**: {actress_info.hobby}\n"
-    if actress_info.blood_type:
-        actress_details += f"**血型**: {actress_info.blood_type}\n"
-    if actress_info.aliases:
-        aliases = ', '.join(actress_info.aliases)
-        actress_details += f"**别名**: {aliases}\n"
-    return actress_details
+        self.bot.send_photo(self.chat_id, img, caption=message, parse_mode="Markdown")
 
 
-def movieInformation(keyword: str, movie_info: MovieInformation) -> str:
-    work = movie_info.props.pageProps.work
-    genres = movie_info.props.pageProps.work.genres
+_telegram_bot: TelegramBot | None = None
 
-    movie_details = f"*【添加订阅】*: {keyword}\n"
 
-    if work.title:
-        movie_details += f"*标题*: {work.title}\n"
-    if work.products and work.products[0].maker and work.products[0].maker.name:
-        movie_details += f"*制造商*: {work.products[0].maker.name}\n"
-    if work.products[0].label.name:
-        movie_details += f"*厂牌*: {work.products[0].label.name}\n"
-    if work.min_date:
-        movie_details += f"*发布日期*: {work.min_date}\n"
-    if genres:
-        genres_names = ', '.join([genre.name for genre in genres if genre.name])
-        movie_details += f"*标签*: {genres_names}\n"
-    if work.products and work.products[0].iteminfo and work.products[0].iteminfo.price:
-        movie_details += f"*价格*: {work.products[0].iteminfo.price}\n"
-    if work.products and work.products[0].iteminfo and work.products[0].iteminfo.volume:
-        movie_details += f"*时长*: {work.products[0].iteminfo.volume} 分钟\n"
+async def init_telegram_bot(token: str, chat_id: str) -> TelegramBot:
+    global _telegram_bot
+    if _telegram_bot is None:
+        _telegram_bot = TelegramBot(token, chat_id)
+        await _telegram_bot.start()
+    return _telegram_bot
 
-    if work.casts:
-        actors = ', '.join(cast.actor.name for cast in work.casts if cast.actor.name)
-        movie_details += f"*演员*: {actors}\n"
 
-    return movie_details
-    
-def DownloadInformation(keyword: str, movie_info: MovieInformation) -> str:
-    work = movie_info.props.pageProps.work
-    genres = movie_info.props.pageProps.work.genres
-    
-    movie_details = f"*【开始下载】*: {keyword}\n"
-
-    if work.title:
-        movie_details += f"*标题*: {work.title}\n"
-    if work.products and work.products[0].maker and work.products[0].maker.name:
-        movie_details += f"*制造商*: {work.products[0].maker.name}\n"
-    if work.products[0].label.name:
-        movie_details += f"*厂牌*: {work.products[0].label.name}\n"
-    if work.min_date:
-        movie_details += f"*发布日期*: {work.min_date}\n"
-    if genres:
-        genres_names = ', '.join([genre.name for genre in genres if genre.name])
-        movie_details += f"*标签*: {genres_names}\n"
-    if work.products and work.products[0].iteminfo and work.products[0].iteminfo.price:
-        movie_details += f"*价格*: {work.products[0].iteminfo.price}\n"
-    if work.products and work.products[0].iteminfo and work.products[0].iteminfo.volume:
-        movie_details += f"*时长*: {work.products[0].iteminfo.volume} 分钟\n"
-
-    if work.casts:
-        actors = ', '.join(cast.actor.name for cast in work.casts if cast.actor.name)
-        movie_details += f"*演员*: {actors}\n"
-        
-    return movie_details
+async def shutdown_telegram_bot():
+    global _telegram_bot
+    if _telegram_bot:
+        await _telegram_bot.shutdown()
+        _telegram_bot = None

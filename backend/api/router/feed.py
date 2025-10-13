@@ -1,11 +1,12 @@
-from fastapi import APIRouter, HTTPException, Depends, Form, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Response, Depends, Form
 from core.auth import *
 from sqlalchemy.orm import Session
 from core.database import RSSItem, RSSFeed, ActressCollect, get_db
-from modules.notification.telegram import *
+from modules.notification.telegram.text import *
 from modules.metadata.avbase import *
 from core.config import _config
 from core.system import replace_domain_in_value
+from services.feed import *
 
 router = APIRouter()
 
@@ -19,41 +20,13 @@ async def add_feed(
     db: Session = Depends(get_db),
     isValid: str = Depends(tokenInterceptor),
 ):
-    existing_keyword = db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
-    if existing_keyword:
-        try:
-            existing_keyword.downloaded = False
-            db.commit()
-            db.refresh(existing_keyword)
-            movie_info = await get_actors_from_work(link,changeImagePrefix=False)
-            movie_details = movieInformation(keyword, movie_info)
-            imgURL = str(movie_info.props.pageProps.work.products[0].image_url)
-            TelegramBot.Send_Message_With_Image(imgURL, movie_details)
-            return {
-                "message": f"Keyword {keyword} already exists, updated 'downloaded' to False."
-            }
-        except Exception as e:
-            print(e)
-            db.rollback()
-            raise HTTPException(
-                status_code=500, detail=f"Error updating feed: {str(e)}"
-            )
+
+    r = await add_movie_feed(actors, keyword, img, link, db)
+
+    if r:
+        return Response(status_code=status.HTTP_200_OK)
     else:
-        new_feed = RSSItem(
-            actors=actors, keyword=keyword, img=img, link=link, downloaded=False
-        )
-        try:
-            db.add(new_feed)
-            db.commit()
-            db.refresh(new_feed)
-            movie_info = await get_actors_from_work(link,changeImagePrefix=False)
-            movie_details = movieInformation(keyword, movie_info)
-            imgURL = str(movie_info.props.pageProps.work.products[0].image_url)
-            TelegramBot.Send_Message_With_Image(imgURL, movie_details)
-            return {"message": f"Successfully added keyword: {keyword}"}
-        except Exception as e:
-            db.rollback()
-            raise HTTPException(status_code=500, detail=f"Error adding feed: {str(e)}")
+        return Response(status_code=status.HTTP_400_BAD_REQUEST)
 
 
 @router.delete("/delKeywords")
@@ -62,18 +35,12 @@ async def remove_feed(
     db: Session = Depends(get_db),
     isValid: str = Depends(tokenInterceptor),
 ):
-    existing_keyword = db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
+    r = await remove_movie_feed(keyword, db)
 
-    if not existing_keyword:
-        raise HTTPException(status_code=404, detail="Keyword not found.")
-
-    try:
-        db.delete(existing_keyword)
-        db.commit()
-        return {"message": f"Successfully removed keyword: {keyword}"}
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error removing feed: {str(e)}")
+    if r:
+        return Response(status_code=status.HTTP_200_OK)
+    else:
+        return Response(status_code=status.HTTP_400_BAD_REQUEST)
 
 
 @router.post("/addFeeds")
@@ -85,31 +52,12 @@ async def add_rss_feed(
     isValid: str = Depends(tokenInterceptor),
 ):
 
-    existing_feed = db.query(RSSFeed).filter(RSSFeed.url == avatar_img_url).first()
-    if existing_feed:
-        raise HTTPException(status_code=400, detail="RSS feed already exists.")
+    r = await add_performer_feed(avatar_img_url, actor_name, description, db)
 
-    new_feed = RSSFeed(url=avatar_img_url, title=actor_name, description=description)
-
-    try:
-        db.add(new_feed)
-        db.commit()
-        db.refresh(new_feed)
-
-        actress_info = await get_actress_info_by_actress_name(
-            actor_name, changeImagePrefix=False
-        )
-        actress_details = actressInformation(actor_name, actress_info)
-
-        TelegramBot.Send_Message_With_Image(actress_info.avatar_url, actress_details)
-        return {
-            "message": f"Successfully added RSS feed: {actor_name}",
-            "feed_id": new_feed.id,
-        }
-
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error adding RSS feed: {str(e)}")
+    if r:
+        return Response(status_code=status.HTTP_200_OK)
+    else:
+        return Response(status_code=status.HTTP_400_BAD_REQUEST)
 
 
 @router.post("/addActressCollect")
@@ -171,9 +119,7 @@ async def remove_actress_collect(
     db: Session = Depends(get_db),
     isValid: str = Depends(tokenInterceptor),
 ):
-    existing_feed = (
-        db.query(ActressCollect).filter(ActressCollect.name == name).first()
-    )
+    existing_feed = db.query(ActressCollect).filter(ActressCollect.name == name).first()
 
     if not existing_feed:
         raise HTTPException(status_code=404, detail="Actress not found.")

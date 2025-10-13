@@ -43,7 +43,7 @@ async def refresh_keywords(
     isValid: str = Depends(tokenInterceptor), background_tasks: BackgroundTasks = None
 ):
     try:
-        background_tasks.add_task(refresh_movies_feeds)
+        background_tasks.add_task(refresh_actress_feeds)
         return {"message": "Feeds refreshed and torrents added successfully"}
 
     except Exception as e:

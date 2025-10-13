@@ -40,7 +40,7 @@ export class MovieCardComponent {
   }
 
   onClick() {
-    this.movieClick.emit(this.id);
+    this.movieClick.emit(this.id || this.title);
   }
 
   get showImage(): boolean {

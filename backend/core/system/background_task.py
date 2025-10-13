@@ -4,7 +4,7 @@ from modules.metadata.prowlarr import Prowlarr
 from modules.downloader.qbittorrent import QB
 from datetime import datetime
 from core.config import _config
-from modules.notification.telegram import *
+from modules.notification.telegram.text import *
 from modules.metadata.avbase import *
 from core.database import get_db, EmbyMovie
 from modules.mediaServer.emby import emby_get_all_movies
@@ -84,7 +84,9 @@ async def refresh_movies_feeds():
                     movie_link, changeImagePrefix=False
                 )
                 movie_details = DownloadInformation(keyword, movie_info)
-                TelegramBot.Send_Message_With_Image(
+                from modules.notification.telegram import _telegram_bot
+
+                await _telegram_bot.send_message_with_image(
                     str(movie_info.props.pageProps.work.products[0].image_url),
                     movie_details,
                 )
@@ -93,13 +95,14 @@ async def refresh_movies_feeds():
         return
 
     except Exception as e:
-        LOG_ERROR(f"Unexpected error: {e}", flush=True)
+        LOG_ERROR(e)
         return
 
 
 async def refresh_actress_feeds():
     try:
         db = next(get_db())
+
         feeds = db.query(RSSFeed).all()
         if not feeds:
             return
@@ -123,39 +126,42 @@ async def refresh_actress_feeds():
                 continue
 
             item = valid_items[-1]
-            rss_item = RSSItem(
-                actors=",".join(item.actors),
-                keyword=item.id,
-                img=str(item.img_url),
-                link=str(item.full_id),
-                downloaded=False,
-            )
+            existing_feed = db.query(RSSItem).filter_by(keyword=item.id).first()
+            if existing_feed:
+                existing_feed.img = str(item.img_url)
+                existing_feed.link = str(item.full_id)
+                db.add(existing_feed)
+                rss_item = existing_feed
+            else:
+                rss_item = RSSItem(
+                    actors=",".join(item.actors),
+                    keyword=item.id,
+                    img=str(item.img_url),
+                    link=str(item.full_id),
+                    downloaded=False,
+                )
+                db.add(rss_item)
 
             try:
-                existing_feed = db.query(RSSItem).filter_by(keyword=item.id).first()
-                if existing_feed:
-                    existing_feed.img = rss_item.img
-                    existing_feed.link = rss_item.link
-                else:
-                    db.add(rss_item)
-
                 db.commit()
                 db.refresh(rss_item)
-
                 movie_info = await get_actors_from_work(
                     rss_item.link, changeImagePrefix=False
                 )
                 movie_details = movieInformation(rss_item.keyword, movie_info)
-                TelegramBot.Send_Message_With_Image(rss_item.img, movie_details)
+
+                from modules.notification.telegram import _telegram_bot
+
+                await _telegram_bot.send_message_with_image(rss_item.img, movie_details)
 
             except Exception as e:
                 db.rollback()
-                LOG_ERROR(f"DB error: {e}", flush=True)
+                LOG_ERROR(e)
 
             await asyncio.sleep(5)
 
     except Exception as e:
-        LOG_ERROR(f"Unexpected error: {e}", flush=True)
+        LOG_ERROR(e)
 
 
 async def refresh_feeds():
@@ -167,7 +173,7 @@ def update_emby_movies_in_db():
     db = next(get_db())
     try:
         movies: List[dict] = emby_get_all_movies()
-
+        print("hello")
         db.query(EmbyMovie).delete()
         db.commit()
 
