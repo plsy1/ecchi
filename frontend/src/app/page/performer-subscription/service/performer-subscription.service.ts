@@ -12,9 +12,10 @@ export class PerformerSubscriptionService {
     return this.common.request<any>('GET', 'feed/getCollectList');
   }
 
-  removeActressCollect(urlParam: string): Observable<any> {
+  removeActressCollect(nameParam: string): Observable<any> {
     return this.common.request<any>('DELETE', 'feed/delActressCollect', {
-      body: new URLSearchParams({ url: urlParam }).toString(),
+
+      body: new URLSearchParams({ name: nameParam }).toString(),
       acceptJson: true,
     });
   }

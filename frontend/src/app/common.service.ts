@@ -80,7 +80,7 @@ export class CommonService {
           .pipe(catchError(handleError));
       case 'DELETE':
         return this.http
-          .delete<T>(url, { headers, params: httpParams })
+          .delete<T>(url, { headers, params: httpParams, body })
           .pipe(catchError(handleError));
       default:
         return this.http

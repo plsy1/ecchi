@@ -25,13 +25,15 @@ async def add_feed(
             existing_keyword.downloaded = False
             db.commit()
             db.refresh(existing_keyword)
-            movie_info = await get_actors_from_work(link)
+            movie_info = await get_actors_from_work(link,changeImagePrefix=False)
             movie_details = movieInformation(keyword, movie_info)
-            TelegramBot.Send_Message_With_Image(img, movie_details)
+            imgURL = str(movie_info.props.pageProps.work.products[0].image_url)
+            TelegramBot.Send_Message_With_Image(imgURL, movie_details)
             return {
                 "message": f"Keyword {keyword} already exists, updated 'downloaded' to False."
             }
         except Exception as e:
+            print(e)
             db.rollback()
             raise HTTPException(
                 status_code=500, detail=f"Error updating feed: {str(e)}"
@@ -44,9 +46,10 @@ async def add_feed(
             db.add(new_feed)
             db.commit()
             db.refresh(new_feed)
-            movie_info = await get_actors_from_work(link)
+            movie_info = await get_actors_from_work(link,changeImagePrefix=False)
             movie_details = movieInformation(keyword, movie_info)
-            TelegramBot.Send_Message_With_Image(img, movie_details)
+            imgURL = str(movie_info.props.pageProps.work.products[0].image_url)
+            TelegramBot.Send_Message_With_Image(imgURL, movie_details)
             return {"message": f"Successfully added keyword: {keyword}"}
         except Exception as e:
             db.rollback()
@@ -164,12 +167,12 @@ async def remove_rss_feed(
 
 @router.delete("/delActressCollect")
 async def remove_actress_collect(
-    url: str = Form(...),
+    name: str = Form(...),
     db: Session = Depends(get_db),
     isValid: str = Depends(tokenInterceptor),
 ):
     existing_feed = (
-        db.query(ActressCollect).filter(ActressCollect.avatar_url == url).first()
+        db.query(ActressCollect).filter(ActressCollect.name == name).first()
     )
 
     if not existing_feed:

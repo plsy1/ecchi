@@ -10,7 +10,13 @@ import { MovieCardComponent } from '../../../../shared/movie-card/movie-card.com
 @Component({
   selector: 'app-download-history',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltip,MatMenuModule,MovieCardComponent],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatTooltip,
+    MatMenuModule,
+    MovieCardComponent,
+  ],
   templateUrl: './download-history.component.html',
   styleUrl: './download-history.component.css',
 })
@@ -41,26 +47,13 @@ export class DownloadHistoryComponent {
     }
   }
 
-  onUnsubscribeClick(event: MouseEvent, movie: KeywordFeed): void {
-    event.stopPropagation();
-
-    this.ProductionSubscriptionService.removeKeywordsRSS(
-      movie.keyword
-    ).subscribe({
-      next: () => {
-        this.ProductionSubscriptionService.getDownloadedKeywordsFeedListGet().subscribe(
-          {
-            next: (data: KeywordFeed[]) => {
-              this.keywordFeeds = data;
-            },
-            error: (error) => {
-              console.error('Error fetching keywords feed list', error);
-            },
-          }
-        );
+  onUnsubscribeClick(): void {
+    this.ProductionSubscriptionService.getKeywordFeeds().subscribe({
+      next: (data: KeywordFeed[]) => {
+        this.keywordFeeds = data;
       },
       error: (error) => {
-        console.error('Failed to remove RSS feed:', error);
+        console.error('Error fetching keywords feed list', error);
       },
     });
   }

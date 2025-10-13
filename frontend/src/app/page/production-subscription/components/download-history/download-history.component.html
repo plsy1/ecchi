@@ -6,9 +6,9 @@
       [imgUrl]="movie.img"
       [actors]="movie.actors.split(',') || []"
       (movieClick)="onMovieCardClick(movie)"
+      (movieDelete)="onUnsubscribeClick()"
       [showID]="false"
       [showDetialButton]="true"
     ></app-movie-card>
   </div>
 </div>
-

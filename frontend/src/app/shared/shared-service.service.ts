@@ -30,4 +30,11 @@ export class SharedServiceService {
       })
     );
   }
+
+  removeKeywordsRSS(keyword: string): Observable<any> {
+    return this.common.request<any>('DELETE', 'feed/delKeywords', {
+      body: new URLSearchParams({ keyword }).toString(),
+      acceptJson: true,
+    });
+  }
 }

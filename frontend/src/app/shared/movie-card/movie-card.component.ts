@@ -28,6 +28,7 @@ export class MovieCardComponent {
   imageLoaded = false;
 
   @Output() movieClick = new EventEmitter<string>();
+  @Output() movieDelete = new EventEmitter<string>();
 
   constructor(
     private shareService: SharedServiceService,
@@ -76,7 +77,16 @@ export class MovieCardComponent {
     this.router.navigate(['/performer', actor]);
   }
 
-  onUnsubscribeClick(event: MouseEvent) {
+  onUnsubscribeClick(event: MouseEvent): void {
     event.stopPropagation();
+
+    this.shareService.removeKeywordsRSS(this.title).subscribe({
+      next: () => {
+        this.movieDelete.emit();
+      },
+      error: (error) => {
+        console.error('Failed to remove RSS feed:', error);
+      },
+    });
   }
 }

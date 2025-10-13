@@ -10,7 +10,13 @@ import { MovieCardComponent } from '../../../../shared/movie-card/movie-card.com
 @Component({
   selector: 'app-production-subscription-list',
   standalone: true,
-  imports: [MatIconModule, CommonModule, MatMenuModule,MatTooltip,MovieCardComponent],
+  imports: [
+    MatIconModule,
+    CommonModule,
+    MatMenuModule,
+    MatTooltip,
+    MovieCardComponent,
+  ],
   templateUrl: './subscription.component.html',
   styleUrl: './subscription.component.css',
 })
@@ -33,24 +39,13 @@ export class ProductionSubscriptionListComponent implements OnInit {
     });
   }
 
-  onUnsubscribeClick(event: MouseEvent, movie: KeywordFeed): void {
-    event.stopPropagation();
-
-    this.ProductionSubscriptionService.removeKeywordsRSS(
-      movie.keyword
-    ).subscribe({
-      next: () => {
-        this.ProductionSubscriptionService.getKeywordFeeds().subscribe({
-          next: (data: KeywordFeed[]) => {
-            this.keywordFeeds = data;
-          },
-          error: (error) => {
-            console.error('Error fetching keywords feed list', error);
-          },
-        });
+  onUnsubscribeClick(): void {
+    this.ProductionSubscriptionService.getKeywordFeeds().subscribe({
+      next: (data: KeywordFeed[]) => {
+        this.keywordFeeds = data;
       },
       error: (error) => {
-        console.error('Failed to remove RSS feed:', error);
+        console.error('Error fetching keywords feed list', error);
       },
     });
   }

@@ -58,7 +58,7 @@ export class PerformerCollectionListComponent {
     event.stopPropagation();
 
     this.PerformerSubscriptionService.removeActressCollect(
-      movie.avatar_url
+      movie.name
     ).subscribe({
       next: () => {
         this.snackBar.open('Unsubscribed successfully', 'Close', {
