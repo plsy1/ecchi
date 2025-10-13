@@ -5,10 +5,12 @@ import { KeywordFeed } from '../../models/production-subscription.interface';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MovieCardComponent } from '../../../../shared/movie-card/movie-card.component';
 @Component({
   selector: 'app-download-history',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltip],
+  imports: [CommonModule, MatIconModule, MatTooltip,MatMenuModule,MovieCardComponent],
   templateUrl: './download-history.component.html',
   styleUrl: './download-history.component.css',
 })

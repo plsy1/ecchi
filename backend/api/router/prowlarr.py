@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import JSONResponse
-from core.prowlarr import Prowlarr
+from modules.metadata.prowlarr import Prowlarr
 from core.auth import tokenInterceptor
-from core.config import *
+from core.config import _config
 
 router = APIRouter()
 
@@ -39,8 +39,8 @@ async def search(
     :return: 搜索结果的JSON响应
     """
     
-    PROWLARR_URL = get_config("PROWLARR_URL")
-    PROWLARR_KEY = get_config("PROWLARR_KEY")
+    PROWLARR_URL = _config.get("PROWLARR_URL")
+    PROWLARR_KEY = _config.get("PROWLARR_KEY")
 
     prowlarr = Prowlarr(PROWLARR_URL, PROWLARR_KEY)
 

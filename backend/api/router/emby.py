@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from core.auth import tokenInterceptor
-from core.emby import *
+from modules.mediaServer.emby import *
 
 router = APIRouter()
 import re
@@ -37,6 +37,7 @@ async def get_latest(isValid: str = Depends(tokenInterceptor)):
 
 
 @router.get("/exists")
-async def exists(title: str,isValid: str = Depends(tokenInterceptor)):
+async def exists(title: str, isValid: str = Depends(tokenInterceptor)):
     jav_code = extract_jav_code(title)
-    return is_movie_in_db_partial(jav_code)
+    exists_flag, index_link = is_movie_in_db_partial(jav_code)
+    return {"exists": exists_flag, "indexLink": index_link}

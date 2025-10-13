@@ -33,88 +33,27 @@
 </div>
 
 <h2>Released on {{ currentDate | date : "yyyy-MM-dd" }}</h2>
-<div class="pagination-buttons">
-  <button mat-icon-button class="floating-button" (click)="prevDay()">
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-  <button mat-icon-button class="floating-button" (click)="nextDay()">
-    <mat-icon>chevron_right</mat-icon>
-  </button>
-</div>
+
+<app-pagination
+  (previousClick)="prevDay()"
+  (nextClick)="nextDay()"
+></app-pagination>
 
 <div *ngFor="let group of releaseData">
   <h3>{{ group.prefixName }}</h3>
-
   <div class="poster-grid">
-    <div
-      class="poster-card"
+    <app-movie-card
       *ngFor="let work of group.works"
-      (click)="posterClick(work.work_id)"
-    >
-      <div class="poster-image-wrapper">
-        <img
-          class="poster-image"
-          [src]="work.products[0].image_url || 'assets/placeholder.jpg'"
-          [alt]="work.work_id"
-          loading="lazy"
-          (load)="onImageLoad(work.title)"
-        />
-
-
-
-        <div class="library-icon" *ngIf="libraryCache[work.title]">
-  <i class="fas fa-check-circle"></i>
-</div>
-
-        <div class="movie-info">
-          <h3 class="movie-title" matTooltip="{{ work.title }}">
-            {{ work.work_id }} - {{ work.title }}
-          </h3>
-          <div class="movie-meta">
-            <div class="movie-tags">
-              <span
-                *ngFor="let actor of work.actors.slice(0, 3)"
-                class="movie-tag"
-              >
-                {{ actor.name }}
-              </span>
-              <span class="more-tags" *ngIf="(work.actors?.length || 0) > 3">
-                +{{ work.actors!.length - 3 }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      [id]="work.work_id"
+      [title]="work.title"
+      [imgUrl]="work.products[0].image_url || ''"
+      [actors]="getActorNames(work.actors)"
+      (movieClick)="posterClick(work.work_id)"
+    ></app-movie-card>
   </div>
 </div>
 
-<div class="pagination-buttons">
-  <button mat-icon-button class="floating-button" (click)="prevDay()">
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-  <button mat-icon-button class="floating-button" (click)="nextDay()">
-    <mat-icon>chevron_right</mat-icon>
-  </button>
-</div>
-
-<!-- <h2>Release Today</h2>
-<div class="poster-grid">
-  <div
-    class="poster-card"
-    *ngFor="let work of avbaseIndexData?.products"
-    (click)="posterClick(work.product_id)"
-  >
-    <div class="poster-image-wrapper">
-      <img
-        [src]="work.image_url || 'assets/favicon.ico'"
-        [alt]="work.title"
-        class="poster-image"
-        loading="lazy"
-      />
-      <div class="overlay">
-        <div >{{ work.product_id }}</div>
-      </div>
-    </div>
-  </div>
-</div> -->
+<app-pagination
+  (previousClick)="prevDay()"
+  (nextClick)="nextDay()"
+></app-pagination>

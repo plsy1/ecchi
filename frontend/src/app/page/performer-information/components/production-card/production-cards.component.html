@@ -22,106 +22,30 @@
       <mat-option [value]="'2'">Sale</mat-option>
     </mat-select>
   </mat-form-field>
-
-  <!-- 分页按钮 -->
-  <div class="pagination-controls" *ngIf="searchKeyWords.length != 0">
-    <button
-      mat-icon-button
-      color="primary"
-      (click)="loadPreviousPage()"
-      [disabled]="isLoading || this.page <= 1"
-      aria-label="Previous Page"
-    >
-      <i class="fas fa-chevron-left"></i>
-    </button>
-
-    <button
-      mat-icon-button
-      color="primary"
-      (click)="loadNextPage()"
-      [disabled]="isLoading"
-      aria-label="Next Page"
-    >
-      <i class="fas fa-chevron-right"></i>
-    </button>
-
-    <div *ngIf="isLoading" class="loading-spinner">
-      <mat-spinner diameter="24"></mat-spinner>
-    </div>
-  </div>
 </div>
+
+<app-pagination
+  [page]="this.page"
+  (previousClick)="loadPreviousPage()"
+  (nextClick)="loadNextPage()"
+></app-pagination>
 
 <div class="poster-grid">
   <ng-container *ngFor="let movie of discoverResults">
-    <ng-container *ngIf="shouldShowMovie(movie)">
-      <div class="movie-card" (click)="onMovieClick(movie)">
-        <img
-          [src]="movie.img_url"
-          alt="{{ movie.title }}"
-          class="movie-img"
-          (error)="onImageError($event)"
-        />
-<div class="library-icon" *ngIf="inLibrary(movie.id)">
-  <i class="fas fa-check-circle"></i>
-</div>
-
-        <div class="movie-info">
-          <h3
-            class="movie-title"
-            matTooltip="{{ movie.id }} - {{ movie.title }}"
-          >
-            {{ movie.id }} - {{ movie.title }}
-          </h3>
-          <div class="movie-meta">
-            <div class="movie-date">{{ movie.release_date }}</div>
-            <div class="movie-tags">
-              <span
-                *ngFor="let tag of movie.actors.slice(0, 3)"
-                class="movie-tag"
-              >
-                {{ tag }}
-              </span>
-
-              <span class="more-tags" *ngIf="(movie.actors?.length || 0) > 3">
-                {{
-                  movie.actors!.length - 3 === 7
-                    ? "+N"
-                    : "+" + (movie.actors!.length - 3)
-                }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ng-container>
+    <app-movie-card
+      *ngIf="shouldShowMovie(movie)"
+      [id]="movie.id"
+      [title]="movie.title"
+      [imgUrl]="movie.img_url"
+      [releaseDate]="movie.release_date"
+      [actors]="movie.actors"
+      (movieClick)="onMovieClick(movie)"
+    ></app-movie-card>
   </ng-container>
 </div>
 
-<div class="foot-bar">
-  <!-- 分页按钮 -->
-  <div class="pagination-controls-foot" *ngIf="searchKeyWords.length != 0">
-    <button
-      mat-icon-button
-      color="primary"
-      (click)="loadPreviousPage()"
-      [disabled]="isLoading || this.page <= 1"
-      aria-label="Previous Page"
-    >
-      <i class="fas fa-chevron-left"></i>
-    </button>
-
-    <button
-      mat-icon-button
-      color="primary"
-      (click)="loadNextPage()"
-      [disabled]="isLoading"
-      aria-label="Next Page"
-    >
-      <i class="fas fa-chevron-right"></i>
-    </button>
-
-    <div *ngIf="isLoading" class="loading-spinner">
-      <mat-spinner diameter="24"></mat-spinner>
-    </div>
-  </div>
-</div>
+<app-pagination
+  [page]="this.page"
+  (previousClick)="loadPreviousPage()"
+  (nextClick)="loadNextPage()"
+></app-pagination>

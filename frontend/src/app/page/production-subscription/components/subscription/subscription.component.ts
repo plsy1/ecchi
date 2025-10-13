@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { KeywordFeed } from '../../models/production-subscription.interface';
 import { MatTooltip } from '@angular/material/tooltip';
-
+import { MatMenuModule } from '@angular/material/menu';
+import { MovieCardComponent } from '../../../../shared/movie-card/movie-card.component';
 @Component({
   selector: 'app-production-subscription-list',
   standalone: true,
-  imports: [MatIconModule, CommonModule, MatTooltip],
+  imports: [MatIconModule, CommonModule, MatMenuModule,MatTooltip,MovieCardComponent],
   templateUrl: './subscription.component.html',
   styleUrl: './subscription.component.css',
 })

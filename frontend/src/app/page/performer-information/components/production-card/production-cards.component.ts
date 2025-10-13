@@ -12,8 +12,9 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { ActivatedRoute } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { PaginationComponent } from '../../../../shared/pagination/pagination.component';
 
-import { Observable } from 'rxjs';
+import { MovieCardComponent } from '../../../../shared/movie-card/movie-card.component';
 
 @Component({
   selector: 'app-production-cards',
@@ -29,6 +30,8 @@ import { Observable } from 'rxjs';
     MatOptionModule,
     MatSelectModule,
     MatTooltipModule,
+    PaginationComponent,
+    MovieCardComponent,
   ],
 })
 export class MovieCards implements OnInit {
@@ -38,9 +41,6 @@ export class MovieCards implements OnInit {
   page: number = 1;
 
   actressNumberFilter: string = '0';
-
-  libraryStatus: { [title: string]: boolean } = {};
-  
 
   constructor(
     public service: PerformerService,
@@ -55,19 +55,10 @@ export class MovieCards implements OnInit {
         this.discoverResults = this.service.productionInformation;
         this.page = this.service.page;
         this.actressNumberFilter = this.service.actressNumberFilter;
-        this.loadLibraryStatus();
       } else {
         this.service.saveSearchKeyWords(this.searchKeyWords);
         this.loadDiscoverData(this.searchKeyWords, this.page);
       }
-    });
-  }
-
-  loadLibraryStatus() {
-    this.discoverResults.forEach((movie) => {
-      this.service.checkMovieExists(movie.id).subscribe((exists) => {
-        this.libraryStatus[movie.id] = exists;
-      });
     });
   }
 
@@ -81,7 +72,6 @@ export class MovieCards implements OnInit {
         this.isLoading = false;
         this.service.saveProductionInformation(data.movies);
         this.service.savePage(this.page);
-        this.loadLibraryStatus();
       },
       error: (error) => {
         console.error('Failed to load discover data:', error);
@@ -122,9 +112,5 @@ export class MovieCards implements OnInit {
 
   onFilterChange(value: string) {
     this.service.saveActressNumberFilter(value);
-  }
-
-  inLibrary(id: string): boolean {
-    return !!this.libraryStatus[id]; // 同步返回缓存
   }
 }

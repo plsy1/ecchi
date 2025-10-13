@@ -4,11 +4,13 @@ from typing import List
 from collections import defaultdict
 from .model import *
 from .helper import *
-from core.config import SYSTEM_IMAGE_PREFIX
+from core.config import _config
 from core.system import replace_domain_in_value
 
 
-async def get_actress_info_by_actress_name(name: str) -> Actress:
+async def get_actress_info_by_actress_name(
+    name: str, changeImagePrefix: bool = True
+) -> Actress:
     actress = Actress(name=name)
 
     url = f"https://www.avbase.net/talents/{name}"
@@ -22,7 +24,11 @@ async def get_actress_info_by_actress_name(name: str) -> Actress:
         talent = page_props.get("talent", {})
 
         primary = talent.get("primary", {})
-        actress.avatar_url = f'{SYSTEM_IMAGE_PREFIX}{primary.get("image_url")}'
+        if changeImagePrefix:
+            SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
+            actress.avatar_url = f'{SYSTEM_IMAGE_PREFIX}{primary.get("image_url")}'
+        else:
+            actress.avatar_url = f'{primary.get("image_url")}'
 
         fanza = (primary.get("meta") or {}).get("fanza") or {}
         for k, v in fanza.items():
@@ -37,9 +43,11 @@ async def get_actress_info_by_actress_name(name: str) -> Actress:
     return actress
 
 
-async def get_movie_info_by_actress_name(name: str, page: int) -> List[Movie]:
+async def get_movie_info_by_actress_name(
+    name: str, page: int, changeImagePrefix: bool = True
+) -> List[Movie]:
     url = f"https://www.avbase.net/talents/{name}?q=&page={page}"
-    return await get_movies(url)
+    return await get_movies(url, changeImagePrefix=changeImagePrefix)
 
 
 async def get_movie_info_by_keywords(keywords: str, page: int) -> List[Movie]:
@@ -60,6 +68,7 @@ async def get_actors_from_work(
         data["props"]["pageProps"]["work"]["min_date"] = work["min_date"]
 
     if changeImagePrefix:
+        SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
         data = replace_domain_in_value(data, SYSTEM_IMAGE_PREFIX)
 
     movie_info = MovieInformation(**data)
@@ -75,7 +84,7 @@ async def get_index():
     products = [p for work in works for p in work.get("products", [])]
     newbie_talents = data.get("newbie_talents")
     popular_talents = data.get("popular_talents")
-
+    SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
     newbie_talents = replace_domain_in_value(newbie_talents, SYSTEM_IMAGE_PREFIX)
     popular_talents = replace_domain_in_value(popular_talents, SYSTEM_IMAGE_PREFIX)
 
@@ -108,7 +117,7 @@ async def get_release_grouped_by_prefix(
     data = await get_next_data(url)
 
     works_data = data.get("props", {}).get("pageProps", {}).get("works", [])
-
+    SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
     works_data = replace_domain_in_value(works_data, SYSTEM_IMAGE_PREFIX)
 
     grouped: defaultdict[str, List[Work]] = defaultdict(list)

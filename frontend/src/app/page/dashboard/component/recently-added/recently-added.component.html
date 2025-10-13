@@ -5,25 +5,13 @@
 
   <mat-card-content>
     <div class="items-grid" *ngIf="latestItems.length > 0">
-<ng-container *ngFor="let item of latestItems">
-  <a
-    *ngIf="!item.hideImage"
-    [href]="item.indexLink"
-    target="_blank"
-    class="item-card"
-  >
-    <div class="image-wrapper">
-      <img
-        loading="lazy"
-        class="item-image"
-        [src]="item.primary"
-        alt="{{ item.name }}"
-        (error)="onImageError($event, item)"
-      />
-      <div class="hover-name">{{ item.name }}</div>
-    </div>
-  </a>
-</ng-container>
+      <app-movie-poster
+        *ngFor="let item of latestItems"
+        [title]="item.name"
+        [imgUrl]="item.primary"
+        [link]="item.indexLink"
+        [hideImage]="item.hideImage"
+      ></app-movie-poster>
     </div>
   </mat-card-content>
 </mat-card>

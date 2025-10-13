@@ -3,11 +3,11 @@ import { DashboardService } from './../../service/dashboard.service';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { EmbyLatestItem } from '../../models/dashboard.interface';
-
+import { MoviePosterComponent } from '../../../../shared/movie-poster/movie-poster.component';
 @Component({
   selector: 'app-recently-added',
   standalone: true,
-  imports: [MatCardModule, CommonModule],
+  imports: [MatCardModule, CommonModule,MoviePosterComponent],
   templateUrl: './recently-added.component.html',
   styleUrl: './recently-added.component.css',
 })
@@ -27,5 +27,9 @@ ngOnInit(): void {
 
 onImageError(event: Event, item: any) {
   item.hideImage = true;
+}
+
+onItemClick() {
+  
 }
 }

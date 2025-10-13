@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
-
+from typing import Generator
 
 DATABASE_URL = "sqlite:///./data/database.db"
 
@@ -57,18 +57,10 @@ class EmbyMovie(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    primary = Column(String)   
+    primary = Column(String)
     serverId = Column(String)
-    indexLink = Column(String) 
+    indexLink = Column(String)
     ProductionYear = Column(Integer)
-
-
-def initDatabase():
-    """创建数据库表（如果不存在的话）"""
-    Base.metadata.create_all(bind=engine)
-
-
-from typing import Generator
 
 
 def get_db() -> Generator[Session, None, None]:
@@ -81,3 +73,7 @@ def get_db() -> Generator[Session, None, None]:
 
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
+
+
+def initDatabase():
+    Base.metadata.create_all(bind=engine)

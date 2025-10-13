@@ -1,27 +1,32 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 from contextlib import asynccontextmanager
+from core.config import _config
+from core.logs import LOGGING_CONFIG
 from core.database import initDatabase
 from core.auth import initUser
-from core.scheduler import initScheduler, shutdownScheduler
-from core.logs import LOGGING_CONFIG
-from core.playwright import playwright_service
+from core.scheduler import init_scheduler_service
+from core.playwright import init_playwright_service
 
 
 def Init():
     initDatabase()
     initUser()
-    initRouter()
+
 
 @asynccontextmanager
-async def lifespan(App: FastAPI):
+async def lifespan(app: FastAPI):
     Init()
-    initScheduler()
-    await playwright_service.start()
-    yield
-    await playwright_service.stop()
-    shutdownScheduler()
+    scheduler = init_scheduler_service()
+    playwright = await init_playwright_service()
+    initRouter()
+
+    try:
+        yield
+    finally:
+        await playwright.stop()
+        scheduler.shutdown()
 
 
 App = FastAPI(lifespan=lifespan)

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from core.auth import tokenInterceptor
-from core.javtrailers.javtrailers import *
+from modules.metadata.javtrailers import *
 
 router = APIRouter()
 

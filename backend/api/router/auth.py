@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException, Depends, Form, Body
+from fastapi import APIRouter, HTTPException, Depends, Form
 from fastapi.security import OAuth2PasswordRequestForm
 from core.auth import *
 from sqlalchemy.orm import Session
 from core.database import get_user_by_username, get_db
+from core.config import _config
 
 router = APIRouter()
 
@@ -21,7 +22,9 @@ def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(
+        minutes=int(_config.get("ACCESS_TOKEN_EXPIRE_MINUTES"))
+    )
 
     access_token = create_access_token(
         data={"sub": form_data.username}, expires_delta=access_token_expires

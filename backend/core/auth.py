@@ -1,13 +1,11 @@
+import bcrypt, secrets, string
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-import bcrypt
-import secrets
-import string
 from sqlalchemy.orm import Session
 from core.database import get_user_by_username, User, SessionLocal
 from datetime import datetime, timedelta, timezone
-from core.config import *
+from core.config import _config
 from core.logs import LOG_INFO
 
 
@@ -47,6 +45,7 @@ def change_password(db: Session, username: str, old_password: str, new_password:
 
     return {"message": "Password updated successfully"}
 
+
 def get_user(db, username: str):
     if username in db:
         return db[username]
@@ -54,7 +53,9 @@ def get_user(db, username: str):
 
 def verify_token_expiration(token: str, credentials_exception):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(
+            token, _config.get("SECRET_KEY"), algorithms=[_config.get("ALGORITHM")]
+        )
         expiration: str = payload.get("exp")
         if expiration is None:
             raise credentials_exception
@@ -72,10 +73,12 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
         expire = datetime.now(timezone(timedelta(hours=8))) + expires_delta
     else:
         expire = datetime.now(timezone(timedelta(hours=8))) + timedelta(
-            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+            minutes=_config.get("ACCESS_TOKEN_EXPIRE_MINUTES")
         )
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(
+        to_encode, _config.get("SECRET_KEY"), algorithm=_config.get("ALGORITHM")
+    )
     return encoded_jwt
 
 
@@ -89,14 +92,12 @@ def tokenInterceptor(token: str = Depends(oauth2_scheme)):
 
 
 def generate_random_password(length=32) -> str:
-    """生成一个安全的随机密码"""
     alphabet = string.ascii_letters + string.digits + string.punctuation
     password = "".join(secrets.choice(alphabet) for _ in range(length))
     return hash_password(password), password
 
 
 def create_root_user_if_not_exists(db: Session):
-    """检查 root 用户是否存在，如果不存在则创建并设置随机密码"""
     root_user = get_user_by_username(db, "root")
 
     if root_user:
@@ -120,7 +121,9 @@ def initUser():
 
 def is_token_expiration(token: str) -> bool:
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(
+            token, _config.get("SECRET_KEY"), algorithms=[_config.get("ALGORITHM")]
+        )
         exp = payload.get("exp")
         if exp is None:
             return False

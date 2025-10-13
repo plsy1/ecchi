@@ -14,16 +14,18 @@ import {
   RankingItem,
 } from '../../models/page-explore';
 
+import { PaginationComponent } from '../../../../shared/pagination/pagination.component';
+import { MovieCardComponent } from '../../../../shared/movie-card/movie-card.component';
 @Component({
   selector: 'app-fanza',
   standalone: true,
   imports: [
     MatTabsModule,
-    CommonModule,
+    CommonModule,MovieCardComponent,
     MatIconModule,
     MatFormFieldModule,
     MatSelectModule,
-    FormsModule,MatTooltipModule
+    FormsModule,MatTooltipModule,PaginationComponent
   ],
   templateUrl: './fanza.component.html',
   styleUrl: './fanza.component.css',

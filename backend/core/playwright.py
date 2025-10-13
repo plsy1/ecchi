@@ -58,4 +58,11 @@ class PlaywrightService:
         return self.context
 
 
-playwright_service = PlaywrightService()
+_playwright_service: PlaywrightService | None = None
+
+async def init_playwright_service() -> PlaywrightService:
+    global _playwright_service
+    if _playwright_service is None:
+        _playwright_service = PlaywrightService()
+        await _playwright_service.start()
+    return _playwright_service

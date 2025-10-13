@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpErrorResponse,
-} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, throwError } from 'rxjs';
+import { AvbaseEverydayReleaseByPrefix } from '../models/avbase-everyday-release';
+import { CommonService } from '../../../common.service';
 import {
   RankingTypeOfWorks,
   ActressRanking,
@@ -13,23 +10,18 @@ import {
   JavtrailersDailyRelease,
   AvbaseIndexData,
 } from '../models/page-explore';
-import { AvbaseEverydayReleaseByPrefix } from '../models/avbase-everyday-release';
-import { CommonService } from '../../../common.service';
+
 @Injectable({
   providedIn: 'root',
 })
 export class PageExploreServiceService {
   private actressRankingCache: ActressRanking[] = [];
   private lastFetchedPage: number = 1;
-
   private workRankingCache: RankingItem[] = [];
   private lastFetchedWorkPage: number = 1;
   private workRankingType: RankingTypeOfWorks = RankingTypeOfWorks.Weekly;
-
   private CalenderData: JavtrailersDailyRelease | null = null;
-
   private AvbaseIndexData: AvbaseIndexData | null = null;
-
   private avbaseEverydayReleaseData: AvbaseEverydayReleaseByPrefix[] | null =
     null;
 
@@ -57,8 +49,6 @@ export class PageExploreServiceService {
   setAvbaseIndexData(data: AvbaseIndexData): void {
     this.AvbaseIndexData = data;
   }
-
-  constructor(private http: HttpClient, private common: CommonService) {}
 
   setRankingData(data: ActressRanking[], page: number): void {
     this.actressRankingCache = data;
@@ -95,122 +85,41 @@ export class PageExploreServiceService {
     return this.lastFetchedWorkPage;
   }
 
-  fetchActressRanking(page: number): Observable<ActressRanking[]> {
-    const url = `${this.common.apiUrl}/fanza/monthlyactress?page=${page}`;
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
-    });
+  constructor(private http: HttpClient, private common: CommonService) {}
 
-    return this.http.get<ActressRanking[]>(url, { headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.common.logout();
-        }
-        console.error('Request Failed', error);
-        return throwError(() => new Error('Request Failed'));
-      })
+  fetchActressRanking(page: number): Observable<ActressRanking[]> {
+    return this.common.request<ActressRanking[]>(
+      'GET',
+      'fanza/monthlyactress',
+      {
+        params: { page },
+      }
     );
   }
 
-  fetchWorkRanking(
-    page: number,
-    term: RankingTypeOfWorks
-  ): Observable<RankingItem[]> {
-    const url = `${this.common.apiUrl}/fanza/monthlyworks?page=${page}&term=${term}`;
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
+  fetchWorkRanking(page: number, term: string): Observable<RankingItem[]> {
+    return this.common.request<RankingItem[]>('GET', 'fanza/monthlyworks', {
+      params: { page, term },
     });
-
-    return this.http.get<RankingItem[]>(url, { headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.common.logout();
-        }
-        console.error('Request Failed', error);
-        return throwError(() => new Error('Request Failed'));
-      })
-    );
   }
 
   getAvbaseIndex(): Observable<any> {
-    const url = `${this.common.apiUrl}/avbase/get_index`;
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
-    });
-
-    return this.http.get(url, { headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.common.logout();
-        }
-        console.error('Request Failed', error);
-        return throwError(() => new Error('Request Failed'));
-      })
-    );
+    return this.common.request<any>('GET', 'avbase/get_index');
   }
 
   getAvbaseReleaseByDate(yyyymmdd: string): Observable<any> {
-    const url = `${this.common.apiUrl}/avbase/get_release_by_date?yyyymmdd=${yyyymmdd}`;
-
-    const headers = new HttpHeaders({
-      Accept: 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
+    return this.common.request<any>('GET', 'avbase/get_release_by_date', {
+      params: { yyyymmdd },
     });
-
-    return this.http.get(url, { headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.common.logout();
-        }
-        console.error('Request Failed', error);
-        return throwError(() => new Error('Request Failed'));
-      })
-    );
   }
 
   getJavtrailersReleaseByDate(
     yyyymmdd: string
   ): Observable<JavtrailersDailyRelease> {
-    const url = `${this.common.apiUrl}/javtrailers/getReleasebyDate?yyyymmdd=${yyyymmdd}`;
-
-    const accessToken = localStorage.getItem('access_token') ?? '';
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    });
-
-    return this.http.get<JavtrailersDailyRelease>(url, { headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.common.logout();
-        }
-        console.error('Request Failed', error);
-        return throwError(() => new Error('Request Failed'));
-      })
-    );
-  }
-
-  checkMovieExists(title: string): Observable<boolean> {
-    const url = `${this.common.apiUrl}/emby/exists?title=${encodeURIComponent(
-      title
-    )}`;
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token') ?? ''}`,
-    });
-
-    return this.http.get<boolean>(url, { headers }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.common.logout();
-        }
-        console.error('Request Failed', error);
-        return throwError(() => new Error('Request Failed'));
-      })
+    return this.common.request<JavtrailersDailyRelease>(
+      'GET',
+      'javtrailers/getReleasebyDate',
+      { params: { yyyymmdd } }
     );
   }
 }

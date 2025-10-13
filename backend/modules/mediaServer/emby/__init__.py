@@ -1,16 +1,17 @@
 import requests
 import json
 from typing import List, Dict
-from core.config import get_config
-from core.config import SYSTEM_IMAGE_PREFIX
+from core.config import _config
 from core.database import get_db, EmbyMovie
 
-
-def is_movie_in_db_partial(title: str) -> bool:
+def is_movie_in_db_partial(title: str):
     db = next(get_db())
     try:
-        exists = db.query(EmbyMovie).filter(EmbyMovie.name.ilike(f"%{title}%")).first()
-        return bool(exists)
+        movie = db.query(EmbyMovie).filter(EmbyMovie.name.ilike(f"%{title}%")).first()
+        if movie:
+            return True, movie.indexLink
+        else:
+            return False, None
     finally:
         db.close()
 
@@ -26,8 +27,8 @@ def emby_request(path: str, params=None, method="GET", use_header=True) -> List[
     if params is None:
         params = {}
 
-    EMBY_URL = get_config("EMBY_URL")
-    EMBY_API_KEY = get_config("EMBY_API_KEY")
+    EMBY_URL = _config.get("EMBY_URL")
+    EMBY_API_KEY = _config.get("EMBY_API_KEY")
 
     url = f"{EMBY_URL}/emby{path}"
 
@@ -72,7 +73,7 @@ def emby_get_latest_items() -> List[Dict]:
         "Limit": 16,
     }
     try:
-        EMBY_URL = get_config("EMBY_URL")
+        EMBY_URL = _config.get("EMBY_URL")
         result = []
         userId = emby_get_userId_of_administrator()
         info = emby_request(
@@ -81,6 +82,7 @@ def emby_get_latest_items() -> List[Dict]:
         for item in info:
             name = item.get("Name")
             id = item.get("Id")
+            SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
             primary = f"{SYSTEM_IMAGE_PREFIX}{EMBY_URL}/Items/{id}/Images/Primary"
             serverId = item.get("ServerId")
             indexLink = f"{EMBY_URL}/web/index.html#!/item?id={id}&context=home&serverId={serverId}"
@@ -107,7 +109,7 @@ def emby_get_resume_items() -> List[Dict]:
         "Limit": 16,
     }
     try:
-        EMBY_URL = get_config("EMBY_URL")
+        EMBY_URL = _config.get("EMBY_URL")
         result = []
         userId = emby_get_userId_of_administrator()
         info = emby_request(
@@ -117,6 +119,7 @@ def emby_get_resume_items() -> List[Dict]:
             name = item.get("Name")
             id = item.get("Id")
             serverId = item.get("ServerId")
+            SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
             primary = f"{SYSTEM_IMAGE_PREFIX}{EMBY_URL}/Items/{id}/Images/Primary"
             indexLink = f"{EMBY_URL}/web/index.html#!/item?id={id}&context=home&serverId={serverId}"
             PlayedPercentage = item.get("UserData").get("PlayedPercentage")
@@ -138,7 +141,7 @@ def emby_get_resume_items() -> List[Dict]:
 
 def emby_get_views() -> List[Dict]:
     try:
-        EMBY_URL = get_config("EMBY_URL")
+        EMBY_URL = _config.get("EMBY_URL")
         result = []
         userId = emby_get_userId_of_administrator()
         info = emby_request(f"/Users/{userId}/Views", use_header=True)
@@ -147,6 +150,7 @@ def emby_get_views() -> List[Dict]:
             name = item.get("Name")
             Id = item.get("Id")
             ServerId = item.get("ServerId")
+            SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
             primary = f"{SYSTEM_IMAGE_PREFIX}{EMBY_URL}/Items/{Id}/Images/Primary"
             indexLink = (
                 f"{EMBY_URL}/web/index.html#!/videos?serverId={ServerId}&parentId={Id}"
@@ -177,7 +181,7 @@ def emby_get_all_movies() -> List[Dict]:
         "SortOrder": "Descending",
     }
     try:
-        EMBY_URL = get_config("EMBY_URL")
+        EMBY_URL = _config.get("EMBY_URL")
         userId = emby_get_userId_of_administrator()
 
         info = emby_request(f"/Users/{userId}/Items", use_header=True, params=params)
@@ -187,6 +191,7 @@ def emby_get_all_movies() -> List[Dict]:
             name = item.get("Name")
             id = item.get("Id")
             serverId = item.get("ServerId")
+            SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
             primary = f"{SYSTEM_IMAGE_PREFIX}{EMBY_URL}/Items/{id}/Images/Primary"
             indexLink = f"{EMBY_URL}/web/index.html#!/item?id={id}&context=home&serverId={serverId}"
             ProductionYear = item.get("ProductionYear")

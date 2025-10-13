@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from core.auth import tokenInterceptor
-from core.avbase.avbase import *
+from modules.metadata.avbase import *
 
 router = APIRouter()
 

@@ -1,0 +1,14 @@
+<div class="pagination-buttons">
+  <button
+    mat-icon-button
+    (click)="onPrevious()"
+    [class.disabled]="page <= 1"
+    aria-label="Previous Page"
+  >
+    <i class="fas fa-chevron-left"></i>
+  </button>
+
+  <button mat-icon-button (click)="onNext()" aria-label="Next Page">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+</div>

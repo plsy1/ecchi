@@ -1,12 +1,12 @@
 import telebot
-from core.config import get_config
-from core.avbase.model import Actress, MovieInformation
+from core.config import _config
+from modules.metadata.avbase.model import Actress, MovieInformation
 
 
 class TelegramBot:
     @staticmethod
     def get_bot():
-        token = get_config("TELEGRAM_TOKEN", "")
+        token = _config.get("TELEGRAM_TOKEN", "")
         return telebot.TeleBot(token=token) if token else None
 
     @staticmethod
@@ -14,7 +14,7 @@ class TelegramBot:
         bot = TelegramBot.get_bot()
         if not bot:
             return
-        chat_id = get_config("TELEGRAM_CHAT_ID", "")
+        chat_id = _config.get("TELEGRAM_CHAT_ID", "")
         bot.send_photo(chat_id, img, caption=message, parse_mode='Markdown')
 
     @staticmethod
@@ -22,7 +22,7 @@ class TelegramBot:
         bot = TelegramBot.get_bot()
         if not bot:
             return
-        chat_id = get_config("TELEGRAM_CHAT_ID", "")
+        chat_id = _config.get("TELEGRAM_CHAT_ID", "")
         bot.send_message(chat_id, message, parse_mode='Markdown')
 
 def actressInformation(name, actress_info: Actress):

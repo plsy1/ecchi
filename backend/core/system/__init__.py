@@ -5,10 +5,6 @@ import os
 import httpx
 from urllib.parse import urlparse, quote
 from typing import Any, List
-from core.config import *
-from core.database import get_db, EmbyMovie
-from core.emby import emby_get_all_movies
-
 CACHE_EXPIRE_HOURS = 24
 CACHE_DIR = "data/cache_images"
 os.makedirs(CACHE_DIR, exist_ok=True)
@@ -84,31 +80,3 @@ def fetch_and_cache_image(url: str) -> tuple[BytesIO, dict]:
         "ETag": etag,
     }
     return BytesIO(resp.content), headers
-
-
-def update_emby_movies_in_db():
-    db = next(get_db())
-    try:
-        movies: List[dict] = emby_get_all_movies()
-
-        db.query(EmbyMovie).delete()
-        db.commit()
-
-        for m in movies:
-            new_movie = EmbyMovie(
-                name=m.get("name"),
-                primary=m.get("primary"),
-                serverId=m.get("serverId"),
-                indexLink=m.get("indexLink"),
-                ProductionYear=m.get("ProductionYear"),
-            )
-            db.add(new_movie)
-
-        db.commit()
-        print(f"Inserted {len(movies)} movies into database.")
-
-    except Exception as e:
-        db.rollback()
-        print(f"Error updating Emby movies: {e}")
-    finally:
-        db.close()

@@ -6,7 +6,6 @@
   margin-bottom: 16px;
   width: 100%;
   background-color: var(--app-background);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .performer-content-wrapper {
@@ -24,7 +23,7 @@
 }
 
 .avatar-section {
-  flex: 0 0 160px;
+  flex: 0;
   display: column;
   justify-content: center;
   align-items: flex-start;
@@ -37,7 +36,6 @@
   border-radius: 50%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
-
 
 .actress-name {
   margin: 0 0 12px;
@@ -73,8 +71,6 @@
   margin: 0;
 }
 
-
-
 @media (max-width: 600px) {
   .actress-content-wrapper {
     flex-direction: column;
@@ -94,15 +90,29 @@
 
   .info-section {
     width: 100%;
-    text-align: left
+    text-align: left;
   }
 
   .action-icons {
-    justify-content: center;
+    justify-content: left;
   }
 
   .actress-info {
     text-align: left;
     align-items: flex-start;
   }
+}
+
+button[mat-icon-button] {
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+button[mat-icon-button]:hover {
+  transform: scale(1.1);
 }

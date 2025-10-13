@@ -1,35 +1,30 @@
-.overlayy {
-  display: flex;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 1), transparent);
-  color: white;
-  padding-left: 0.5rem;
-  transform: translateY(10%);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  line-height: 1.2;
-  text-align: left;
+.poster-wrapper {
+  position: relative;
+  display: inline-block;
 }
-
-.unsubscribe-btn {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  padding-right: 0.5rem;
-}
-
-.unsubscribe-btn:hover {
-  transform: scale(1.1);
-}
-
-.spacer {
-  flex: 1;
-}
-
 
 .poster-grid {
   padding: 1rem;
 }
+
+.menu-btn {
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  z-index: 10;
+  border: none;
+  background-color: transparent;
+}
+
+.menu-btn:hover {
+  background-color: var(--mat-hover-state-layer-color, rgba(0, 0, 0, 0.05));
+}
+
+.menu-btn:hover {
+  background-color: var(--mat-hover-state-layer-color, rgba(0, 0, 0, 0.04));
+  border-radius: 50%;
+}
+

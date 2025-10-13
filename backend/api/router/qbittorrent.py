@@ -11,11 +11,12 @@ from fastapi import (
 
 from pathlib import Path
 from io import BytesIO
-from core.qbittorrent import QB
+from modules.downloader.qbittorrent import QB
 from core.auth import tokenInterceptor
-from core.config import *
-from core.avbase.avbase import *
-from core.telegram import *
+from core.config import _config
+
+from modules.metadata.avbase import *
+from modules.notification.telegram import *
 from core.database import RSSItem, get_db
 from sqlalchemy.orm import Session
 
@@ -23,14 +24,14 @@ from sqlalchemy.orm import Session
 router = APIRouter()
 
 
-@router.post(
+@router.get(
     "/get_downloading_torrents",
 )
 async def get(isValid: str = Depends(tokenInterceptor)):
-    QB_HOST = get_config("QB_HOST")
-    QB_PORT = get_config("QB_PORT")
-    QB_USERNAME = get_config("QB_USERNAME")
-    QB_PASSWORD = get_config("QB_PASSWORD")
+    QB_HOST = _config.get("QB_HOST")
+    QB_PORT = _config.get("QB_PORT")
+    QB_USERNAME = _config.get("QB_USERNAME")
+    QB_PASSWORD = _config.get("QB_PASSWORD")
 
     qb_client = QB(
         host=QB_HOST,
@@ -48,10 +49,10 @@ async def delete(
     delete_files: bool = Body(True),
     isValid: str = Depends(tokenInterceptor),
 ):
-    QB_HOST = get_config("QB_HOST")
-    QB_PORT = get_config("QB_PORT")
-    QB_USERNAME = get_config("QB_USERNAME")
-    QB_PASSWORD = get_config("QB_PASSWORD")
+    QB_HOST = _config.get("QB_HOST")
+    QB_PORT = _config.get("QB_PORT")
+    QB_USERNAME = _config.get("QB_USERNAME")
+    QB_PASSWORD = _config.get("QB_PASSWORD")
 
     qb_client = QB(
         host=QB_HOST,
@@ -91,12 +92,12 @@ async def add_torrent_url(
     :return: 成功与否
     """
     try:
-        QB_HOST = get_config("QB_HOST")
-        QB_PORT = get_config("QB_PORT")
-        QB_USERNAME = get_config("QB_USERNAME")
-        QB_PASSWORD = get_config("QB_PASSWORD")
+        QB_HOST = _config.get("QB_HOST")
+        QB_PORT = _config.get("QB_PORT")
+        QB_USERNAME = _config.get("QB_USERNAME")
+        QB_PASSWORD = _config.get("QB_PASSWORD")
 
-        DOWNLOAD_PATH = get_config("DOWNLOAD_PATH", "")
+        DOWNLOAD_PATH = _config.get("DOWNLOAD_PATH", "")
 
         base_path = Path(save_path) if save_path else Path(DOWNLOAD_PATH)
         save_path = base_path / performerName
@@ -118,7 +119,7 @@ async def add_torrent_url(
         if success:
             QB_KEYWORD_FILTER = [
                 kw.strip()
-                for kw in get_config("QB_KEYWORD_FILTER", "").split(",")
+                for kw in _config.get("QB_KEYWORD_FILTER", "").split(",")
                 if kw.strip()
             ]
             background_tasks.add_task(
@@ -126,7 +127,9 @@ async def add_torrent_url(
             )
 
             if keywords != "":
-                movie_info = await get_actors_from_work(movie_link,changeImagePrefix=False)
+                movie_info = await get_actors_from_work(
+                    movie_link, changeImagePrefix=False
+                )
                 movie_details = DownloadInformation(keywords, movie_info)
                 imgURL = str(movie_info.props.pageProps.work.products[0].image_url)
                 TelegramBot.Send_Message_With_Image(
@@ -176,10 +179,10 @@ async def add_torrent_file(
     try:
         torrent_data = BytesIO(await file.read())
 
-        QB_HOST = get_config("QB_HOST")
-        QB_PORT = get_config("QB_PORT")
-        QB_USERNAME = get_config("QB_USERNAME")
-        QB_PASSWORD = get_config("QB_PASSWORD")
+        QB_HOST = _config.get("QB_HOST")
+        QB_PORT = _config.get("QB_PORT")
+        QB_USERNAME = _config.get("QB_USERNAME")
+        QB_PASSWORD = _config.get("QB_PASSWORD")
 
         qb_client = QB(
             host=QB_HOST,

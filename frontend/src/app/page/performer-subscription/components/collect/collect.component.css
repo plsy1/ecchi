@@ -6,27 +6,16 @@
 }
 
 .actress-card {
-  position: relative;
-  padding: 12px 4px 16px;
   text-align: center;
   border-radius: 10px;
   background-color: transparent;
-  color: var(--mat-card-text-color);
   box-shadow: var(--mat-elevation-1);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.actress-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--mat-elevation-6);
 }
 
 .title {
   margin-top: 8px;
   font-size: 14px;
-  font-weight: 500;
   line-height: 1.2;
-  color: inherit;
 }
 
 .menu-button {
@@ -41,14 +30,4 @@
   line-height: 1;
   border-radius: 50%;
   background-color: transparent;
-  color: var(--mat-icon-color, rgba(0, 0, 0, 0.54));
-}
-
-.menu-button:hover {
-  background-color: var(--mat-hover-state-layer-color, rgba(0, 0, 0, 0.05));
-}
-
-.menu-button:hover {
-  background-color: var(--mat-hover-state-layer-color, rgba(0, 0, 0, 0.04));
-  border-radius: 50%;
 }

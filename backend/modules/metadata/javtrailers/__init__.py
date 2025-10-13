@@ -1,9 +1,10 @@
 import requests
-from core.javtrailers.model import *
-from core.config import set_config, get_config
+from .model import *
+from core.config import _config
 from core.logs import LOG_ERROR
-from core.system import replace_domain_in_value
-from core.config import SYSTEM_IMAGE_PREFIX
+from backend.core.system import replace_domain_in_value
+
+
 def get_javtrailers_fetch_tokens() -> str:
     """
     从网页 HTML 提取 AUTH_TOKEN
@@ -45,7 +46,7 @@ def fetch_daily_release(year: int, month: int, day: int) -> DailyRelease:
     url = "https://javtrailers.com/api/calendar/day"
     params = {"year": year, "month": month, "day": day}
 
-    JAVTRAILERS_AUTHENTICATION = get_config("JAVTRAILERS_AUTHENTICATION")
+    JAVTRAILERS_AUTHENTICATION = _config.get("JAVTRAILERS_AUTHENTICATION")
 
     headers = {
         "accept": "*/*",
@@ -62,21 +63,24 @@ def fetch_daily_release(year: int, month: int, day: int) -> DailyRelease:
             if not new_token:
                 resp.raise_for_status()
 
-            set_config({"JAVTRAILERS_AUTHENTICATION": new_token})
+            _config.set({"JAVTRAILERS_AUTHENTICATION": new_token})
 
             headers["authorization"] = new_token
             resp = requests.get(url, params=params, headers=headers)
 
         resp.raise_for_status()
         data = resp.json()
-
+        SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
         studios = [
             Studio(
                 name=s["name"],
                 jpName=s["jpName"],
                 slug=s["slug"],
                 link=s["link"],
-                videos=[Video(**replace_domain_in_value(v, SYSTEM_IMAGE_PREFIX)) for v in s.get("videos", [])],
+                videos=[
+                    Video(**replace_domain_in_value(v, SYSTEM_IMAGE_PREFIX))
+                    for v in s.get("videos", [])
+                ],
             )
             for s in data.get("studios", [])
         ]

@@ -11,7 +11,7 @@ class Actor(BaseModel):
     id: int = 0
     name: str = ""
     order: Optional[int] = None
-    image_url: str = ""
+    image_url: Optional[str] = None
     talent: Optional[Talent] = None
     ruby: Optional[str] = None
     note: Optional[str] = None
@@ -43,7 +43,7 @@ class Product(BaseModel):
     id: int = 0
     product_id: str = ""
     url: str = ""
-    image_url: str = ""
+    image_url: Optional[str] = None
     title: str = ""
     source: Optional[str] = None
     thumbnail_url: str = ""

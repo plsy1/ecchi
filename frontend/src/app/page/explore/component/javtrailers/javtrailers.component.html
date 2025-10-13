@@ -1,36 +1,29 @@
 <h1 class="current-date">
   Released on {{ currentDate | date : "yyyy-MM-dd" }}
 </h1>
-<div class="pagination-buttons">
-  <button mat-icon-button class="floating-button" (click)="prevDay()">
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-  <button mat-icon-button class="floating-button" (click)="nextDay()">
-    <mat-icon>chevron_right</mat-icon>
-  </button>
-</div>
+
+<app-pagination
+  (previousClick)="prevDay()"
+  (nextClick)="nextDay()"
+></app-pagination>
 
 <div *ngIf="releaseData">
   <div *ngFor="let studio of releaseData.studios" class="section">
     <h2>{{ studio.name }} ({{ studio.jpName }})</h2>
+
     <div class="poster-grid">
-      <div
-        class="poster-card"
+      <app-movie-card
         *ngFor="let video of studio.videos"
-        (click)="posterClick(video.contentId)"
-      >
-        <div class="poster-image-wrapper">
-          <img
-            class="poster-image"
-            [src]="video.image"
-            [alt]="video.contentId"
-            loading="lazy"
-          />
-          <div class="movie-info">
-            <div class="movie-title" matTooltip="{{ video.dvdId }}">{{ video.dvdId }}</div>
-          </div>
-        </div>
-      </div>
+        [title]="video.dvdId"
+        [imgUrl]="video.image"
+        [actors]="[]"
+        (movieClick)="posterClick($event)"
+      ></app-movie-card>
     </div>
   </div>
 </div>
+
+<app-pagination
+  (previousClick)="prevDay()"
+  (nextClick)="nextDay()"
+></app-pagination>

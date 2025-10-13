@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { DashboardService } from './../../service/dashboard.service';
 import { ResumeItem } from '../../models/dashboard.interface';
+import { MoviePosterComponent } from '../../../../shared/movie-poster/movie-poster.component';
 @Component({
   selector: 'app-resume-watching',
   standalone: true,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule,MoviePosterComponent],
   templateUrl: './resume-watching.component.html',
   styleUrl: './resume-watching.component.css',
 })

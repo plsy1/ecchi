@@ -7,11 +7,20 @@ import { AvbaseIndexData } from '../../models/page-explore';
 import { MatIconModule } from '@angular/material/icon';
 import { AvbaseEverydayReleaseByPrefix } from '../../models/avbase-everyday-release';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Observable } from 'rxjs';
+import { PaginationComponent } from '../../../../shared/pagination/pagination.component';
+import { MovieCardComponent } from '../../../../shared/movie-card/movie-card.component';
+
 @Component({
   selector: 'app-avbase',
   standalone: true,
-  imports: [MatTabsModule, CommonModule, MatIconModule, MatTooltipModule],
+  imports: [
+    MatTabsModule,
+    MovieCardComponent,
+    CommonModule,
+    MatIconModule,
+    MatTooltipModule,
+    PaginationComponent,
+  ],
   templateUrl: './avbase.component.html',
   styleUrl: './avbase.component.css',
 })
@@ -19,7 +28,6 @@ export class AvbaseComponent implements OnInit {
   currentDate: Date = new Date();
   avbaseIndexData?: AvbaseIndexData;
   releaseData: AvbaseEverydayReleaseByPrefix[] = [];
-  libraryCache: { [title: string]: boolean | null } = {};
 
   constructor(
     private PageExploreService: PageExploreServiceService,
@@ -104,12 +112,7 @@ export class AvbaseComponent implements OnInit {
     this.loadEverydayReleaseData();
   }
 
-
-onImageLoad(title: string) {
-  if (this.libraryCache[title] != null) return; // 已请求过
-  this.libraryCache[title] = false; // 默认 false
-  this.PageExploreService.checkMovieExists(title).subscribe(exists => {
-    this.libraryCache[title] = exists;
-  });
-}
+  getActorNames(actors: any[] = []): string[] {
+    return actors.map((a) => a.name);
+  }
 }

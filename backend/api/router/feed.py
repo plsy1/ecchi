@@ -2,10 +2,9 @@ from fastapi import APIRouter, HTTPException, Depends, Form, BackgroundTasks
 from core.auth import *
 from sqlalchemy.orm import Session
 from core.database import RSSItem, RSSFeed, ActressCollect, get_db
-from core.telegram import *
-from core.avbase.avbase import *
-from core.feed import *
-from core.config import SYSTEM_IMAGE_PREFIX
+from modules.notification.telegram import *
+from modules.metadata.avbase import *
+from core.config import _config
 from core.system import replace_domain_in_value
 
 router = APIRouter()
@@ -76,30 +75,32 @@ async def remove_feed(
 
 @router.post("/addFeeds")
 async def add_rss_feed(
-    url: str = Form(...),
-    title: str = Form(...),
+    avatar_img_url: str = Form(...),
+    actor_name: str = Form(...),
     description: str = Form(None),
     db: Session = Depends(get_db),
     isValid: str = Depends(tokenInterceptor),
 ):
 
-    existing_feed = db.query(RSSFeed).filter(RSSFeed.url == url).first()
+    existing_feed = db.query(RSSFeed).filter(RSSFeed.url == avatar_img_url).first()
     if existing_feed:
         raise HTTPException(status_code=400, detail="RSS feed already exists.")
 
-    new_feed = RSSFeed(url=url, title=title, description=description)
+    new_feed = RSSFeed(url=avatar_img_url, title=actor_name, description=description)
 
     try:
         db.add(new_feed)
         db.commit()
         db.refresh(new_feed)
 
-        actress_info = get_actress_info_by_actress_name(title)
-        actress_details = actressInformation(title, actress_info)
+        actress_info = await get_actress_info_by_actress_name(
+            actor_name, changeImagePrefix=False
+        )
+        actress_details = actressInformation(actor_name, actress_info)
 
         TelegramBot.Send_Message_With_Image(actress_info.avatar_url, actress_details)
         return {
-            "message": f"Successfully added RSS feed: {title}",
+            "message": f"Successfully added RSS feed: {actor_name}",
             "feed_id": new_feed.id,
         }
 
@@ -129,11 +130,6 @@ async def add_actress_collect(
         db.commit()
         db.refresh(new_collect)
 
-        # actress_info = get_actress_info_by_name(name)
-        # actress_details = actressInformation(name, actress_info)
-
-        # TelegramBot.Send_Message_With_Image(actress_info["avatar_url"], actress_details)
-
         return {
             "message": f"Successfully added Actress to Collect: {name}",
             "feed_id": new_collect.id,
@@ -146,11 +142,11 @@ async def add_actress_collect(
 
 @router.delete("/delFeeds")
 async def remove_rss_feed(
-    url: str = Form(...),
+    title: str = Form(...),
     db: Session = Depends(get_db),
     isValid: str = Depends(tokenInterceptor),
 ):
-    existing_feed = db.query(RSSFeed).filter(RSSFeed.url == url).first()
+    existing_feed = db.query(RSSFeed).filter(RSSFeed.title == title).first()
 
     if not existing_feed:
         raise HTTPException(status_code=404, detail="RSS feed not found.")
@@ -207,7 +203,9 @@ async def get_keywords_feed_list(
             {k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"}
             for feed in feeds
         ]
-        feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
+        feeds_dicts = replace_domain_in_value(
+            feeds_dicts, _config.get("SYSTEM_IMAGE_PREFIX")
+        )
         return feeds_dicts
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
@@ -228,7 +226,9 @@ async def get_downloaded_keywords_feed_list(
             {k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"}
             for feed in feeds
         ]
-        feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
+        feeds_dicts = replace_domain_in_value(
+            feeds_dicts, _config.get("SYSTEM_IMAGE_PREFIX")
+        )
         return feeds_dicts
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
@@ -244,7 +244,9 @@ async def get_feed_list(
             {k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"}
             for feed in feeds
         ]
-        feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
+        feeds_dicts = replace_domain_in_value(
+            feeds_dicts, _config.get("SYSTEM_IMAGE_PREFIX")
+        )
         return feeds_dicts
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
@@ -262,31 +264,9 @@ async def get_collect_list(
             {k: v for k, v in feed.__dict__.items() if k != "_sa_instance_state"}
             for feed in feeds
         ]
-        feeds_dicts = replace_domain_in_value(feeds_dicts, SYSTEM_IMAGE_PREFIX)
+        feeds_dicts = replace_domain_in_value(
+            feeds_dicts, _config.get("SYSTEM_IMAGE_PREFIX")
+        )
         return feeds_dicts
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving feeds: {str(e)}")
-
-
-@router.post("/refreshKeywordsFeeds")
-async def refresh_keywords(
-    isValid: str = Depends(tokenInterceptor), background_tasks: BackgroundTasks = None
-):
-    try:
-        background_tasks.add_task(refresh_movies_feeds)
-        return {"message": "Feeds refreshed and torrents added successfully"}
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error occurred: {str(e)}")
-
-
-@router.post("/refreshActressFeeds")
-async def refresh_actress(
-    isValid: str = Depends(tokenInterceptor), background_tasks: BackgroundTasks = None
-):
-    try:
-        background_tasks.add_task(refresh_actress_feeds)
-        return {"message": "Actress Feeds refreshed successfully"}
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error occurred: {str(e)}")

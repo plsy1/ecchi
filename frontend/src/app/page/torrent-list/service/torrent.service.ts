@@ -23,33 +23,18 @@ export class TorrentService {
     movieId: string,
     downloadLink: string,
     savePath: string,
-    performerName: string,
+    performerName: string
   ): Observable<any> {
-    const url = `${this.common.apiUrl}/downloader/add_torrent_url`;
-
-    let params = new HttpParams()
-      .set('keywords', keywords)
-      .set('movie_link', movieId)
-      .set('download_link', downloadLink)
-      .set('save_path', savePath)
-      .set('performerName', performerName);
-      ;
-
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${localStorage.getItem('access_token') || ''}`,
-      'Content-Type': 'application/json',
+    return this.common.request<any>('POST', 'downloader/add_torrent_url', {
+      params: {
+        keywords,
+        movie_link: movieId,
+        download_link: downloadLink,
+        save_path: savePath,
+        performerName,
+      },
+      body: null,
     });
-
-    return this.http.post(url, null, { headers, params }).pipe(
-      catchError((error) => {
-        if (error.status === 401) {
-          this.common.logout();
-        }
-        console.error('Failed to push torrent:', error);
-        return throwError(() => new Error('Failed to push torrent'));
-      })
-    );
   }
 
   search(
@@ -57,26 +42,12 @@ export class TorrentService {
     page: number = 1,
     pageSize: number = 10
   ): Observable<any> {
-    const url = `${this.common.apiUrl}/prowlarr/search`;
-
-    let params = new HttpParams()
-      .set('query', query)
-      .set('page', page)
-      .set('page_size', pageSize);
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${localStorage.getItem('access_token') || ''}`,
+    return this.common.request<any>('GET', 'prowlarr/search', {
+      params: {
+        query,
+        page,
+        page_size: pageSize,
+      },
     });
-
-    return this.http.get(url, { headers, params }).pipe(
-      catchError((error) => {
-        if (error.status === 401) {
-          this.common.logout();
-        }
-        console.error('Search request failed:', error);
-        return throwError(() => new Error('Request Failed'));
-      }),
-      map((res) => res)
-    );
   }
 }

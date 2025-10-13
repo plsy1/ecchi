@@ -1,0 +1,70 @@
+<div class="movie-card" (click)="onClick()">
+  <div
+    class="menu-btn"
+    [matMenuTriggerFor]="menu"
+    (click)="$event.stopPropagation()"
+    *ngIf="showDetialButton"
+  >
+    <i class="fas fa-info-circle"></i>
+  </div>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onClick()">
+      <mat-icon>info</mat-icon>
+      <span>Details</span>
+    </button>
+    <button mat-menu-item (click)="onUnsubscribeClick($event)">
+      <mat-icon>cancel</mat-icon>
+      <span>Delete</span>
+    </button>
+  </mat-menu>
+
+  <img
+    [src]="imgUrl"
+    [alt]="title"
+    class="movie-img"
+    loading="lazy"
+    (load)="onImageLoad()"
+    (error)="onImageError($event)"
+  />
+  <div
+    class="library-icon"
+    *ngIf="inLibrary && !showDetialButton"
+    (click)="onInLibraryClick($event)"
+  >
+    <i class="fas fa-check-circle"></i>
+  </div>
+
+  <div class="movie-info">
+    <h3
+      class="movie-title"
+      matTooltip="{{
+        showID && displayPrefix ? displayPrefix + ' - ' + title : title
+      }}"
+    >
+      {{ showID && displayPrefix ? displayPrefix + " - " + title : title }}
+    </h3>
+
+    <div class="movie-meta">
+      <div class="movie-date">{{ releaseDate }}</div>
+      <div class="movie-tags">
+        <span
+          *ngFor="let tag of actors.slice(0, 3)"
+          class="movie-tag"
+          [matTooltip]="tag"
+          (click)="onActorClick(tag, $event)"
+        >
+          {{ tag }}
+        </span>
+
+        <span
+          class="more-tags"
+          *ngIf="actors.length > 3"
+          [matTooltip]="actors.slice(3).join(', ')"
+        >
+          +{{ actors.length - 3 }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

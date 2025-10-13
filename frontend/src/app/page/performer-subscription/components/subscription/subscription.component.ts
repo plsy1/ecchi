@@ -56,7 +56,7 @@ export class PerformerSubscriptionListComponent {
   onUnsubscribeClick(event: MouseEvent, movie: any): void {
     event.stopPropagation();
 
-    this.PerformerSubscriptionService.removeFeedsRSS(movie.url).subscribe({
+    this.PerformerSubscriptionService.removeFeedsRSS(movie.title).subscribe({
       next: () => {
         this.snackBar.open('Unsubscribed successfully', 'Close', {
           duration: 2000,

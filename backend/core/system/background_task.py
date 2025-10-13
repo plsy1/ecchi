@@ -1,0 +1,190 @@
+import uuid, asyncio
+from core.database import get_db, RSSItem, RSSFeed
+from modules.metadata.prowlarr import Prowlarr
+from modules.downloader.qbittorrent import QB
+from datetime import datetime
+from core.config import _config
+from modules.notification.telegram import *
+from modules.metadata.avbase import *
+from core.database import get_db, EmbyMovie
+from modules.mediaServer.emby import emby_get_all_movies
+from core.logs import LOG_ERROR
+
+
+async def refresh_movies_feeds():
+    try:
+
+        QB_HOST = _config.get("QB_HOST")
+        QB_PORT = _config.get("QB_PORT")
+        QB_USERNAME = _config.get("QB_USERNAME")
+        QB_PASSWORD = _config.get("QB_PASSWORD")
+
+        qb_client = QB(
+            host=QB_HOST,
+            port=QB_PORT,
+            username=QB_USERNAME,
+            password=QB_PASSWORD,
+        )
+
+        PROWLARR_URL = _config.get("PROWLARR_URL")
+        PROWLARR_KEY = _config.get("PROWLARR_KEY")
+
+        prowlarr = Prowlarr(PROWLARR_URL, PROWLARR_KEY)
+
+        db = next(get_db())
+        feeds = db.query(RSSItem).filter(RSSItem.downloaded == False).all()
+
+        if not feeds:
+            return
+
+        for feed in feeds:
+            keyword = feed.keyword
+            movie_link = feed.link
+
+            search_data = prowlarr.search(query=keyword, page=1, page_size=5)
+
+            if not search_data:
+                continue
+
+            search_data.sort(key=lambda x: x.get("seeders", 0), reverse=True)
+            best_seed = search_data[0]
+
+            download_link = best_seed.get("downloadUrl")
+
+            if not download_link:
+                continue
+
+            random_tag = str(uuid.uuid4())[:8]
+
+            tags = f"Ecchi,{random_tag}"
+
+            DOWNLOAD_PATH = _config.get("DOWNLOAD_PATH")
+
+            success = qb_client.add_torrent_url(
+                download_link, f"{DOWNLOAD_PATH}/{feed.actors}", tags
+            )
+
+            if success:
+
+                QB_KEYWORD_FILTER = [
+                    kw.strip()
+                    for kw in _config.get("QB_KEYWORD_FILTER", "").split(",")
+                    if kw.strip()
+                ]
+
+                qb_client.filter_after_add_by_tag(random_tag, QB_KEYWORD_FILTER)
+                keyword_feed = (
+                    db.query(RSSItem).filter(RSSItem.keyword == keyword).first()
+                )
+                if keyword_feed:
+                    keyword_feed.downloaded = True
+                    db.commit()
+
+                movie_info = await get_actors_from_work(
+                    movie_link, changeImagePrefix=False
+                )
+                movie_details = DownloadInformation(keyword, movie_info)
+                TelegramBot.Send_Message_With_Image(
+                    str(movie_info.props.pageProps.work.products[0].image_url),
+                    movie_details,
+                )
+
+            await asyncio.sleep(5)
+        return
+
+    except Exception as e:
+        LOG_ERROR(f"Unexpected error: {e}", flush=True)
+        return
+
+
+async def refresh_actress_feeds():
+    try:
+        db = next(get_db())
+        feeds = db.query(RSSFeed).all()
+        if not feeds:
+            return
+
+        for feed in feeds:
+            name = feed.title
+            items = await get_movie_info_by_actress_name(
+                name, 1, changeImagePrefix=False
+            )
+
+            valid_items = []
+            for item in items:
+                try:
+                    release_date = datetime.strptime(item.release_date, "%Y/%m/%d")
+                except ValueError:
+                    continue
+                if release_date > datetime.today() and len(item.actors) <= 2:
+                    valid_items.append(item)
+
+            if not valid_items:
+                continue
+
+            item = valid_items[-1]
+            rss_item = RSSItem(
+                actors=",".join(item.actors),
+                keyword=item.id,
+                img=str(item.img_url),
+                link=str(item.full_id),
+                downloaded=False,
+            )
+
+            try:
+                existing_feed = db.query(RSSItem).filter_by(keyword=item.id).first()
+                if existing_feed:
+                    existing_feed.img = rss_item.img
+                    existing_feed.link = rss_item.link
+                else:
+                    db.add(rss_item)
+
+                db.commit()
+                db.refresh(rss_item)
+
+                movie_info = await get_actors_from_work(
+                    rss_item.link, changeImagePrefix=False
+                )
+                movie_details = movieInformation(rss_item.keyword, movie_info)
+                TelegramBot.Send_Message_With_Image(rss_item.img, movie_details)
+
+            except Exception as e:
+                db.rollback()
+                LOG_ERROR(f"DB error: {e}", flush=True)
+
+            await asyncio.sleep(5)
+
+    except Exception as e:
+        LOG_ERROR(f"Unexpected error: {e}", flush=True)
+
+
+async def refresh_feeds():
+    await refresh_actress_feeds()
+    await refresh_movies_feeds()
+
+
+def update_emby_movies_in_db():
+    db = next(get_db())
+    try:
+        movies: List[dict] = emby_get_all_movies()
+
+        db.query(EmbyMovie).delete()
+        db.commit()
+
+        for m in movies:
+            new_movie = EmbyMovie(
+                name=m.get("name"),
+                primary=m.get("primary"),
+                serverId=m.get("serverId"),
+                indexLink=m.get("indexLink"),
+                ProductionYear=m.get("ProductionYear"),
+            )
+            db.add(new_movie)
+
+        db.commit()
+
+    except Exception as e:
+        db.rollback()
+        LOG_ERROR(f"Error updating Emby movies: {e}")
+    finally:
+        db.close()

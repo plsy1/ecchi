@@ -7,10 +7,18 @@ import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+import { PaginationComponent } from '../../../../shared/pagination/pagination.component';
+import { MovieCardComponent } from '../../../../shared/movie-card/movie-card.component';
 @Component({
   selector: 'app-javtrailers',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule,MatTooltipModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    MatTooltipModule,
+    PaginationComponent,MovieCardComponent
+  ],
   templateUrl: './javtrailers.component.html',
   styleUrls: ['./javtrailers.component.css'],
 })

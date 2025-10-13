@@ -1,15 +1,14 @@
-import requests
+import json
 
 from datetime import datetime
 from typing import List
 from bs4 import BeautifulSoup
 from fastapi import HTTPException
 from .model import SocialMedia, Movie
-from core.config import SYSTEM_IMAGE_PREFIX
-import json
+from core.config import _config
 
 
-async def get_movies(url: str) -> List[Movie]:
+async def get_movies(url: str, changeImagePrefix: bool = True) -> List[Movie]:
     content = await get_raw_html(url)
 
     soup = BeautifulSoup(content, "html.parser")
@@ -42,7 +41,9 @@ async def get_movies(url: str) -> List[Movie]:
         img_url = img_tag.get("src", "") if img_tag else ""
         if img_url:
             img_url = img_url.replace("ps.", "pl.")
-            img_url = f"{SYSTEM_IMAGE_PREFIX}{img_url}"
+            if changeImagePrefix:
+                SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
+                img_url = f"{SYSTEM_IMAGE_PREFIX}{img_url}"
 
         actors = [
             a.get_text(strip=True) for a in movie.find_all("a", class_="chip chip-sm")
@@ -109,9 +110,9 @@ def date_trans(date: str) -> str:
 
 
 async def get_next_data(url: str):
-    from main import playwright_service
+    from core.playwright import _playwright_service
 
-    context = await playwright_service.get_context()
+    context = await _playwright_service.get_context()
     page = await context.new_page()
     try:
         response = await page.goto(url, timeout=5000)
@@ -134,9 +135,9 @@ async def get_next_data(url: str):
 
 
 async def get_raw_html(url: str):
-    from main import playwright_service
+    from core.playwright import _playwright_service
 
-    context = await playwright_service.get_context()
+    context = await _playwright_service.get_context()
     page = await context.new_page()
     try:
         response = await page.goto(url, timeout=5000)

@@ -19,24 +19,11 @@
   </div>
 </div>
 
-<div class="pagination-buttons">
-  <button
-    mat-icon-button
-    class="floating-button"
-    (click)="prevPage()"
-    [disabled]="currentPage === 1"
-  >
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-  <button
-    mat-icon-button
-    class="floating-button"
-    (click)="nextPage()"
-    [disabled]="currentPage === 5"
-  >
-    <mat-icon>chevron_right</mat-icon>
-  </button>
-</div>
+<app-pagination
+  [page]="currentPage"
+  (previousClick)="prevPage()"
+  (nextClick)="nextPage()"
+></app-pagination>
 
 <h2>Ranking of Works</h2>
 <mat-form-field appearance="outline">
@@ -63,75 +50,26 @@
   </mat-select>
 </mat-form-field>
 
-<div class="pagination-buttons">
-  <button
-    mat-icon-button
-    class="floating-button"
-    (click)="prevWorkPage()"
-    [disabled]="currentWorkPage === 1"
-  >
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-  <button
-    mat-icon-button
-    class="floating-button"
-    (click)="nextWorkPage()"
-    [disabled]="workList.length < 10"
-  >
-    <mat-icon>chevron_right</mat-icon>
-  </button>
-</div>
+<app-pagination
+  [page]="currentWorkPage"
+  (previousClick)="prevWorkPage()"
+  (nextClick)="nextWorkPage()"
+></app-pagination>
 
 <div class="poster-grid">
-  <div
-    class="poster-card"
+  <app-movie-card
     *ngFor="let work of workList"
-    (click)="posterClick(work.number || work.title)"
-  >
-    <div class="poster-image-wrapper">
-      <img
-        [src]="work.image"
-        [alt]="work.title"
-        class="poster-image"
-        loading="lazy"
-      />
-      <div class="movie-info">
-        <div class="movie-title" matTooltip="{{ work.rank }}.{{ work.title }}">
-          {{ work.rank }}.{{ work.title }}
-        </div>
-        <div class="movie-meta">
-          <div class="movie-tags">
-            <span
-              *ngFor="let actor of work.actresses.slice(0, 3)"
-              class="movie-tag"
-            >
-              {{ actor }}
-            </span>
-            <span class="more-tags" *ngIf="(work.actresses?.length || 0) > 3">
-              +{{ work.actresses!.length - 3 }}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    [id]="work.number"
+    [title]="work.title"
+    [imgUrl]="work.image"
+    [actors]="work.actresses"
+    [rank]="work.rank"
+    (movieClick)="posterClick($event)"
+  ></app-movie-card>
 </div>
 
-<div class="pagination-buttons">
-  <button
-    mat-icon-button
-    class="floating-button"
-    (click)="prevWorkPage()"
-    [disabled]="currentWorkPage === 1"
-  >
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-  <button
-    mat-icon-button
-    class="floating-button"
-    (click)="nextWorkPage()"
-    [disabled]="workList.length < 10"
-  >
-    <mat-icon>chevron_right</mat-icon>
-  </button>
-</div>
+<app-pagination
+  [page]="currentWorkPage"
+  (previousClick)="prevWorkPage()"
+  (nextClick)="nextWorkPage()"
+></app-pagination>
