@@ -3,6 +3,7 @@ from core.database import get_db, RSSItem, RSSFeed
 from modules.metadata.prowlarr import Prowlarr
 from modules.downloader.qbittorrent import QB
 from core.config import _config
+from modules.notification.telegram import _telegram_bot
 from modules.notification.telegram.text import *
 from modules.metadata.avbase import *
 from core.database import get_db, EmbyMovie
@@ -84,7 +85,6 @@ async def refresh_movies_feeds():
                     movie_link, changeImagePrefix=False
                 )
                 movie_details = DownloadInformation(keyword, movie_info)
-                from modules.notification.telegram import _telegram_bot
 
                 await _telegram_bot.send_message_with_image(
                     str(movie_info.props.pageProps.work.products[0].image_url),
@@ -108,6 +108,7 @@ async def refresh_actress_feeds():
             return
 
         for feed in feeds:
+            isExist = False
             name = feed.title
             items = await get_movie_info_by_actress_name(
                 name, 1, changeImagePrefix=False
@@ -128,6 +129,7 @@ async def refresh_actress_feeds():
             item = valid_items[-1]
             existing_feed = db.query(RSSItem).filter_by(keyword=item.id).first()
             if existing_feed:
+                isExist = True
                 existing_feed.img = str(item.img_url)
                 existing_feed.link = str(item.full_id)
                 db.add(existing_feed)
@@ -145,14 +147,16 @@ async def refresh_actress_feeds():
             try:
                 db.commit()
                 db.refresh(rss_item)
-                movie_info = await get_actors_from_work(
-                    rss_item.link, changeImagePrefix=False
-                )
-                movie_details = movieInformation(rss_item.keyword, movie_info)
+                if not isExist:
+                    movie_info = await get_actors_from_work(
+                        rss_item.link, changeImagePrefix=False
+                    )
+                    movie_details = movieInformation(rss_item.keyword, movie_info)
 
-                from modules.notification.telegram import _telegram_bot
 
-                await _telegram_bot.send_message_with_image(rss_item.img, movie_details)
+                    await _telegram_bot.send_message_with_image(
+                        rss_item.img, movie_details
+                    )
 
             except Exception as e:
                 db.rollback()

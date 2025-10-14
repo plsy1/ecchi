@@ -16,7 +16,7 @@ from core.auth import tokenInterceptor
 from core.config import _config
 
 from modules.metadata.avbase import *
-from modules.notification.telegram import *
+from modules.notification.telegram.text import *
 from core.database import RSSItem, get_db
 from sqlalchemy.orm import Session
 
