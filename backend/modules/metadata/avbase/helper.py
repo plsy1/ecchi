@@ -28,7 +28,8 @@ async def get_movies(url: str, changeImagePrefix: bool = True) -> List[Movie]:
             )
             if not title_tag:
                 title_tag = movie.find(
-                    "a", class_="text-md font-bold btn-ghost rounded-lg m-1 line-clamp-3"
+                    "a",
+                    class_="text-md font-bold btn-ghost rounded-lg m-1 line-clamp-3",
                 )
 
             title = title_tag.get_text(strip=True) if title_tag else ""
@@ -47,7 +48,8 @@ async def get_movies(url: str, changeImagePrefix: bool = True) -> List[Movie]:
                     img_url = f"{SYSTEM_IMAGE_PREFIX}{img_url}"
 
             actors = [
-                a.get_text(strip=True) for a in movie.find_all("a", class_="chip chip-sm")
+                a.get_text(strip=True)
+                for a in movie.find_all("a", class_="chip chip-sm")
             ]
 
             movies.append(
@@ -115,25 +117,32 @@ def date_trans(date: str) -> str:
 async def get_next_data(url: str):
     from core.playwright import _playwright_service
 
-    context = await _playwright_service.get_context()
+    context = await _playwright_service.get_context(use_new_fingerprint=True)
     page = await context.new_page()
+
     try:
         response = await page.goto(url, timeout=5000)
         status = response.status
         if status == 403:
-            raise HTTPException(status_code=status, detail="403")
+            raise HTTPException(status_code=status, detail="403 Forbidden")
         content = await page.content()
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"页面请求失败: {str(e)}")
+
     finally:
         await page.close()
+        await context.close()
 
     soup = BeautifulSoup(content, "html.parser")
     script_tag = soup.find("script", id="__NEXT_DATA__")
     if not script_tag:
         raise HTTPException(status_code=500, detail="没有找到 __NEXT_DATA__")
+    try:
+        data = json.loads(script_tag.string)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="JSON 解析失败")
 
-    data = json.loads(script_tag.string)
     return data
 
 
