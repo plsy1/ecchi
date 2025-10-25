@@ -1,4 +1,8 @@
-![Ecchi Logo](images/favicon.png)
+# Ecchi
+
+<div align="center">
+    <img src="images/favicon.png" alt="logo" width="100">
+</div>
 
 ## **部署**
 
