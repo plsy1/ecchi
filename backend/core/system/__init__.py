@@ -1,11 +1,12 @@
 from fastapi import HTTPException
-from io import BytesIO
+from io import IOBase
 from datetime import datetime, timedelta
 import os
 import httpx
 from urllib.parse import urlparse, quote
 from typing import Any, List
 from core.config import _config
+import aiofiles
 
 CACHE_EXPIRE_HOURS = _config.get("CACHE_EXPIRE_HOURS")
 CACHE_DIR = _config.get("CACHE_DIR")
@@ -49,10 +50,7 @@ def get_cache_path(url: str) -> str:
     return os.path.join(CACHE_DIR, f"{hash_name}")
 
 
-def fetch_and_cache_image(url: str) -> tuple[BytesIO, dict]:
-    """
-    检查缓存、下载、返回 BytesIO 和 headers
-    """
+async def fetch_and_cache_image(url: str) -> tuple[IOBase, dict]:
     cache_path = get_cache_path(url)
 
     if os.path.exists(cache_path):
@@ -68,18 +66,18 @@ def fetch_and_cache_image(url: str) -> tuple[BytesIO, dict]:
             os.remove(cache_path)
 
     os.makedirs(os.path.dirname(cache_path), exist_ok=True)
-    resp = httpx.get(url)
-    if resp.status_code != 200:
-        raise HTTPException(
-            status_code=resp.status_code, detail="Failed to fetch image"
-        )
 
-    with open(cache_path, "wb") as f:
-        f.write(resp.content)
+    async with httpx.AsyncClient() as client:
+        resp = await client.get(url)
+    if resp.status_code != 200:
+        raise HTTPException(resp.status_code, "Failed to fetch image")
+
+    async with aiofiles.open(cache_path, "wb") as f:
+        await f.write(resp.content)
 
     etag = str(os.path.getmtime(cache_path))
     headers = {
         "Cache-Control": f"public, max-age={CACHE_EXPIRE_HOURS*3600}",
         "ETag": etag,
     }
-    return BytesIO(resp.content), headers
+    return open(cache_path, "rb"), headers

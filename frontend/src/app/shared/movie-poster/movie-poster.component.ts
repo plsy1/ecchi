@@ -15,6 +15,6 @@ export class MoviePosterComponent {
   @Input() hideImage: boolean = false;
 
   onImageError(event: Event) {
-    (event.target as HTMLImageElement).src = 'assets/placeholder.jpg';
+    (event.target as HTMLImageElement).src = 'assets/favicon.png';
   }
 }
