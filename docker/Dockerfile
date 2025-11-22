@@ -13,14 +13,18 @@ COPY requirements.txt .
 RUN python3 -m pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-ENV PLAYWRIGHT_BROWSERS_PATH=/app/data/utils
+RUN playwright install-deps chromium \
+    && playwright install chromium \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
 COPY backend /app/backend
 RUN mkdir -p /app/data
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends nginx supervisor && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    apt-get clean && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
 COPY docker/start.sh /app/start.sh
 RUN chmod +x /app/start.sh
