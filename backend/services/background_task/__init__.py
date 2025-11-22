@@ -19,7 +19,13 @@ async def refresh_movies_feeds():
         QB_URL = _config.get("QB_URL")
         parsed = urlparse(QB_URL)
         QB_HOST = parsed.hostname
-        QB_PORT = parsed.port
+        if parsed.port is not None:
+            QB_PORT = parsed.port
+        else:
+            if parsed.scheme == "http":
+                QB_PORT = 80
+            elif parsed.scheme == "https":
+                QB_PORT = 443
 
         QB_USERNAME = _config.get("QB_USERNAME")
         QB_PASSWORD = _config.get("QB_PASSWORD")

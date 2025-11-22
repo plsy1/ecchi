@@ -33,7 +33,13 @@ async def get(isValid: str = Depends(tokenInterceptor)):
     QB_URL = _config.get("QB_URL")
     parsed = urlparse(QB_URL)
     QB_HOST = parsed.hostname
-    QB_PORT = parsed.port
+    if parsed.port is not None:
+        QB_PORT = parsed.port
+    else:
+        if parsed.scheme == "http":
+            QB_PORT = 80
+        elif parsed.scheme == "https":
+            QB_PORT = 443
     QB_USERNAME = _config.get("QB_USERNAME")
     QB_PASSWORD = _config.get("QB_PASSWORD")
 
@@ -58,7 +64,13 @@ async def delete(
     QB_URL = _config.get("QB_URL")
     parsed = urlparse(QB_URL)
     QB_HOST = parsed.hostname
-    QB_PORT = parsed.port
+    if parsed.port is not None:
+        QB_PORT = parsed.port
+    else:
+        if parsed.scheme == "http":
+            QB_PORT = 80
+        elif parsed.scheme == "https":
+            QB_PORT = 443
     QB_USERNAME = _config.get("QB_USERNAME")
     QB_PASSWORD = _config.get("QB_PASSWORD")
 
@@ -105,7 +117,13 @@ async def add_torrent_url(
         QB_URL = _config.get("QB_URL")
         parsed = urlparse(QB_URL)
         QB_HOST = parsed.hostname
-        QB_PORT = parsed.port
+        if parsed.port is not None:
+            QB_PORT = parsed.port
+        else:
+            if parsed.scheme == "http":
+                QB_PORT = 80
+            elif parsed.scheme == "https":
+                QB_PORT = 443
         print(QB_HOST)
         print(QB_PORT)
         QB_USERNAME = _config.get("QB_USERNAME")
@@ -199,7 +217,13 @@ async def add_torrent_file(
         QB_URL = _config.get("QB_URL")
         parsed = urlparse(QB_URL)
         QB_HOST = parsed.hostname
-        QB_PORT = parsed.port
+        if parsed.port is not None:
+            QB_PORT = parsed.port
+        else:
+            if parsed.scheme == "http":
+                QB_PORT = 80
+            elif parsed.scheme == "https":
+                QB_PORT = 443
         QB_USERNAME = _config.get("QB_USERNAME")
         QB_PASSWORD = _config.get("QB_PASSWORD")
 
