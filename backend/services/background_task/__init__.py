@@ -14,9 +14,13 @@ from datetime import datetime, timedelta
 
 async def refresh_movies_feeds():
     try:
+        from urllib.parse import urlparse
 
-        QB_HOST = _config.get("QB_HOST")
-        QB_PORT = _config.get("QB_PORT")
+        QB_URL = _config.get("QB_URL")
+        parsed = urlparse(QB_URL)
+        QB_HOST = parsed.hostname
+        QB_PORT = parsed.port
+
         QB_USERNAME = _config.get("QB_USERNAME")
         QB_PASSWORD = _config.get("QB_PASSWORD")
 
@@ -152,7 +156,6 @@ async def refresh_actress_feeds():
                         rss_item.link, changeImagePrefix=False
                     )
                     movie_details = movieInformation(rss_item.keyword, movie_info)
-
 
                     await _telegram_bot.send_message_with_image(
                         rss_item.img, movie_details

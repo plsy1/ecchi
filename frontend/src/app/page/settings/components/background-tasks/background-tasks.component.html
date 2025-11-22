@@ -3,8 +3,14 @@
     mat-raised-button
     color="primary"
     (click)="refreshFeeds()"
-    [disabled]="isRefreshing"
   >
-    {{ isRefreshing ? "Refreshing..." : "Refresh Feeds" }}
+    Refresh Feeds
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="refreshEMBY()"
+  >
+    Refresh EMBY
   </button>
 </div>

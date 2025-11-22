@@ -8,19 +8,25 @@ import { SettingsService } from '../../service/settings.service';
   styleUrl: './background-tasks.component.css',
 })
 export class BackgroundTasksComponent {
-  isRefreshing = false;
   constructor(private SettingsService: SettingsService) {}
   refreshFeeds() {
-    this.isRefreshing = true;
     this.SettingsService.refreshKeywordsFeeds().subscribe({
       next: (res) => {
         console.log(res.message);
-
-        this.isRefreshing = false;
       },
       error: (err) => {
         console.error('Refresh failed:', err);
-        this.isRefreshing = false;
+      },
+    });
+  }
+
+  refreshEMBY() {
+    this.SettingsService.refreshEMBY().subscribe({
+      next: (res) => {
+        console.log(res.message);
+      },
+      error: (err) => {
+        console.error('Refresh failed:', err);
       },
     });
   }

@@ -51,4 +51,24 @@ export class SettingsService {
       }
     );
   }
+
+  refreshActressFeeds(): Observable<{ message: string }> {
+    return this.common.request<{ message: string }>(
+      'POST',
+      'system/refreshActressFeeds',
+      {
+        body: {},
+      }
+    );
+  }
+
+  refreshEMBY(): Observable<{ message: string }> {
+    return this.common.request<{ message: string }>(
+      'POST',
+      'system/refresh_emby_movies_database',
+      {
+        body: {},
+      }
+    );
+  }
 }

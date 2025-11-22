@@ -46,8 +46,7 @@ class ConfigManager:
             "PROWLARR_URL": self.config.get("PROWLARR_URL", ""),
             "PROWLARR_KEY": self.config.get("PROWLARR_KEY", ""),
             "DOWNLOAD_PATH": self.config.get("DOWNLOAD_PATH", ""),
-            "QB_HOST": self.config.get("QB_HOST", ""),
-            "QB_PORT": self.config.get("QB_PORT", ""),
+            "QB_URL": self.config.get("QB_URL", ""),
             "QB_USERNAME": self.config.get("QB_USERNAME", ""),
             "QB_PASSWORD": self.config.get("QB_PASSWORD", ""),
             "QB_KEYWORD_FILTER": self.config.get(

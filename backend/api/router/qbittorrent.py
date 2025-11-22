@@ -28,8 +28,12 @@ router = APIRouter()
     "/get_downloading_torrents",
 )
 async def get(isValid: str = Depends(tokenInterceptor)):
-    QB_HOST = _config.get("QB_HOST")
-    QB_PORT = _config.get("QB_PORT")
+    from urllib.parse import urlparse
+
+    QB_URL = _config.get("QB_URL")
+    parsed = urlparse(QB_URL)
+    QB_HOST = parsed.hostname
+    QB_PORT = parsed.port
     QB_USERNAME = _config.get("QB_USERNAME")
     QB_PASSWORD = _config.get("QB_PASSWORD")
 
@@ -49,8 +53,12 @@ async def delete(
     delete_files: bool = Body(True),
     isValid: str = Depends(tokenInterceptor),
 ):
-    QB_HOST = _config.get("QB_HOST")
-    QB_PORT = _config.get("QB_PORT")
+    from urllib.parse import urlparse
+
+    QB_URL = _config.get("QB_URL")
+    parsed = urlparse(QB_URL)
+    QB_HOST = parsed.hostname
+    QB_PORT = parsed.port
     QB_USERNAME = _config.get("QB_USERNAME")
     QB_PASSWORD = _config.get("QB_PASSWORD")
 
@@ -92,8 +100,14 @@ async def add_torrent_url(
     :return: 成功与否
     """
     try:
-        QB_HOST = _config.get("QB_HOST")
-        QB_PORT = _config.get("QB_PORT")
+        from urllib.parse import urlparse
+
+        QB_URL = _config.get("QB_URL")
+        parsed = urlparse(QB_URL)
+        QB_HOST = parsed.hostname
+        QB_PORT = parsed.port
+        print(QB_HOST)
+        print(QB_PORT)
         QB_USERNAME = _config.get("QB_USERNAME")
         QB_PASSWORD = _config.get("QB_PASSWORD")
 
@@ -180,8 +194,12 @@ async def add_torrent_file(
     try:
         torrent_data = BytesIO(await file.read())
 
-        QB_HOST = _config.get("QB_HOST")
-        QB_PORT = _config.get("QB_PORT")
+        from urllib.parse import urlparse
+
+        QB_URL = _config.get("QB_URL")
+        parsed = urlparse(QB_URL)
+        QB_HOST = parsed.hostname
+        QB_PORT = parsed.port
         QB_USERNAME = _config.get("QB_USERNAME")
         QB_PASSWORD = _config.get("QB_PASSWORD")
 

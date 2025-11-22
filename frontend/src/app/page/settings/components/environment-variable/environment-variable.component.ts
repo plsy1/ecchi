@@ -41,7 +41,7 @@ export class EnvironmentVariableComponent implements OnInit {
     PROWLARR_URL: '',
     PROWLARR_KEY: '',
     DOWNLOAD_PATH: '',
-    QB_HOST: '',
+    QB_URL: '',
     QB_PORT: '',
     QB_USERNAME: '',
     QB_PASSWORD: '',

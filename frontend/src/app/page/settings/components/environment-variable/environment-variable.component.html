@@ -1,79 +1,93 @@
+<mat-card class="env-card">
+  <mat-card-title>Environment Variables</mat-card-title>
+  <mat-card-content>
+    <form (ngSubmit)="saveEnv()" #envForm="ngForm" class="env-form">
+      <div class="env-row">
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>PROWLARR_URL</mat-label>
+          <input matInput [(ngModel)]="env.PROWLARR_URL" name="PROWLARR_URL" />
+        </mat-form-field>
 
-  <mat-card class="env-card">
-    <mat-card-title>Environment Variables</mat-card-title>
-    <mat-card-content>
-      <form (ngSubmit)="saveEnv()" #envForm="ngForm" class="env-form">
-        <div class="env-row">
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>PROWLARR_URL</mat-label>
-            <input matInput [(ngModel)]="env.PROWLARR_URL" name="PROWLARR_URL" >
-          </mat-form-field>
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>PROWLARR_KEY</mat-label>
+          <input matInput [(ngModel)]="env.PROWLARR_KEY" name="PROWLARR_KEY" />
+        </mat-form-field>
+      </div>
 
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>PROWLARR_KEY</mat-label>
-            <input matInput [(ngModel)]="env.PROWLARR_KEY" name="PROWLARR_KEY" >
-          </mat-form-field>
-        </div>
+      <div class="env-row">
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>QB_URL</mat-label>
+          <input matInput [(ngModel)]="env.QB_URL" name="QB_URL" />
+        </mat-form-field>
 
-        <div class="env-row">
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>DOWNLOAD_PATH</mat-label>
-            <input matInput [(ngModel)]="env.DOWNLOAD_PATH" name="DOWNLOAD_PATH" >
-          </mat-form-field>
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>QB_KEYWORD_FILTER</mat-label>
+          <input
+            matInput
+            [(ngModel)]="env.QB_KEYWORD_FILTER"
+            name="QB_KEYWORD_FILTER"
+          />
+        </mat-form-field>
+      </div>
 
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>QB_HOST</mat-label>
-            <input matInput [(ngModel)]="env.QB_HOST" name="QB_HOST" >
-          </mat-form-field>
-        </div>
+      <div class="env-row">
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>QB_USERNAME</mat-label>
+          <input matInput [(ngModel)]="env.QB_USERNAME" name="QB_USERNAME" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>QB_PASSWORD</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="env.QB_PASSWORD"
+            name="QB_PASSWORD"
+          />
+        </mat-form-field>
+      </div>
 
-        <div class="env-row">
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>QB_PORT</mat-label>
-            <input matInput type="number" [(ngModel)]="env.QB_PORT" name="QB_PORT" >
-          </mat-form-field>
+      <div class="env-row">
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>TELEGRAM_TOKEN</mat-label>
+          <input
+            matInput
+            [(ngModel)]="env.TELEGRAM_TOKEN"
+            name="TELEGRAM_TOKEN"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>TELEGRAM_CHAT_ID</mat-label>
+          <input
+            matInput
+            [(ngModel)]="env.TELEGRAM_CHAT_ID"
+            name="TELEGRAM_CHAT_ID"
+          />
+        </mat-form-field>
+      </div>
 
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>QB_USERNAME</mat-label>
-            <input matInput [(ngModel)]="env.QB_USERNAME" name="QB_USERNAME" >
-          </mat-form-field>
-        </div>
+      <div class="env-row">
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>EMBY_URL</mat-label>
+          <input matInput [(ngModel)]="env.EMBY_URL" name="EMBY_URL" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>EMBY_API_KEY</mat-label>
+          <input matInput [(ngModel)]="env.EMBY_API_KEY" name="EMBY_API_KEY" />
+        </mat-form-field>
+      </div>
 
-        <div class="env-row">
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>QB_PASSWORD</mat-label>
-            <input matInput type="password" [(ngModel)]="env.QB_PASSWORD" name="QB_PASSWORD" >
-          </mat-form-field>
+      <div class="env-row">
+        <mat-form-field appearance="outline" class="env-field">
+          <mat-label>DOWNLOAD_PATH</mat-label>
+          <input
+            matInput
+            [(ngModel)]="env.DOWNLOAD_PATH"
+            name="DOWNLOAD_PATH"
+          />
+        </mat-form-field>
+      </div>
 
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>TELEGRAM_TOKEN</mat-label>
-            <input matInput [(ngModel)]="env.TELEGRAM_TOKEN" name="TELEGRAM_TOKEN" >
-          </mat-form-field>
-        </div>
-
-        <div class="env-row">
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>TELEGRAM_CHAT_ID</mat-label>
-            <input matInput [(ngModel)]="env.TELEGRAM_CHAT_ID" name="TELEGRAM_CHAT_ID" >
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>QB_KEYWORD_FILTER</mat-label>
-            <input matInput [(ngModel)]="env.QB_KEYWORD_FILTER" name="QB_KEYWORD_FILTER" >
-          </mat-form-field>
-        </div>
-
-          <div class="env-row">
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>EMBY_URL</mat-label>
-            <input matInput [(ngModel)]="env.EMBY_URL" name="EMBY_URL" >
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="env-field">
-            <mat-label>EMBY_API_KEY</mat-label>
-            <input matInput [(ngModel)]="env.EMBY_API_KEY" name="EMBY_API_KEY" >
-          </mat-form-field>
-        </div>
-
-        <button mat-raised-button type="submit">Save</button>
-      </form>
-    </mat-card-content>
-  </mat-card>
+      <button mat-raised-button type="submit">Save</button>
+    </form>
+  </mat-card-content>
+</mat-card>

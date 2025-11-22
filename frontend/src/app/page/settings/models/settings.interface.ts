@@ -3,7 +3,7 @@ export interface EnvironmentConfig {
   PROWLARR_KEY: string;
   DOWNLOAD_PATH: string;
 
-  QB_HOST: string;
+  QB_URL: string;
   QB_PORT: string;
   QB_USERNAME: string;
   QB_PASSWORD: string;
