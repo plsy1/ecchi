@@ -6,11 +6,10 @@
 
 ## **部署**
 
-### **快速开始**
-
-1. 从 [这里](https://github.com/plsy1/ecchi/blob/main/docker/compose.yml) 下载 `compose.yml` 文件到你的服务器。
+1. 从 [这里](https://github.com/plsy1/ecchi/blob/main/docker/compose.yml) 下载 `compose.yml` 文件到你的服务器
 2. 运行此命令来启动所有服务：`docker compose up -d`
-
+3. 详细可参考此[文档](https://zread.ai/plsy1/ecchi)
+   
 ## **配置**
 
 - 在首次启动后，可以从设置页面调整环境变量。
