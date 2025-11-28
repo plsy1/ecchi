@@ -113,16 +113,28 @@ async def get_release_grouped_by_prefix(
     获取指定日期的作品列表，并按 prefix 分组
     date_str: 'YYYY-MM-DD'
     """
-    url = f"https://www.avbase.net/works/date/{date_str}"
-    data = await get_next_data(url)
-
-    works_data = data.get("props", {}).get("pageProps", {}).get("works", [])
     SYSTEM_IMAGE_PREFIX = _config.get("SYSTEM_IMAGE_PREFIX")
-    works_data = replace_domain_in_value(works_data, SYSTEM_IMAGE_PREFIX)
+
+    all_works = []
+
+    page = 1
+    while True:
+        url = f"https://www.avbase.net/works/date/{date_str}?page={page}"
+        data = await get_next_data(url)
+
+        works_data = data.get("props", {}).get("pageProps", {}).get("works", [])
+        works_data = replace_domain_in_value(works_data, SYSTEM_IMAGE_PREFIX)
+
+        if not works_data:
+            break
+
+        all_works.extend(works_data)
+        page += 1
+
 
     grouped: defaultdict[str, List[Work]] = defaultdict(list)
 
-    for work_dict in works_data:
+    for work_dict in all_works:
         products = work_dict.get("products", [])
         prefix = next(
             (

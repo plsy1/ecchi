@@ -1,6 +1,7 @@
 # database.py
 
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Date, JSON
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
@@ -61,6 +62,16 @@ class EmbyMovie(Base):
     serverId = Column(String)
     indexLink = Column(String)
     ProductionYear = Column(Integer)
+
+
+class AvbaseReleaseEveryday(Base):
+    __tablename__ = "avbase_release_everyday"
+
+    id = Column(Integer, primary_key=True, index=True)
+    date = Column(Date, unique=True, index=True)
+    data_json = Column(JSON, nullable=False)
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
 
 def get_db() -> Generator[Session, None, None]:

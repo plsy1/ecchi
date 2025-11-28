@@ -1,5 +1,5 @@
 import uuid, asyncio
-from core.database import get_db, RSSItem, RSSFeed
+from core.database import get_db, RSSItem, RSSFeed, AvbaseReleaseEveryday
 from modules.metadata.prowlarr import Prowlarr
 from modules.downloader.qbittorrent import QB
 from core.config import _config
@@ -10,7 +10,6 @@ from core.database import get_db, EmbyMovie
 from modules.mediaServer.emby import emby_get_all_movies
 from core.logs import LOG_ERROR
 from datetime import datetime, timedelta
-
 
 async def refresh_movies_feeds():
     try:
@@ -208,6 +207,35 @@ def update_emby_movies_in_db():
     finally:
         db.close()
 
+
+async def update_avbase_release_everyday():
+    """
+    异步抓取当天作品列表，并写入数据库
+    数据库操作同步执行（db = next(get_db())）
+    """
+    date_str = datetime.date.today().strftime("%Y-%m-%d")
+    record_date = datetime.date.today() 
+    db = next(get_db())
+
+    try:
+        result = await get_release_grouped_by_prefix(date_str)
+        json_data = json.dumps([r.model_dump() for r in result], ensure_ascii=False, default=str)
+        db.query(AvbaseReleaseEveryday).filter(
+            AvbaseReleaseEveryday.date == record_date
+        ).delete()
+        db.commit()
+
+        record = AvbaseReleaseEveryday(
+            date=record_date,
+            data_json=json_data
+        )
+        db.add(record)
+        db.commit()
+
+    except Exception as e:
+        db.rollback()
+    finally:
+        db.close()
 
 def clean_cache_dir(max_age_hours=48):
     from pathlib import Path

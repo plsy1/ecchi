@@ -7,6 +7,7 @@ from services.background_task import (
     refresh_feeds,
     update_emby_movies_in_db,
     clean_cache_dir,
+    update_avbase_release_everyday
 )
 
 
@@ -73,6 +74,14 @@ def init_app_scheduler() -> AppScheduler:
         trigger=IntervalTrigger,
         job_id="Feed",
         name="Check Feed",
+        hours=7,
+    )
+
+    app_scheduler.add_job(
+        update_avbase_release_everyday,
+        trigger=IntervalTrigger,
+        job_id="avbase_release_everyday",
+        name="Update avbase release everyday",
         hours=7,
     )
 

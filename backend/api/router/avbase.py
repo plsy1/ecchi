@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from core.auth import tokenInterceptor
 from modules.metadata.avbase import *
-
+from core.database import get_db, AvbaseReleaseEveryday
 router = APIRouter()
 
 
@@ -42,4 +42,33 @@ async def get_relesae(yyyymmdd: str, isValid: str = Depends(tokenInterceptor)):
 
     date_str = f"{yyyymmdd[:4]}-{yyyymmdd[4:6]}-{yyyymmdd[6:8]}"
 
-    return await get_release_grouped_by_prefix(date_str)
+    record_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+    db = next(get_db())
+    try:
+        record = db.query(AvbaseReleaseEveryday).filter(
+            AvbaseReleaseEveryday.date == record_date
+        ).first()
+
+        if record:
+            return json.loads(record.data_json)
+        
+        result = await get_release_grouped_by_prefix(date_str)
+
+        json_data = json.dumps([r.model_dump() for r in result], ensure_ascii=False, default=str)
+
+
+        new_record = AvbaseReleaseEveryday(
+            date=record_date,
+            data_json=json_data
+        )
+        db.add(new_record)
+        db.commit()
+
+        return result
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"获取失败: {e}")
+    finally:
+        db.close()
